@@ -1,0 +1,14 @@
+# Netlify Redirects & Clean URLs — Lex Global Advocacy LLP
+
+# Clean paths for Admin Portal
+/admin        /admin.html     200
+/portal       /admin.html     200
+
+# Quick anchor redirects
+/courses      /#courses       302
+/academy      /#courses       302
+/blogs        /#blogs         302
+/publications /#blogs         302
+
+# (Optional) If you have a separate backend on Render, uncomment the line below to proxy all /api calls:
+# /api/*        https://YOUR_BACKEND_ON_RENDER.onrender.com/api/:splat  200!

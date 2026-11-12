@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="LEX GLOBAL ADVOCACY — A full-service law firm with experienced attorneys handling a broad range of complex legal issues.">
+<title>LEX GLOBAL ADVOCACY | Full-Service Law Firm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Prompt:wght@500;600;700&family=Unna:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+
+<style>
+/* ============================================================
+   LEX GLOBAL ADVOCACY — All-in-One Stylesheet
+   ============================================================ */
+:root{
+  --primary:#f5c00c; --primary-dark:#c99b00; --black:#000; --white:#fff;
+  --gray-light:#ececec; --gray-mid:#c7c7c7; --gray-dark:#171818; --text:#000;
+  --font-body:'Hind',sans-serif; --font-serif:'Unna',serif;
+  --font-accent:'Prompt',sans-serif; --font-display:'Playfair Display',serif;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+body{margin:0;font-family:var(--font-body);font-size:16px;line-height:2;letter-spacing:1px;color:var(--text);background:var(--white);}
+img{display:block;max-width:100%;height:auto;}
+a{color:var(--primary);text-decoration:none;transition:color .25s ease-in-out,background-color .25s ease-in-out;}
+a:hover,a:focus{color:var(--black);}
+h1,h2,h3,h4,h5,h6{margin:0 0 .5rem;font-family:var(--font-serif);font-weight:400;line-height:1.1;}
+h1{font-size:2.2rem;} h2{font-size:2rem;} h3{font-weight:700;font-size:1.6rem;}
+h4{font-weight:500;letter-spacing:2px;text-transform:uppercase;font-size:1.35rem;}
+p{margin:0 0 1.25rem;line-height:2;}
+ul,ol{margin:0;padding:0;list-style:none;}
+button{font-family:inherit;cursor:pointer;border:0;background:none;}
+
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.hide-for-small-only{display:none;} .show-for-small-only{display:block;}
+@media(min-width:40em){.hide-for-small-only{display:block;} .show-for-small-only{display:none;}}
+
+#skiptocontent{position:fixed;top:0;left:0;z-index:10000;padding:8px 12px;background:var(--black);color:var(--white);transform:translateY(-100%);opacity:0;transition:200ms ease-out;}
+#skiptocontent:focus{transform:translateY(0);opacity:1;}
+
+.wrapper{width:100%;max-width:100%;overflow:hidden;font-size:20px;}
+.grid-container{width:100%;max-width:100%;padding-right:118px;padding-left:118px;margin:0 auto;}
+@media(max-width:1499px){.grid-container{padding-right:15px;padding-left:15px;}}
+
+.button{position:relative;display:inline-flex;align-items:center;justify-content:center;height:43px;padding:7px 35px 4px;font-family:var(--font-body);font-weight:700;font-size:16px;color:#222;text-transform:uppercase;text-align:center;white-space:nowrap;background:#bbbfc2;border:0;border-radius:0;overflow:hidden;z-index:1;transition:color .25s ease-in-out,background-color .25s ease-in-out;}
+.button::before{content:'';position:absolute;top:0;left:0;z-index:-1;width:5px;height:100%;background:var(--primary);transition:width .25s ease-in-out;}
+.button:hover,.button:focus{color:#222;text-decoration:none;}
+.button:hover::before,.button:focus::before{width:100%;}
+
+.animate{visibility:hidden;}
+.animate.is-animated{visibility:visible;animation:fadeIn .8s ease-out forwards;}
+@keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+
+/* ---------- HEADER ---------- */
+.header{position:fixed;top:0;right:0;left:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;line-height:1.3;background:transparent;transition:background .25s ease-in-out,padding .25s ease-in-out;box-shadow:inset 0 270px 100px -200px rgba(0,0,0,0.9);}
+.header.is-fixed{background:var(--black);padding-top:8px;padding-bottom:8px;}
+.header .logo{display:block;color:var(--white);}
+.logo-text{display:block;font-family:var(--font-accent);font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--white);line-height:1;}
+.logo-text .logo-mark{display:block;font-size:26px;color:var(--white);}
+.logo-text .logo-sub{display:block;margin-top:6px;font-size:14px;font-weight:500;letter-spacing:6px;color:var(--primary);}
+.logo-text::before{content:'';display:block;width:48px;height:3px;background:var(--primary);margin-bottom:10px;}
+.header .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.header .tools{display:flex;align-items:center;gap:16px;padding-right:8px;}
+.header .tools .search,.header .tools .toggle{display:inline-flex;align-items:center;justify-content:center;width:45px;height:42px;color:var(--white);border:3px solid #d9d9d9;transition:color .25s,border-color .25s;}
+.header .tools .search:hover,.header .tools .search:focus,.header .tools .toggle:hover,.header .tools .toggle:focus{color:var(--primary);border-color:var(--primary);}
+.header .tools .tel{display:inline-flex;align-items:center;gap:14px;min-height:42px;color:var(--white);font-weight:600;font-size:24px;}
+.header .tools .tel:hover{color:var(--white);}
+.header .tools .tel i{position:relative;color:var(--white);font-size:18px;padding-right:20px;margin-right:6px;}
+.header .tools .tel i::after{content:'';position:absolute;top:50%;right:0;width:4px;height:40px;background:var(--gray-mid);transform:translateY(-50%);}
+.header .tools .toggle{display:none;}
+.header nav{width:100%;}
+.header nav > ul{display:flex;justify-content:flex-end;margin:0;padding:0;list-style:none;}
+.header nav > ul > li{position:relative;margin-left:26px;}
+.header nav > ul > li:first-child{margin-left:0;}
+.header nav > ul > li > a{position:relative;display:block;padding:6px 0;font-weight:600;font-size:16px;color:var(--white);line-height:1.3;}
+.header nav > ul > li > a::after{content:'';position:absolute;bottom:-6px;left:50%;width:38px;height:4px;background:var(--white);transform:translateX(-50%);opacity:0;visibility:hidden;transition:opacity .25s ease-in-out;}
+.header nav > ul > li:hover > a,.header nav > ul > li:focus-within > a,.header nav > ul > li.is-active > a{color:var(--primary);}
+.header nav > ul > li:hover > a::after,.header nav > ul > li:focus-within > a::after,.header nav > ul > li.is-active > a::after{opacity:1;visibility:visible;}
+.header nav .sub-menu{position:absolute;top:100%;left:-32px;display:none;width:405px;margin:0;padding:12px 0;background:var(--black);z-index:999;}
+.header nav li:hover > .sub-menu,.header nav li:focus-within > .sub-menu{display:block;}
+.header nav .sub-menu li{margin:0;}
+.header nav .sub-menu a{display:block;padding:8px 20px;font-size:14px;color:var(--white);}
+.header nav .sub-menu a:hover{color:var(--primary);background:rgba(255,255,255,0.05);}
+.search-bar{display:none;position:relative;width:100%;padding:40px;background:var(--black);z-index:2;}
+.search-bar.is-open{display:block;}
+.search-bar form{position:relative;}
+.search-bar .close-it{position:absolute;top:-30px;right:0;font-size:20px;}
+.search-bar .close-it a{color:var(--white);}
+.search-bar input[type="text"]{width:100%;height:50px;padding:8px;font-size:22px;color:var(--white);background:transparent;border:0;border-bottom:1px solid #cacaca;}
+.search-bar input[type="text"]::placeholder{color:var(--white);opacity:1;}
+.search-bar button[type="submit"]{position:absolute;top:0;right:0;padding:8px 0;font-size:22px;color:var(--white);}
+@media(max-width:1023px){
+  .header nav{display:none;}
+  .header nav.is-open{display:block;position:fixed;top:0;right:0;width:80%;max-width:400px;height:100vh;padding:80px 24px 24px;background:var(--primary);overflow-y:auto;z-index:998;}
+  .header nav.is-open > ul{flex-direction:column;}
+  .header nav.is-open > ul > li{margin:0;border-bottom:1px solid rgba(255,255,255,0.3);}
+  .header nav.is-open > ul > li > a{padding:14px 0;color:var(--white);font-size:20px;}
+  .header nav.is-open > ul > li > a::after{display:none;}
+  .header nav.is-open .sub-menu{position:static;display:block;width:100%;padding:0 0 0 16px;background:transparent;}
+  .header nav.is-open .sub-menu a{color:var(--white);font-size:14px;padding:6px 0;}
+  .header .tools .toggle{display:inline-flex;}
+  .header .tools .tel span{display:none;}
+  .header .tools .tel i{font-size:22px;margin-right:0;padding-right:0;}
+  .header .tools .tel i::after{display:none;}
+}
+
+/* ---------- HERO SLIDER ---------- */
+.slider{position:relative;height:100vh;min-height:100vh;margin:0;overflow:hidden;}
+.main-slider{height:100vh;}
+.main-slider .slide{position:relative;height:100vh;min-height:100vh;overflow:hidden;padding:200px 0;box-sizing:border-box;}
+.slide-media{position:absolute;inset:0;z-index:0;}
+.slide-media img{width:100%;height:100%;object-fit:cover;object-position:left center;}
+.main-slider article{position:absolute;top:50%;left:0;right:0;z-index:1;display:flex;justify-content:flex-end;transform:translateY(-50%);}
+.slider-heading{display:block;width:100%;max-width:758px;padding:38px 0 45px 48px;font-family:var(--font-body);font-weight:600;font-size:60px;line-height:.99;color:var(--white);text-transform:uppercase;border-left:5px solid var(--primary);}
+.slider-heading > span{display:block;font-size:118%;color:var(--primary);}
+.slider-tools{position:absolute;bottom:0;left:0;right:0;z-index:2;display:flex;align-items:center;justify-content:space-between;min-height:90px;padding-bottom:20px;color:var(--white);}
+.slider-info{display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;max-width:400px;}
+.slider-info i{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:48px;height:48px;margin-top:8px;font-size:24px;border:3px solid var(--primary);}
+.slider-info p{width:calc(100% - 85px);font-family:var(--font-serif);font-style:italic;line-height:1.75;margin:0;}
+.slider-explore{position:absolute;top:8px;left:50%;z-index:1;display:inline-flex;align-items:center;justify-content:center;height:53px;min-width:170px;padding:5px 15px;font-family:var(--font-accent);font-weight:700;font-size:16px;color:var(--white);text-transform:uppercase;background:rgba(0,0,0,0.38);transform:translateX(-50%);}
+.slider-explore i{color:var(--primary);margin-right:10px;}
+.slider-explore:hover{background:var(--black);color:var(--white);}
+.slider-control{display:flex;align-items:center;align-self:flex-start;margin-top:15px;}
+.slider-control p{min-width:60px;margin:0 10px;font-family:var(--font-accent);font-weight:500;text-align:center;}
+.slider-control .js-current-slide{color:var(--primary);}
+.slider-control button{width:90px;height:13px;overflow:hidden;text-indent:-9999px;background:transparent;transition:opacity .25s;}
+.slider-control button.prev{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 13'><path d='M30 6.5H90' stroke='%23bbb' stroke-width='1'/><path d='M0 6.5l30-6v12z' fill='%23bbb'/></svg>") no-repeat center/100% 100%;}
+.slider-control button.next{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 13'><path d='M0 6.5h60' stroke='%23bbb' stroke-width='1'/><path d='M90 6.5l-30-6v12z' fill='%23bbb'/></svg>") no-repeat center/100% 100%;}
+.slider-control button.next:hover{filter:brightness(1.4);}
+@media(max-width:1199px){.slider-heading{font-size:50px;max-width:600px;}}
+@media(max-width:1023px){
+  .main-slider .slide{display:flex;align-items:center;padding:160px 0 100px;}
+  .main-slider article{position:static;transform:none;justify-content:flex-start;}
+  .slider-heading{font-size:40px;padding:24px 0 24px 30px;}
+  .slider-tools{position:relative;background:var(--black);padding:20px;}
+  .slider-explore{top:-80px;}
+}
+@media(max-width:639px){
+  .wrapper{font-size:18px;}
+  .main-slider .slide{height:auto;min-height:100vh;align-items:flex-end;padding:160px 0 85px;}
+  .slider-heading{padding:15px 0 10px;border-left:0;border-top:3px solid var(--primary);font-size:25px;text-align:center;line-height:1.05;}
+  .slider-tools{position:absolute;bottom:0;left:0;right:0;justify-content:center;background:transparent;padding:0 0 20px;}
+  .slider-explore{position:static;transform:none;}
+  .slider-info,.slider-control{display:none;}
+}
+
+/* ---------- STORY ---------- */
+.story{position:relative;display:flex;flex-wrap:wrap;justify-content:space-between;padding-top:200px;padding-bottom:110px;overflow:hidden;background:#fbfafa;}
+.story::before{content:'';position:absolute;inset:0;background:linear-gradient(27deg,rgba(0,0,0,0.06),transparent);pointer-events:none;}
+.story-left{position:relative;width:49%;padding-left:58px;z-index:3;}
+.story-top{display:none;}
+.story-slider{position:relative;box-shadow:30px 20px 60px rgba(0,0,0,0.3);}
+.story-slider .slide{position:relative;}
+.story-slider .slide img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;}
+.story-slider .slide article{position:absolute;bottom:0;left:0;width:100%;padding:0 90px 45px;background:linear-gradient(0deg,rgba(0,0,0,0.9),rgba(0,0,0,0.1));color:var(--white);font-weight:500;font-size:14px;}
+.story-slider .slide article::before{content:'';display:block;width:100%;height:5px;margin-bottom:28px;background:#737373;}
+.story-slider .slide h4{font-family:var(--font-body);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:5px;color:var(--white);}
+.story-year{text-align:center;margin-top:28px;}
+.story-year .year span{position:relative;display:inline-block;padding:0 30px 8px;font-family:var(--font-display);font-weight:700;font-style:italic;font-size:72px;line-height:1.2;color:var(--primary);}
+.story-year .year span::before{content:'';position:absolute;top:22px;bottom:0;left:0;width:5px;background:#bfbfbf;}
+.story-content{position:relative;width:44.8%;padding-left:93px;padding-right:20px;z-index:2;}
+.story-content::before{content:'';position:absolute;top:5px;left:0;width:5px;height:275px;background:var(--primary);}
+.story-heading{display:block;margin-bottom:112px;font-family:var(--font-body);font-weight:600;font-size:48px;letter-spacing:1.5px;line-height:1.1;text-transform:uppercase;}
+.story-content h1{font-size:26px;font-weight:700;margin-bottom:36px;}
+.story-content p{font-size:15px;margin-bottom:28px;}
+@media(max-width:1023px){
+  .story-left{width:100%;padding-left:0;padding-bottom:30px;}
+  .story-content{width:100%;padding:0;margin-top:40px;}
+  .story-content::before{display:none;}
+  .story-heading{font-size:38px;margin-bottom:40px;}
+}
+@media(max-width:639px){
+  .story{padding-top:60px;padding-bottom:40px;}
+  .story-slider .slide article{padding:0 12px 12px;}
+  .story-year .year span{font-size:50px;}
+  .story-year .year span::before{top:15px;}
+  .story-content h1{font-size:24px;}
+}
+
+/* ---------- ATTORNEYS ---------- */
+.attorneys{display:flex;flex-wrap:wrap;justify-content:space-between;padding-top:150px;padding-bottom:138px;}
+.attorneys-content{width:40%;padding-left:46px;padding-top:55px;}
+.attorneys-content h2{font-family:var(--font-body);font-weight:600;font-size:48px;line-height:1;text-transform:uppercase;margin-bottom:50px;}
+.attorneys-content h3{margin-bottom:35px;}
+.attorneys-content p{font-size:15px;margin-bottom:30px;}
+.attorneys-content .button{margin-top:20px;}
+.attorneys-content article{max-height:560px;overflow-y:auto;padding-right:20px;}
+.attorneys-slider{position:relative;width:49.3%;padding:22px 52px;margin-right:26px;z-index:1;}
+.attorneys-slider::before,.attorneys-slider::after{content:'';position:absolute;width:190px;height:480px;background:var(--primary);z-index:-1;opacity:.08;}
+.attorneys-slider::before{top:0;left:0;}
+.attorneys-slider::after{bottom:0;right:0;}
+.attorneys-slider .slide ul{display:flex;flex-wrap:wrap;margin:0 -35px;}
+.attorneys-slider .slide li{width:50%;padding:20px 35px;}
+.attorneys-block{display:block;text-align:center;background:var(--white);border-bottom:4px solid var(--primary);transition:background .25s ease-in-out;}
+.attorneys-block img{width:100%;}
+.attorneys-block span{position:relative;display:block;padding:8px 5px;font-weight:700;font-size:16px;line-height:1.25;letter-spacing:1.5px;color:var(--black);text-transform:uppercase;}
+.attorneys-block:hover{background:var(--primary);}
+.attorneys-block:hover span{color:var(--white);}
+@media(max-width:1023px){
+  .attorneys-content{width:100%;padding:0 0 40px;}
+  .attorneys-content h2{font-size:38px;margin-bottom:20px;}
+  .attorneys-slider{width:100%;margin:0;padding:22px 20px;}
+  .attorneys-slider .slide li{width:50%;padding:15px 10px;}
+}
+@media(max-width:639px){
+  .attorneys-slider .slide li{width:100%;}
+  .attorneys-content h2{font-size:32px;}
+}
+
+/* ---------- APPROACH ---------- */
+.approach{display:flex;flex-flow:row-reverse wrap;justify-content:space-between;padding-top:195px;padding-bottom:140px;background:#f7f7f7;}
+.approach-content{width:48%;padding-left:46px;}
+.approach-content h2{font-family:var(--font-body);font-weight:600;font-size:48px;line-height:1;text-transform:uppercase;margin-bottom:50px;}
+.approach-content h3{line-height:1.35;margin-bottom:32px;}
+.approach-content p{font-size:15px;margin-bottom:30px;}
+.approach-content article{max-height:592px;overflow-y:auto;padding-right:30px;}
+.approach-content .button{margin-top:10px;}
+.approach-blocks{width:48.5%;padding-left:50px;position:relative;z-index:1;}
+.approach-blocks ul{display:flex;flex-wrap:wrap;margin:0 -15px;}
+.approach-blocks li{width:50%;padding:0 15px;margin-bottom:30px;}
+.approach-block{position:relative;display:block;overflow:hidden;text-align:center;}
+.approach-block img{width:100%;aspect-ratio:1/1;object-fit:cover;}
+.approach-block span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:30px 10px 10px;font-weight:700;font-size:16px;letter-spacing:1.7px;color:var(--white);text-transform:uppercase;background:rgba(0,0,0,0.4);transition:all .25s ease-in-out;}
+.approach-block:hover span{color:var(--black);background:var(--primary);padding-bottom:26px;}
+@media(max-width:1023px){
+  .approach{padding-top:80px;padding-bottom:60px;}
+  .approach-content{width:100%;padding-left:0;}
+  .approach-content h2{font-size:38px;margin-bottom:24px;}
+  .approach-blocks{width:100%;padding-left:0;margin-top:60px;}
+}
+@media(max-width:639px){
+  .approach-blocks li{width:100%;}
+  .approach-content h2{font-size:30px;}
+}
+
+/* ---------- HISTORY ---------- */
+.history{position:relative;padding-top:128px;padding-bottom:168px;text-align:center;color:var(--white);background:#111 url("https://picsum.photos/seed/lga-history-bg/1920/1080") center/cover no-repeat;z-index:1;}
+.history::after{content:'';position:absolute;inset:0;z-index:-1;background:rgba(0,0,0,0.88);}
+.history-content{max-width:1010px;margin:0 auto 50px;}
+.history-content h2{font-family:var(--font-body);font-weight:600;font-size:48px;line-height:1;text-transform:uppercase;margin-bottom:50px;color:var(--white);}
+.history-content h3{color:var(--primary);margin-bottom:33px;}
+.history-content p{font-size:15px;margin-bottom:33px;}
+.history-content .button{margin-top:10px;}
+.history-slider{padding:0 60px;}
+.history-slider .slide{position:relative;padding:0 10px;}
+.history-slider .slide h4{font-family:var(--font-body);font-weight:700;font-size:72px;color:var(--primary);margin-bottom:32px;}
+.history-slider .slide span{display:block;width:100%;height:4px;background:var(--white);position:relative;}
+.history-slider .slide span::after{content:'';position:absolute;top:50%;left:50%;width:22px;height:22px;background:var(--white);border:5px solid var(--black);border-radius:50%;transform:translate(-50%,-50%);}
+.history-slider .slide p{margin-top:35px;font-weight:500;font-size:15px;line-height:1.4;color:#b7b7b7;}
+@media(max-width:639px){
+  .history{padding-top:60px;padding-bottom:60px;}
+  .history-content h2{font-size:38px;margin-bottom:20px;}
+  .history-slider{padding:0 30px;}
+  .history-slider .slide h4{font-size:48px;}
+}
+
+/* ---------- COMMITMENT ---------- */
+.commitment{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;padding-top:200px;padding-bottom:100px;overflow:hidden;position:relative;}
+.commitment-content{position:relative;width:calc(50% - 130px);margin-left:57px;padding-left:60px;padding-right:20px;z-index:1;}
+.commitment-content::before{content:'';position:absolute;top:5px;left:0;width:6px;height:275px;background:var(--primary);}
+.commitment-content h2{font-family:var(--font-body);font-weight:600;font-size:48px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:50px;}
+.commitment-content h3{margin-bottom:36px;}
+.commitment-content p{font-size:15px;margin-bottom:28px;}
+.commitment-slider{position:relative;width:calc(50% - 75px);margin:30px 60px 70px 0;box-shadow:30px 20px 60px rgba(0,0,0,0.3);z-index:1;}
+.commitment-slider iframe{display:block;width:100%;height:auto;aspect-ratio:16/9;}
+.commitment-pattern{display:none;}
+@media(max-width:1023px){
+  .commitment{padding-top:60px;padding-bottom:60px;}
+  .commitment-content{width:100%;margin:0;padding:0 0 30px;}
+  .commitment-content::before{display:none;}
+  .commitment-content h2{font-size:36px;margin-bottom:20px;}
+  .commitment-slider{width:100%;margin:0;}
+}
+
+/* ---------- FOOTER ---------- */
+.footer{position:relative;}
+.footer-address{position:relative;min-height:350px;}
+.footer-map{position:absolute;top:0;left:0;width:calc(50% - 145px);height:100%;background:#eaeaea;}
+.footer-map img{width:100%;height:100%;object-fit:cover;}
+.footer-info{display:flex;flex-wrap:wrap;justify-content:flex-end;padding-top:100px;padding-bottom:100px;color:var(--white);background:#333 url("https://picsum.photos/seed/lga-address/1920/800") center/cover no-repeat;position:relative;}
+.footer-info::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.85);}
+.footer-info address{position:relative;z-index:1;width:51.7%;padding-left:70px;font-style:normal;}
+.footer-info address::before{content:'';position:absolute;top:5px;left:0;width:6px;height:210px;background:var(--primary);}
+.footer-info address h2{font-family:var(--font-body);font-weight:600;font-size:42px;text-transform:uppercase;margin-bottom:32px;color:var(--white);}
+.footer-info address h3{margin-bottom:30px;color:var(--white);}
+.footer-info address h3 a{font-weight:700;font-size:32px;color:var(--white);}
+.footer-info address h3 a:hover{color:var(--primary);}
+.footer-info address p{font-size:20px;line-height:1.4;margin-bottom:30px;}
+.footer-info address p a{color:var(--white);}
+.footer-info address p a:hover{color:var(--primary);}
+.footer-partners{padding:30px 0;}
+.footer-partners ul{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;margin:0 50px;}
+.footer-partners li{width:25%;padding:15px;text-align:center;}
+.footer-copyright{display:flex;flex-flow:row-reverse wrap;justify-content:space-between;align-items:center;padding:20px 118px;font-family:var(--font-accent);font-size:12px;background:var(--gray-light);}
+.footer-copyright ul{list-style:none;margin:0;}
+.footer-copyright ul li{display:inline-block;text-transform:uppercase;color:#231f20;}
+.footer-copyright ul li + li::before{content:'|';margin:0 15px;opacity:.3;}
+.footer-copyright ul li a{color:#231f20;}
+.footer-copyright ul li a:hover{color:var(--primary);}
+.footer-copyright ol{list-style:none;margin:0;}
+.footer-copyright ol li{display:inline-block;padding:0 5px;}
+.footer-copyright ol li a{display:flex;align-items:center;justify-content:center;width:50px;height:50px;color:var(--white);background:var(--black);font-size:20px;}
+.footer-copyright ol li a:hover{background:var(--primary);color:var(--black);}
+@media(max-width:1023px){
+  .footer-map{position:static;width:100%;height:300px;}
+  .footer-info{padding:60px 0;}
+  .footer-info address{width:100%;padding-left:30px;}
+  .footer-info address::before{height:160px;}
+  .footer-info address h2{font-size:30px;}
+  .footer-partners li{width:33.3%;}
+  .footer-copyright{padding:20px;text-align:center;}
+  .footer-copyright ul,.footer-copyright ol{width:100%;}
+  .footer-copyright ol{margin-bottom:16px;}
+}
+@media(max-width:639px){
+  .footer-info address{padding-left:0;text-align:center;}
+  .footer-info address::before{display:none;}
+  .footer-partners li{width:100%;}
+}
+
+/* ---------- COOKIE BANNER ---------- */
+.ps-sm-banner{position:fixed;bottom:0;left:0;right:0;z-index:99999;background:var(--gray-dark);color:var(--white);box-shadow:0 -2px 12px rgba(0,0,0,0.3);font-size:14px;display:none;}
+.ps-sm-banner.is-visible{display:block;}
+.ps-sm-banner-inner{max-width:1366px;margin:0 auto;padding:20px 44px;display:grid;grid-template-columns:1fr auto;gap:12px 40px;align-items:center;}
+.ps-sm-banner-upper{position:relative;}
+.ps-sm-banner-message{font-size:14px;line-height:1.5;}
+.ps-sm-banner-close{position:absolute;top:-4px;right:-20px;padding:4px;color:var(--white);font-size:16px;}
+.ps-sm-banner-lower{display:flex;gap:10px;flex-shrink:0;}
+.ps-sm-banner-btn{padding:10px 22px;font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer;border-radius:2px;transition:opacity .25s;}
+.ps-sm-banner-btn:hover{opacity:.85;}
+.ps-sm-banner-btn-accept{background:var(--primary);color:var(--black);}
+.ps-sm-banner-btn-reject{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.5);}
+@media(max-width:767px){
+  .ps-sm-banner-inner{grid-template-columns:1fr;padding:16px;}
+  .ps-sm-banner-lower{justify-content:flex-start;flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+<a href="#main" id="skiptocontent">Skip to Content <i class="fas fa-caret-down" aria-hidden="true"></i></a>
+<div class="wrapper">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header grid-container">
+    <div class="search-bar">
+      <form action="/search" method="get">
+        <div class="close-it"><a href="#" class="search-close">Close <i class="fa fa-times"></i></a></div>
+        <label for="popsearch" class="visually-hidden">Search</label>
+        <input type="text" placeholder="Search" id="popsearch" name="s">
+        <button type="submit" aria-label="Search"><i class="fa fa-search"></i></button>
+      </form>
+    </div>
+
+    <a class="logo" href="/" aria-label="LEX GLOBAL ADVOCACY — Home">
+      <span class="logo-text">
+        <span class="logo-mark">LEX GLOBAL</span>
+        <span class="logo-sub">ADVOCACY</span>
+      </span>
+    </a>
+
+    <div class="right">
+      <div class="tools">
+        <a class="tel" href="tel:+1-800-000-0000" aria-label="Call LEX GLOBAL ADVOCACY">
+          <i class="fas fa-phone" aria-hidden="true"></i>
+          <span class="hide-for-small-only">1-800-000-0000</span>
+        </a>
+        <a class="search header-search" href="#" aria-label="Search"><i class="fas fa-search"></i></a>
+        <a class="toggle" href="#nav" aria-label="Menu"><i class="fas fa-bars"></i></a>
+      </div>
+
+      <nav id="nav" aria-label="Primary">
+        <ul>
+          <li class="has-children"><a href="/our-firm/">Our Firm</a>
+            <ul class="sub-menu">
+              <li><a href="/our-firm/facilities/">Facilities</a></li>
+              <li><a href="/our-firm/community/">Community</a></li>
+            </ul>
+          </li>
+          <li><a href="/attorneys/">Attorneys</a></li>
+          <li class="has-children"><a href="/practice-areas/">Practice Areas</a>
+            <ul class="sub-menu">
+              <li><a href="/practice-areas/workers-compensation/">Workers Compensation</a></li>
+              <li><a href="/practice-areas/wills-probate/">Wills &amp; Probate</a></li>
+              <li><a href="/practice-areas/transportation-logistics/">Transportation &amp; Logistics</a></li>
+              <li><a href="/practice-areas/real-estate/">Real Estate</a></li>
+              <li><a href="/practice-areas/products-liability/">Products Liability</a></li>
+              <li><a href="/practice-areas/personal-injury/">Personal Injury</a></li>
+              <li><a href="/practice-areas/mediation-adr/">Mediation &amp; ADR</a></li>
+              <li><a href="/practice-areas/maritime-admiralty/">Maritime &amp; Admiralty</a></li>
+              <li><a href="/practice-areas/intellectual-property/">Intellectual Property</a></li>
+              <li><a href="/practice-areas/healthcare/">Healthcare</a></li>
+              <li><a href="/practice-areas/family-law/">Family Law</a></li>
+              <li><a href="/practice-areas/estate-planning/">Estate Planning</a></li>
+              <li><a href="/practice-areas/employment-law/">Employment Law</a></li>
+              <li><a href="/practice-areas/construction-law/">Construction Law</a></li>
+              <li><a href="/practice-areas/commercial-litigation/">Commercial Litigation</a></li>
+              <li><a href="/practice-areas/business-corporate-law/">Business &amp; Corporate Law</a></li>
+            </ul>
+          </li>
+          <li><a href="/history/">History</a></li>
+          <li><a href="/news/">News &amp; Events</a></li>
+          <li><a href="/careers/">Careers</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <div class="slider">
+    <div class="main-slider">
+      <div class="slide">
+        <picture class="slide-media"><img src="https://picsum.photos/seed/lga-hero-1/1920/1080" alt="" loading="eager"></picture>
+        <article class="grid-container"><span class="slider-heading animate"><span>Valued Tradition</span>Standing the<br>Test of Time</span></article>
+      </div>
+      <div class="slide">
+        <picture class="slide-media"><img src="https://picsum.photos/seed/lga-hero-2/1920/1080" alt="" loading="lazy"></picture>
+        <article class="grid-container"><span class="slider-heading animate"><span>130 Years of Results</span>time and time again</span></article>
+      </div>
+      <div class="slide">
+        <picture class="slide-media"><img src="https://picsum.photos/seed/lga-hero-3/1920/1080" alt="" loading="lazy"></picture>
+        <article class="grid-container"><span class="slider-heading animate"><span>Merging a Modern Mindset</span>with the practices we value</span></article>
+      </div>
+      <div class="slide">
+        <picture class="slide-media"><img src="https://picsum.photos/seed/lga-hero-4/1920/1080" alt="" loading="lazy"></picture>
+        <article class="grid-container"><span class="slider-heading animate"><span>Giving Our Clients</span>the home court advantage</span></article>
+      </div>
+      <div class="slide">
+        <picture class="slide-media"><img src="https://picsum.photos/seed/lga-hero-5/1920/1080" alt="" loading="lazy"></picture>
+        <article class="grid-container"><span class="slider-heading animate"><span>Loyal Advocates</span>bound by integrity</span></article>
+      </div>
+    </div>
+
+    <div class="slider-tools grid-container">
+      <div class="slider-info animate">
+        <i class="fas fa-info"></i>
+        <p>Providing excellent legal service to clients throughout the Southeast and beyond for over 130 years.</p>
+      </div>
+      <a class="slider-explore animate" href="#main"><i class="fas fa-angle-double-down"></i> Explore</a>
+      <div class="slider-control animate">
+        <button type="button" class="js-slider-left prev"><span class="visually-hidden">Previous</span></button>
+        <p class="slick-counter" aria-live="polite"><span class="js-current-slide">01</span> / <span class="js-total-slide">05</span></p>
+        <button type="button" class="js-slider-right next"><span class="visually-hidden">Next</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MAIN ===================== -->
+  <main id="main" role="main" class="main">
+
+    <!-- STORY -->
+    <section class="story grid-container">
+      <div class="story-left">
+        <div class="story-top">Top</div>
+        <div class="story-slider">
+          <div class="slide"><img src="https://picsum.photos/seed/lga-story-1/800/600" alt=""><article><h4>Firm founded — W.W. Osborne and Pope Barrow form a partnership</h4></article></div>
+          <div class="slide"><img src="https://picsum.photos/seed/lga-story-2/800/600" alt=""><article><h4>Osborne, Lawrence &amp; Abrahams merges with the firm</h4></article></div>
+          <div class="slide"><img src="https://picsum.photos/seed/lga-story-3/800/600" alt=""><article><h4>Firm moves into the historic Armstrong House</h4></article></div>
+          <div class="slide"><img src="https://picsum.photos/seed/lga-story-4/800/600" alt=""><article><h4>New firm partnership formed</h4></article></div>
+          <div class="slide"><img src="https://picsum.photos/seed/lga-story-5/800/600" alt=""><article><h4>Two legacy firms merge to form LEX GLOBAL ADVOCACY</h4></article></div>
+          <div class="slide"><img src="https://picsum.photos/seed/lga-story-6/800/600" alt=""><article><h4>LEX GLOBAL ADVOCACY opens its One West Park offices</h4></article></div>
+        </div>
+        <div class="story-year">
+          <div class="year"><span>1886</span></div>
+          <div class="year"><span>1931</span></div>
+          <div class="year"><span>1970</span></div>
+          <div class="year"><span>1990</span></div>
+          <div class="year"><span>2013</span></div>
+          <div class="year"><span>2017</span></div>
+        </div>
+      </div>
+      <div class="story-content">
+        <span class="story-heading">Lex Global Advocacy</span>
+        <h1>A Full-Service Georgia Law Firm</h1>
+        <p>With experienced attorneys who can handle a broad range of complex legal issues for businesses, governmental entities, organizations, professionals, and individuals — at the local, regional, and national levels. Through more than 130 years of practicing law, the firm has developed the deep knowledge base and sound judgment that delivers value to our clients.</p>
+        <a href="/our-firm/" class="button">Read More</a>
+      </div>
+    </section>
+
+    <!-- ATTORNEYS -->
+    <section class="attorneys grid-container">
+      <div class="attorneys-content">
+        <article>
+          <h2>Experienced Attorneys</h2>
+          <h3>Handling a Broad Range of Issues</h3>
+          <p>Across the board, LEX GLOBAL ADVOCACY's experienced attorneys handle a broad range of complex legal issues for businesses, governmental entities, organizations, professionals, and individuals — locally, regionally, and nationally.</p>
+          <p>We are proud to represent a diverse clientele across the region, handling complex legal matters in litigation, estate planning, corporate law, commercial and residential real estate, admiralty, bankruptcy, and maritime law.</p>
+          <p>We are diligent and determined because we care about the success of our clients. We work closely with them to understand their needs and meet their objectives.</p>
+          <p>Recognized not only in the courtroom but also by our peers, our attorneys have received awards and positions of distinction in the legal field for professionalism, knowledge, and character.</p>
+          <p>We adhere to the highest standards of the legal profession and place the utmost value on integrity, quality work product, and community service.</p>
+        </article>
+        <a href="/attorneys/" class="button">Meet Our Team</a>
+      </div>
+      <div class="attorneys-slider">
+        <div class="slide"><ul>
+          <li><a class="attorneys-block" href="/attorneys/margaret-puccini/"><img src="https://i.pravatar.cc/319?img=47" alt="Margaret W.S. Puccini"><span>Margaret W.S. Puccini</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/daniel-falligant/"><img src="https://i.pravatar.cc/319?img=12" alt="J. Daniel Falligant"><span>J. Daniel Falligant</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/b-h-levy/"><img src="https://i.pravatar.cc/319?img=15" alt="B. H. Levy"><span>B. H. Levy</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/steven-baker/"><img src="https://i.pravatar.cc/319?img=8" alt="Steven Baker"><span>Steven Baker</span></a></li>
+        </ul></div>
+        <div class="slide"><ul>
+          <li><a class="attorneys-block" href="/attorneys/heather-lundy/"><img src="https://i.pravatar.cc/319?img=48" alt="Heather H. Lundy"><span>Heather H. Lundy</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/andrew-walcoff/"><img src="https://i.pravatar.cc/319?img=14" alt="Andrew H. Walcoff"><span>Andrew H. Walcoff</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/kathleen-horne/"><img src="https://i.pravatar.cc/319?img=45" alt="Kathleen Horne"><span>Kathleen Horne</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/amber-maloney/"><img src="https://i.pravatar.cc/319?img=44" alt="Amber L. Maloney"><span>Amber L. Maloney</span></a></li>
+        </ul></div>
+        <div class="slide"><ul>
+          <li><a class="attorneys-block" href="/attorneys/dolly-chisholm/"><img src="https://i.pravatar.cc/319?img=32" alt="Dolly Chisholm"><span>Dolly Chisholm</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/shayna-bowen/"><img src="https://i.pravatar.cc/319?img=27" alt="Shayna A. Bowen"><span>Shayna A. Bowen</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/carlton-joyce/"><img src="https://i.pravatar.cc/319?img=33" alt="Carlton E. Joyce"><span>Carlton E. Joyce</span></a></li>
+          <li><a class="attorneys-block" href="/attorneys/lucas-bradley/"><img src="https://i.pravatar.cc/319?img=52" alt="Lucas D. Bradley"><span>Lucas D. Bradley</span></a></li>
+        </ul></div>
+      </div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="approach grid-container">
+      <div class="approach-content">
+        <article>
+          <h2>Multidisciplinary Approach</h2>
+          <h3>Leveraging Extensive Experience with an Arsenal of Knowledge</h3>
+          <p>LEX GLOBAL ADVOCACY's practice areas span a broad range of industries and businesses — locally, regionally, and nationally. These include litigation, estate planning, corporate law, commercial and residential real estate, bankruptcy, product liability, transportation, and admiralty and maritime law.</p>
+          <p>Through our multidisciplinary approach, we provide value to our clients by pulling from our deep knowledge base. We are determined to meet our clients' objectives in a timely and cost-effective manner on an array of issues.</p>
+          <p>Over the years, LEX GLOBAL ADVOCACY has been proud to represent its clients with professionalism, integrity, and zealousness. The firm continues its tradition of providing a complete and diverse offering of legal services.</p>
+        </article>
+        <a href="/practice-areas/" class="button hide-for-small-only">View All Practices</a>
+      </div>
+      <div class="approach-blocks">
+        <div class="slide"><ul>
+          <li><a class="approach-block" href="/practice-areas/family-law/"><img src="https://picsum.photos/seed/lga-pa-1/290/306" alt="Family Law"><span>Family Law</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/business-corporate-law/"><img src="https://picsum.photos/seed/lga-pa-2/290/306" alt="Business &amp; Corporate Law"><span>Business &amp; Corporate Law</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/commercial-litigation/"><img src="https://picsum.photos/seed/lga-pa-3/290/306" alt="Commercial Litigation"><span>Commercial Litigation</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/real-estate/"><img src="https://picsum.photos/seed/lga-pa-4/290/306" alt="Real Estate"><span>Real Estate</span></a></li>
+        </ul></div>
+        <div class="slide"><ul>
+          <li><a class="approach-block" href="/practice-areas/construction-law/"><img src="https://picsum.photos/seed/lga-pa-5/290/306" alt="Construction Law"><span>Construction Law</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/education-law/"><img src="https://picsum.photos/seed/lga-pa-6/290/306" alt="Education Law"><span>Education Law</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/elder-law/"><img src="https://picsum.photos/seed/lga-pa-7/290/306" alt="Elder Law"><span>Elder Law</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/employment-law/"><img src="https://picsum.photos/seed/lga-pa-8/290/306" alt="Employment Law"><span>Employment Law</span></a></li>
+        </ul></div>
+        <div class="slide"><ul>
+          <li><a class="approach-block" href="/practice-areas/estate-planning/"><img src="https://picsum.photos/seed/lga-pa-9/290/306" alt="Estate Planning"><span>Estate Planning</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/banks-financial-institutions/"><img src="https://picsum.photos/seed/lga-pa-10/290/306" alt="Banks &amp; Financial Institutions"><span>Banks &amp; Financial Institutions</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/intellectual-property/"><img src="https://picsum.photos/seed/lga-pa-11/290/306" alt="Intellectual Property"><span>Intellectual Property</span></a></li>
+          <li><a class="approach-block" href="/practice-areas/maritime-admiralty/"><img src="https://picsum.photos/seed/lga-pa-12/290/306" alt="Maritime &amp; Admiralty"><span>Maritime &amp; Admiralty</span></a></li>
+        </ul></div>
+      </div>
+      <a href="/practice-areas/" class="button show-for-small-only">View All Practices</a>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="history grid-container">
+      <div class="history-content">
+        <h2>A Rich &amp; Established<br>Practice History</h2>
+        <h3>More Than 130 Years of Experience</h3>
+        <p>LEX GLOBAL ADVOCACY is proud of our legacy of providing excellent legal service to clients throughout the Southeast and beyond for over 130 years. We are the successor firm to two storied practices.</p>
+        <p>Over the years, LEX GLOBAL ADVOCACY has witnessed our share of changes and has always emerged stronger and with greater resolve. The firm continues our tradition of providing a complete and diverse offering of legal services.</p>
+        <a href="/history/" class="button">View Full History</a>
+      </div>
+      <div class="history-slider">
+        <div class="slide"><h4>1886</h4><span></span><p>W.W. Osborne and Pope Barrow form a partnership.</p></div>
+        <div class="slide"><h4>1900</h4><span></span><p>W.W. Osborne enters into a partnership with Alexander Lawrence.</p></div>
+        <div class="slide"><h4>1924</h4><span></span><p>John J. Bouhan and David S. Atkinson form Bouhan Atkinson.</p></div>
+        <div class="slide"><h4>1931</h4><span></span><p>Osborne, Lawrence &amp; Abrahams merges with Bouhan &amp; Atkinson.</p></div>
+        <div class="slide"><h4>1970</h4><span></span><p>Firm moves into the Armstrong House.</p></div>
+        <div class="slide"><h4>1990</h4><span></span><p>New firm partnership founded.</p></div>
+        <div class="slide"><h4>2013</h4><span></span><p>Two legacy firms merge to form LEX GLOBAL ADVOCACY.</p></div>
+        <div class="slide"><h4>2017</h4><span></span><p>LEX GLOBAL ADVOCACY moves to One West Park.</p></div>
+        <div class="slide"><h4>2026</h4><span></span><p>LEX GLOBAL ADVOCACY continues its legacy of excellence.</p></div>
+      </div>
+    </section>
+
+    <!-- COMMITMENT -->
+    <section class="commitment grid-container">
+      <div class="commitment-content">
+        <h2>A Commitment to Community</h2>
+        <h3>We Fight Loyally for Our Community.</h3>
+        <p>In addition to their unwavering commitment to the law, LEX GLOBAL ADVOCACY attorneys care deeply about the community in which they work and live, and volunteer thousands of hours of service to major nonprofits each year.</p>
+        <p>We support and encourage our attorneys' involvement in community and citizenship efforts outside of the office. We are proud of our clients, community, and employees — and we work hard to make sure they are proud of us.</p>
+        <a href="/our-firm/community/" class="button">Read More</a>
+      </div>
+      <div class="commitment-pattern" aria-hidden="true">pattern</div>
+      <div class="commitment-slider">
+        <iframe title="LEX GLOBAL ADVOCACY — Community" src="https://www.youtube.com/embed/DGCP9AOWvqQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <div class="footer-address">
+      <div class="footer-map">
+        <a href="https://maps.google.com/" target="_blank" rel="noopener" aria-label="View our location on Google Maps">
+          <img src="https://picsum.photos/seed/lga-map/1200/500" alt="Map to our office">
+        </a>
+      </div>
+      <div class="footer-info grid-container">
+        <address>
+          <h2>We Look Forward to Working With You</h2>
+          <h3>We Are Located At</h3>
+          <p><a href="https://maps.google.com/" target="_blank" rel="noopener">One West Park Avenue<br>Savannah, Georgia 31401</a></p>
+          <h3>Telephone<br><a href="tel:+1-800-000-0000">1-800-000-0000</a></h3>
+        </address>
+      </div>
+    </div>
+    <div class="footer-partners grid-container">
+      <ul>
+        <li><img src="https://picsum.photos/seed/lga-partner-1/200/80" alt="Partner logo"></li>
+        <li><img src="https://picsum.photos/seed/lga-partner-2/200/80" alt="Partner logo"></li>
+        <li><img src="https://picsum.photos/seed/lga-partner-3/200/80" alt="Partner logo"></li>
+      </ul>
+    </div>
+    <div class="footer-copyright grid-container">
+      <ol>
+        <li><a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+        <li><a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></li>
+      </ol>
+      <ul>
+        <li>© 2026 <a href="/">LEX GLOBAL ADVOCACY</a></li>
+        <li><a href="/sitemap/">Sitemap</a></li>
+        <li><a href="/disclaimer/">Legal Disclaimer</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ===================== COOKIE BANNER ===================== -->
+<div id="cookie-banner" class="ps-sm-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <div class="ps-sm-banner-inner">
+    <div class="ps-sm-banner-upper">
+      <div class="ps-sm-banner-message">We use cookies to improve your browsing experience and understand site traffic. Optional analytics and marketing cookies stay off until you click Accept All. To continue without them, choose Reject All or close this notice.</div>
+      <button id="cookie-close" class="ps-sm-banner-close" aria-label="Close cookie banner">✕</button>
+    </div>
+    <div class="ps-sm-banner-lower">
+      <button id="cookie-accept" class="ps-sm-banner-btn ps-sm-banner-btn-accept">Accept All</button>
+      <button id="cookie-reject" class="ps-sm-banner-btn ps-sm-banner-btn-reject">Reject All</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script>
+/* ============================================================
+   LEX GLOBAL ADVOCACY — All-in-One JS
+   ============================================================ */
+(function($){
+  'use strict';
+
+  // Header scroll state
+  var header = document.querySelector('.header');
+  var onScroll = function(){
+    if(!header) return;
+    if(window.scrollY > 40) header.classList.add('is-fixed');
+    else header.classList.remove('is-fixed');
+  };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // Mobile menu
+  var nav = document.getElementById('nav');
+  var toggle = document.querySelector('.header .tools .toggle');
+  if(toggle && nav){
+    toggle.addEventListener('click', function(e){
+      e.preventDefault();
+      nav.classList.toggle('is-open');
+      document.body.classList.toggle('menu-open', nav.classList.contains('is-open'));
+    });
+  }
+
+  // Search overlay
+  var searchBar = document.querySelector('.search-bar');
+  var searchOpen = document.querySelector('.header-search');
+  var searchClose = document.querySelector('.search-close');
+  if(searchOpen && searchBar){
+    searchOpen.addEventListener('click', function(e){
+      e.preventDefault();
+      searchBar.classList.add('is-open');
+      var input = searchBar.querySelector('input');
+      if(input) input.focus();
+    });
+  }
+  if(searchClose && searchBar){
+    searchClose.addEventListener('click', function(e){
+      e.preventDefault();
+      searchBar.classList.remove('is-open');
+    });
+  }
+
+  // Slick sliders
+  if($ && $.fn && $.fn.slick){
+    var $mainSlider = $('.main-slider');
+    if($mainSlider.length){
+      $mainSlider.on('init', function(){ revealSlides(); updateCounter(0); });
+      $mainSlider.slick({
+        dots:false, arrows:false, infinite:true, speed:800, fade:true,
+        autoplay:true, autoplaySpeed:7000, pauseOnHover:false, pauseOnFocus:false
+      });
+      $mainSlider.on('afterChange', function(_e,_s,cur){ updateCounter(cur); revealSlides(); });
+      document.querySelectorAll('.js-slider-left').forEach(function(b){
+        b.addEventListener('click', function(){ $mainSlider.slick('slickPrev'); });
+      });
+      document.querySelectorAll('.js-slider-right').forEach(function(b){
+        b.addEventListener('click', function(){ $mainSlider.slick('slickNext'); });
+      });
+    }
+
+    var $attr = $('.attorneys-slider');
+    if($attr.length){
+      $attr.slick({dots:false, arrows:true, infinite:true, slidesToShow:1, slidesToScroll:1, speed:500, autoplay:true, autoplaySpeed:6000});
+    }
+
+    var $approach = $('.approach-blocks');
+    if($approach.length){
+      $approach.slick({dots:false, arrows:true, infinite:true, slidesToShow:1, slidesToScroll:1, speed:500, autoplay:true, autoplaySpeed:6000});
+    }
+
+    var $history = $('.history-slider');
+    if($history.length){
+      $history.slick({
+        dots:false, arrows:true, infinite:true, slidesToShow:4, slidesToScroll:1,
+        speed:500, autoplay:true, autoplaySpeed:5000,
+        responsive:[
+          {breakpoint:1024, settings:{slidesToShow:3}},
+          {breakpoint:768,  settings:{slidesToShow:2}},
+          {breakpoint:480,  settings:{slidesToShow:1}}
+        ]
+      });
+    }
+
+    var $story = $('.story-slider'), $year = $('.story-year');
+    if($story.length && $year.length){
+      $story.slick({dots:false, arrows:false, infinite:true, fade:true, speed:500, autoplay:true, autoplaySpeed:5000, asNavFor:'.story-year'});
+      $year.slick({dots:false, arrows:true, infinite:true, fade:true, speed:500, slidesToShow:1, slidesToScroll:1, asNavFor:'.story-slider', autoplay:true, autoplaySpeed:5000});
+    }
+  }
+
+  function updateCounter(index){
+    var current = document.querySelector('.js-current-slide');
+    var total = document.querySelector('.js-total-slide');
+    if(current) current.textContent = String(index+1).padStart(2,'0');
+    if(total){
+      var count = document.querySelectorAll('.main-slider .slide').length;
+      total.textContent = String(count).padStart(2,'0');
+    }
+  }
+
+  function revealSlides(){
+    document.querySelectorAll('.slider-heading.animate').forEach(function(el){
+      el.classList.add('is-animated');
+    });
+  }
+
+  // Reveal-on-scroll
+  if('IntersectionObserver' in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-animated');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15});
+    document.querySelectorAll('.animate').forEach(function(el){
+      if(!el.closest('.slider')) obs.observe(el);
+    });
+  }
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      var href = link.getAttribute('href');
+      if(!href || href === '#') return;
+      var target = document.querySelector(href);
+      if(!target) return;
+      e.preventDefault();
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  // Cookie banner
+  var cookieBanner = document.getElementById('cookie-banner');
+  var COOKIE_KEY = 'lga_cookie_consent';
+  if(cookieBanner){
+    if(!localStorage.getItem(COOKIE_KEY)) cookieBanner.classList.add('is-visible');
+    function setConsent(v){
+      localStorage.setItem(COOKIE_KEY, v);
+      cookieBanner.classList.remove('is-visible');
+    }
+    document.getElementById('cookie-accept')?.addEventListener('click', function(){ setConsent('all'); });
+    document.getElementById('cookie-reject')?.addEventListener('click', function(){ setConsent('none'); });
+    document.getElementById('cookie-close')?.addEventListener('click', function(){ setConsent('none'); });
+  }
+
+  // Contact form
+  var contactForm = document.getElementById('contact-form');
+  if(contactForm){
+    contactForm.addEventListener('submit', async function(e){
+      e.preventDefault();
+      var payload = Object.fromEntries(new FormData(contactForm).entries());
+      var btn = contactForm.querySelector('button[type="submit"]');
+      var orig = btn.textContent;
+      btn.textContent = 'Sending…'; btn.disabled = true;
+      try{
+        var res = await fetch('/api/contact', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
+        });
+        var data = await res.json();
+        if(!res.ok) throw new Error(data.error || 'Something went wrong');
+        contactForm.reset();
+        alert('Thank you — your message has been received.');
+      }catch(err){
+        alert('Sorry, something went wrong: ' + err.message);
+      }finally{
+        btn.textContent = orig; btn.disabled = false;
+      }
+    });
+  }
+})(window.jQuery);
+</script>
+</body>
+</html>

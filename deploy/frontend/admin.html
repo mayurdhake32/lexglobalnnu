@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob: 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://*.razorpay.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https: http://localhost:* http://127.0.0.1:* ws: wss:; frame-src 'self' https://api.razorpay.com https://*.razorpay.com;">
+<title>Admin Portal | LEX GLOBAL ADVOCACY LLP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700&family=Unna:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+  --primary: #C5A059;
+  --primary-dark: #96732B;
+  --black: #0c0e12;
+  --dark-surface: #141820;
+  --dark-card: #1c222d;
+  --border-color: #2b3342;
+  --text-main: #f0f2f5;
+  --text-muted: #9aa3b2;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  --font-body: 'Hind', sans-serif;
+  --font-serif: 'Unna', serif;
+  --font-accent: 'Prompt', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+a { color: var(--primary); text-decoration: none; }
+a:hover { color: #fff; }
+button { font-family: inherit; cursor: pointer; border: 0; }
+
+/* Header & Top Bar */
+.top-header {
+  background: var(--dark-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand-mark .crest {
+  width: 38px;
+  height: 38px;
+  background: var(--primary);
+  color: #000;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+}
+.brand-text h1 {
+  font-family: var(--font-accent);
+  font-size: 17px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.brand-text span {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.btn-primary { background: var(--primary); color: #000; }
+.btn-primary:hover { background: #deb00c; color: #000; }
+.btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+.btn-outline:hover { background: var(--dark-card); border-color: var(--primary); color: var(--primary); }
+.btn-danger { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; }
+.btn-danger:hover { background: var(--danger); color: #fff; }
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+
+/* Login Modal / Container */
+.login-wrap {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 70px);
+  padding: 24px;
+}
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 36px 32px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  position: relative;
+}
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 8px 8px 0 0;
+}
+.login-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  margin-bottom: 6px;
+  color: #fff;
+}
+.login-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+.form-group {
+  margin-bottom: 18px;
+}
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.form-control {
+  width: 100%;
+  height: 42px;
+  background: var(--dark-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0 14px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-control:focus {
+  border-color: var(--primary);
+}
+textarea.form-control {
+  height: auto;
+  padding: 10px 14px;
+}
+.login-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  background: rgba(245, 192, 12, 0.08);
+  border-left: 3px solid var(--primary);
+  padding: 10px 14px;
+  margin-top: 18px;
+  border-radius: 0 4px 4px 0;
+  line-height: 1.5;
+}
+
+/* App Main Layout */
+.app-layout {
+  display: flex;
+  min-height: calc(100vh - 70px);
+}
+.sidebar {
+  width: 250px;
+  background: var(--dark-surface);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 14px;
+  flex-shrink: 0;
+}
+.nav-group-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #636f82;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  color: var(--text-muted);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.nav-item i { width: 18px; text-align: center; }
+.nav-item:hover { color: #fff; background: var(--dark-card); }
+.nav-item.active { background: var(--dark-card); color: var(--primary); font-weight: 600; border-left: 3px solid var(--primary); }
+.nav-badge {
+  margin-left: auto;
+  background: rgba(245, 192, 12, 0.2);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 28px 36px;
+  overflow-y: auto;
+}
+
+/* Metric Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: rgba(245, 192, 12, 0.15);
+  color: var(--primary);
+}
+.stat-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--info); }
+.stat-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+.stat-icon.purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+.stat-info h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 4px; }
+.stat-info .stat-value { font-size: 26px; font-weight: 700; color: #fff; font-family: var(--font-accent); }
+
+/* Table Component */
+.card-panel {
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.panel-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: #fff;
+}
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.data-table-wrap {
+  overflow-x: auto;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: left;
+}
+.data-table th {
+  background: var(--dark-card);
+  padding: 12px 14px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+}
+.data-table td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(43, 51, 66, 0.6);
+  vertical-align: middle;
+}
+.data-table tr:hover td {
+  background: rgba(28, 34, 45, 0.5);
+}
+
+/* Status Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-new { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+.badge-review { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+.badge-cleared { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+.badge-urgent { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+
+/* Modal overlay */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  place-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.admin-modal-overlay.is-active {
+  display: grid;
+}
+.admin-modal-box {
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+}
+.modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 22px;
+  color: var(--text-muted);
+  background: none;
+  cursor: pointer;
+}
+.modal-close-btn:hover { color: #fff; }
+
+/* Thumbnail styles for admin tables */
+.admin-thumb {
+  width: 48px;
+  height: 36px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+  background: #000;
+}
+.admin-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  background: #000;
+}
+.cell-flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media(max-width: 900px) {
+  .app-layout { flex-direction: column; }
+  .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); display: flex; overflow-x: auto; padding: 12px; gap: 8px; }
+  .nav-group-title { display: none; }
+  .main-content { padding: 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="top-header">
+  <div class="brand-mark">
+    <div class="crest"><i class="fas fa-balance-scale"></i></div>
+    <div class="brand-text">
+      <h1>LEX GLOBAL ADVOCACY</h1>
+      <span>Executive Management &amp; Staff Portal</span>
+    </div>
+  </div>
+  <div class="header-actions">
+    <span id="systemModeTag" class="badge" style="background:rgba(245,192,12,0.15); color:var(--primary); font-size:11px; display:none;">
+      <i class="fas fa-shield-alt"></i> Portal Active
+    </span>
+    <a href="/" class="btn btn-outline btn-sm"><i class="fas fa-external-link-alt"></i> View Public Site</a>
+    <button id="logoutBtn" class="btn btn-outline btn-sm" style="display:none;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+  </div>
+</header>
+
+<!-- LOGIN VIEW -->
+<div id="loginView" class="login-wrap">
+  <div class="login-card">
+    <h2 class="login-title">Partner Authentication</h2>
+    <p class="login-sub">Enter administrative security credentials to manage client inquiries, legal academy courses, and publications.</p>
+    
+    <div id="loginAlert" style="display:none; padding:10px 14px; background:rgba(239,68,68,0.15); border:1px solid var(--danger); border-radius:4px; font-size:13px; color:#fca5a5; margin-bottom:16px;"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="adminUsername">Administrative Username</label>
+        <input type="text" id="adminUsername" class="form-control" placeholder="Enter administrative username" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label for="adminPassword">Master Password</label>
+        <input type="password" id="adminPassword" class="form-control" placeholder="Enter administrative password" required autocomplete="current-password">
+      </div>
+      <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width:100%; justify-content:center; height:44px;">
+        <i class="fas fa-key"></i> Authenticate Session
+      </button>
+    </form>
+
+    <div class="login-hint">
+      <i class="fas fa-shield-alt" style="color:var(--primary); margin-right:6px;"></i>
+      <strong>Restricted Access:</strong> Authorized partners, designated counsel, and registry staff only. All authentication attempts are logged and monitored.
+    </div>
+  </div>
+</div>
+
+<!-- AUTHENTICATED APP VIEW -->
+<div id="appView" class="app-layout" style="display:none;">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="nav-group-title">Operations</div>
+    <div class="nav-item active" onclick="switchTab('dashboard')">
+      <i class="fas fa-tachometer-alt"></i> Dashboard
+    </div>
+    <div class="nav-item" onclick="switchTab('orders')">
+      <i class="fas fa-receipt"></i> Course Buyers &amp; Orders
+      <span class="nav-badge" id="badgeOrdersCount">0</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('inquiries')">
+      <i class="fas fa-user-shield"></i> Client Inquiries
+      <span class="nav-badge" id="badgeInquiriesCount">0</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('courses')">
+      <i class="fas fa-graduation-cap"></i> Courses &amp; Academy
+      <span class="nav-badge" id="badgeCoursesCount">0</span>
+    </div>
+    <div style="padding:4px 12px 10px 12px;">
+      <button class="btn btn-primary btn-sm" style="width:100%; justify-content:center; font-size:12px; height:32px;" onclick="openNewCourseModal()">
+        <i class="fas fa-plus"></i> + Add Masterclass
+      </button>
+    </div>
+    <div class="nav-item" onclick="switchTab('blogs')">
+      <i class="fas fa-newspaper"></i> Publications &amp; Hub
+    </div>
+    <div class="nav-group-title" style="margin-top:20px;">System &amp; Data</div>
+    <div class="nav-item" onclick="switchTab('settings')">
+      <i class="fas fa-sliders-h"></i> Settings &amp; Gateway
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(245,192,12,0.15); color:var(--primary);"><i class="fas fa-coins"></i></div>
+          <div class="stat-info">
+            <h4>Tuition Revenue</h4>
+            <div class="stat-value" id="kpiRevenue" style="color:var(--primary);">₹0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-user-graduate"></i></div>
+          <div class="stat-info">
+            <h4>Course Buyers</h4>
+            <div class="stat-value" id="kpiOrders">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-inbox"></i></div>
+          <div class="stat-info">
+            <h4>Client Inquiries</h4>
+            <div class="stat-value" id="kpiInquiries">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-book-open"></i></div>
+          <div class="stat-info">
+            <h4>Active Courses</h4>
+            <div class="stat-value" id="kpiCourses">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fas fa-scroll"></i></div>
+          <div class="stat-info">
+            <h4>Published Articles</h4>
+            <div class="stat-value" id="kpiPosts">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Course Orders & Purchases Section -->
+      <div class="card-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title"><i class="fas fa-receipt" style="color:var(--primary); margin-right:8px;"></i> Recent Masterclass Purchases (Razorpay)</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Real-time feed of candidate payments, Razorpay IDs, and issued tax invoices.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn btn-primary btn-sm" onclick="switchTab('orders')">View All Buyers &amp; Orders &rarr;</button>
+          </div>
+        </div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date &amp; Order ID</th>
+                <th>Buyer Name / Firm</th>
+                <th>Course Purchased</th>
+                <th>Amount</th>
+                <th>Razorpay ID</th>
+                <th>Status</th>
+                <th>Invoice</th>
+              </tr>
+            </thead>
+            <tbody id="dashOrdersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent Inquiries Section -->
+      <div class="card-panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Recent Privileged Inquiries</h3>
+          <div class="panel-actions">
+            <button class="btn btn-outline btn-sm" onclick="switchTab('inquiries')">View All Inquiries &rarr;</button>
+          </div>
+        </div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Client / Organization</th>
+                <th>Practice Area</th>
+                <th>Urgency</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dashInquiriesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent Academy Enrollments -->
+      <div class="card-panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Recent Academy Registrations</h3>
+          <div class="panel-actions">
+            <button class="btn btn-outline btn-sm" onclick="switchTab('courses')">Manage Academy &rarr;</button>
+          </div>
+        </div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>Participant</th>
+                <th>Masterclass Course</th>
+                <th>Learning Mode</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="dashEnrollmentsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: INQUIRIES -->
+    <section id="tab-inquiries" style="display:none;">
+      <div class="card-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Confidential Client Inquiries &amp; Intakes</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">All inquiries submitted via website intake forms, protected by attorney-client conflict review protocols.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn btn-outline btn-sm" onclick="exportInquiriesCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+            <button class="btn btn-outline btn-sm" onclick="loadInquiries()"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap;">
+          <input type="text" id="inquirySearchInput" class="form-control" placeholder="Search by name, email, or keywords..." style="max-width:320px;" oninput="renderInquiriesTable()">
+          <select id="inquiryStatusFilter" class="form-control" style="max-width:200px;" onchange="renderInquiriesTable()">
+            <option value="">All Statuses</option>
+            <option value="New">New</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Cleared">Cleared</option>
+          </select>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Submitted</th>
+                <th>Name / Email</th>
+                <th>Organization</th>
+                <th>Practice Area</th>
+                <th>Urgency</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inquiriesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: COURSES & ACADEMY -->
+    <section id="tab-courses" style="display:none;">
+      <div class="card-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Legal Academy Courses &amp; Executive Masterclasses</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Manage syllabi, certified instructors, curriculum modules, and review registered practitioners.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn btn-primary btn-sm" onclick="openNewCourseModal()"><i class="fas fa-plus"></i> Add Masterclass</button>
+            <button class="btn btn-outline btn-sm" onclick="loadCourses()"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Course Title</th>
+                <th>Category</th>
+                <th>Faculty Lead</th>
+                <th>Duration &amp; Credits</th>
+                <th>Fee</th>
+                <th>Students</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="coursesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Enrolled Students Panel -->
+      <div class="card-panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Confirmed Academy Enrollments</h3>
+          <span style="font-size:13px; color:var(--text-muted);" id="enrollmentSummaryText">0 enrolled candidates</span>
+        </div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>Date</th>
+                <th>Name &amp; Email</th>
+                <th>Organization</th>
+                <th>Course</th>
+                <th>Learning Mode</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="enrollmentsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: COURSE BUYERS & ORDERS (RAZORPAY) -->
+    <section id="tab-orders" style="display:none;">
+      <div class="stats-grid" style="margin-bottom:20px;">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(245,192,12,0.15); color:var(--primary);"><i class="fas fa-wallet"></i></div>
+          <div class="stat-info">
+            <h4>Total Tuition Revenue</h4>
+            <div class="stat-value" id="ordersTotalRevenue" style="color:var(--primary);">₹0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-shopping-bag"></i></div>
+          <div class="stat-info">
+            <h4>Verified Orders</h4>
+            <div class="stat-value" id="ordersTotalCount">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-shield-alt"></i></div>
+          <div class="stat-info">
+            <h4>Payment Engine</h4>
+            <div class="stat-value" style="font-size:18px;" id="ordersGatewayLabel">Razorpay (Active)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title"><i class="fas fa-receipt" style="color:var(--primary); margin-right:8px;"></i> Course Buyers &amp; Razorpay Transactions</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Comprehensive registry of all candidate purchases, payment hashes, and instant tax invoices.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn btn-outline btn-sm" onclick="exportOrdersCSV()"><i class="fas fa-file-csv"></i> Export Orders CSV</button>
+            <button class="btn btn-outline btn-sm" onclick="loadOrders()"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap;">
+          <input type="text" id="orderSearchInput" class="form-control" placeholder="Search by Student ID, Order ID, Buyer Name, Email, or Course..." style="max-width:380px;" oninput="renderOrdersTable()">
+          <select id="orderStatusFilter" class="form-control" style="max-width:200px;" onchange="renderOrdersTable()">
+            <option value="">All Payment Statuses</option>
+            <option value="Paid">Paid / Verified</option>
+            <option value="Refunded">Refunded</option>
+          </select>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date &amp; Order ID</th>
+                <th>Student ID &amp; Candidate</th>
+                <th>Course Purchased &amp; Track</th>
+                <th>Tuition Fee</th>
+                <th>Razorpay Payment ID</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: BLOGS & PUBLICATIONS -->
+    <section id="tab-blogs" style="display:none;">
+      <div class="card-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">The Legal Hub — Publications &amp; Scholarly Insights</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Publish cross-border legal commentaries, case analyses, and advisory whitepapers.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn btn-primary btn-sm" onclick="openNewBlogModal()"><i class="fas fa-plus"></i> New Publication</button>
+            <button class="btn btn-outline btn-sm" onclick="loadBlogs()"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Article Title</th>
+                <th>Category</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Views</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="blogsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: SECURITY & SETTINGS -->
+    <section id="tab-settings" style="display:none;">
+      <!-- Razorpay Payment Gateway Settings Card -->
+      <div class="card-panel" style="max-width:680px;">
+        <h3 class="panel-title" style="margin-bottom:12px;"><i class="fas fa-credit-card" style="color:var(--primary); margin-right:8px;"></i> Razorpay Payment Gateway Integration</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+          Configure how executive masterclass enrollments accept online payments across UPI (GPay, PhonePe, Paytm), NetBanking, Credit and Debit Cards.
+        </p>
+
+        <div class="form-group">
+          <label for="razorpayModeSelect">Payment Environment</label>
+          <select id="razorpayModeSelect" class="form-control" onchange="toggleRazorpayModeUI()">
+            <option value="test_simulator">Interactive Test Simulator (No API keys required — instant test transactions &amp; official tax invoices)</option>
+            <option value="razorpay_live">Live / Custom Razorpay Gateway (Requires Razorpay Key ID)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="razorpayKeyGroup">
+          <label for="razorpayKeyInput">Razorpay Key ID (Test or Live)</label>
+          <input type="text" id="razorpayKeyInput" class="form-control" placeholder="e.g. rzp_test_1DP5mmOlF5G5ag or rzp_live_...">
+          <span style="font-size:12px; color:#94a3b8; display:block; margin-top:4px;">
+            Copy from your Razorpay Dashboard &rarr; Account &amp; Settings &rarr; API Keys.
+          </span>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="saveRazorpaySettings()"><i class="fas fa-save"></i> Save Razorpay Configuration</button>
+        <span id="razorpaySaveMsg" style="font-size:12px; color:#10b981; margin-left:12px; display:none;"><i class="fas fa-check-circle"></i> Razorpay settings updated successfully!</span>
+
+        <div style="background:rgba(245,192,12,0.06); border-left:3px solid var(--primary); padding:12px 14px; margin-top:16px; border-radius:0 4px 4px 0; font-size:12px; color:#cbd5e1; line-height:1.6;">
+          <strong style="color:var(--primary); display:block; margin-bottom:4px;"><i class="fas fa-graduation-cap"></i> Step-by-Step Razorpay Onboarding Guide:</strong>
+          1. Sign up or log in to <a href="https://dashboard.razorpay.com/" target="_blank" rel="noopener" style="color:var(--primary); text-decoration:underline;">dashboard.razorpay.com</a>.<br>
+          2. In the left menu, click <strong>Account &amp; Settings</strong> &rarr; <strong>API Keys</strong>.<br>
+          3. Click <strong>Generate Key</strong> (or <strong>Regenerate Key</strong>) in Test Mode or Live Mode.<br>
+          4. Copy your <strong>Key ID</strong> (starts with <code>rzp_test_</code> or <code>rzp_live_</code>), paste it above, and click <strong>Save</strong>.
+        </div>
+      </div>
+
+      <div class="card-panel" style="max-width:680px;">
+        <h3 class="panel-title" style="margin-bottom:12px;"><i class="fas fa-plug" style="color:var(--primary);"></i> Backend Server Connection (Optional)</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">
+          This Admin Portal operates reliably in <strong>Standalone Netlify Mode</strong> with browser-synced persistence. If you have also deployed the Node.js backend on Render, Railway, or VPS, connect it here to synchronize across all team members:
+        </p>
+        <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+          <input type="url" id="backendUrlInput" class="form-control" placeholder="https://your-backend.onrender.com" style="flex:1; min-width:260px;">
+          <button class="btn btn-primary btn-sm" onclick="saveBackendUrl()"><i class="fas fa-save"></i> Save &amp; Connect</button>
+          <button class="btn btn-outline btn-sm" onclick="disconnectBackendUrl()"><i class="fas fa-undo"></i> Reset</button>
+        </div>
+        <div id="backendConnectionStatus" style="font-size:12px; color:#94a3b8;">
+          <i class="fas fa-info-circle"></i> Mode: Standalone Netlify (Offline Storage Synced)
+        </div>
+      </div>
+
+      <div class="card-panel" style="max-width:680px;">
+        <h3 class="panel-title" style="margin-bottom:16px;">Security &amp; Credentials</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Change the master administrative password required to access this portal.</p>
+        
+        <form onsubmit="handleChangePassword(event)">
+          <div class="form-group">
+            <label for="newPasswordInput">New Master Password</label>
+            <input type="password" id="newPasswordInput" class="form-control" required placeholder="Minimum 8 characters">
+          </div>
+          <div class="form-group">
+            <label for="confirmPasswordInput">Confirm New Password</label>
+            <input type="password" id="confirmPasswordInput" class="form-control" required placeholder="Re-enter password">
+          </div>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-shield-alt"></i> Update Password</button>
+        </form>
+      </div>
+
+      <div class="card-panel" style="max-width:680px;">
+        <h3 class="panel-title" style="margin-bottom:16px;">Full Database Backup &amp; Portability</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:18px;">Download a complete, offline JSON snapshot of the firm database (containing all articles, course syllabi, candidate enrollments, and client inquiries).</p>
+        <button class="btn btn-outline" onclick="downloadDatabaseBackup()"><i class="fas fa-download"></i> Download db.json Backup</button>
+      </div>
+
+      <div class="card-panel" style="max-width:680px;">
+        <h3 class="panel-title" style="margin-bottom:12px;">Firm Identity &amp; Registration</h3>
+        <p style="font-size:14px; color:#fff;"><strong>Firm Name:</strong> LEX GLOBAL ADVOCACY LLP</p>
+        <p style="font-size:14px; color:#fff;"><strong>LLPIN:</strong> ACK-4630 (Mumbai, India)</p>
+        <p style="font-size:14px; color:var(--text-muted);"><strong>Headquarters:</strong> Savannah, Georgia &amp; Mumbai, India</p>
+        <p style="font-size:14px; color:var(--text-muted);"><strong>Jurisdictions Covered:</strong> 42+ Global Arbitral and Common Law Seats</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- INQUIRY DETAIL MODAL -->
+<div id="inquiryModal" class="admin-modal-overlay">
+  <div class="admin-modal-box">
+    <button class="modal-close-btn" onclick="closeInquiryModal()">&times;</button>
+    <h3 style="font-family:var(--font-serif); font-size:24px; margin-bottom:8px;" id="modalInquiryName">Client Inquiry</h3>
+    <div style="font-size:13px; color:var(--text-muted); margin-bottom:18px;" id="modalInquiryMeta"></div>
+    
+    <div style="background:var(--dark-card); padding:16px; border-radius:6px; margin-bottom:18px;">
+      <h4 style="font-size:12px; text-transform:uppercase; color:var(--primary); letter-spacing:1px; margin-bottom:6px;">Privileged Description</h4>
+      <p id="modalInquiryDesc" style="font-size:15px; color:#e2e8f0; white-space:pre-wrap; line-height:1.7;"></p>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <label style="font-size:13px; color:var(--text-muted);">Change Status:</label>
+        <select id="modalInquiryStatusSelect" class="form-control" style="width:auto; height:36px;">
+          <option value="New">New</option>
+          <option value="Under Review">Under Review</option>
+          <option value="Cleared">Cleared</option>
+        </select>
+        <button class="btn btn-outline btn-sm" onclick="saveInquiryStatusFromModal()">Update</button>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="closeInquiryModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- COURSE CREATE / EDIT MODAL -->
+<div id="courseModal" class="admin-modal-overlay">
+  <div class="admin-modal-box">
+    <button class="modal-close-btn" onclick="closeCourseModal()">&times;</button>
+    <h3 style="font-family:var(--font-serif); font-size:24px; margin-bottom:16px;">Add New Academy Masterclass</h3>
+    
+    <form onsubmit="handleSaveCourse(event)">
+      <div class="form-group">
+        <label>Masterclass Title *</label>
+        <input type="text" id="cTitle" class="form-control" required placeholder="e.g. Cross-Border Technology Transactions & AI Law">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div class="form-group">
+          <label>Practice Category *</label>
+          <select id="cCategory" class="form-control" required>
+            <option value="Arbitration">Arbitration &amp; ADR</option>
+            <option value="Cross-Border Contracts">Cross-Border Contracts</option>
+            <option value="Data & Privacy">Data Privacy &amp; Cyber Law</option>
+            <option value="Maritime & Admiralty">Maritime &amp; Admiralty</option>
+            <option value="Real Estate">Real Estate &amp; Title</option>
+            <option value="Litigation & Advocacy">Litigation &amp; Advocacy</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Academic Level</label>
+          <select id="cLevel" class="form-control">
+            <option value="Advanced Masterclass">Advanced Masterclass</option>
+            <option value="Executive Practitioner">Executive Practitioner</option>
+            <option value="Specialist Masterclass">Specialist Masterclass</option>
+            <option value="Comprehensive Practical Course">Comprehensive Practical Course</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div class="form-group">
+          <label>Duration &amp; Credits</label>
+          <input type="text" id="cDuration" class="form-control" placeholder="e.g. 6 weeks · 18 lectures · 12 CLE Credits">
+        </div>
+        <div class="form-group">
+          <label>Tuition Fee (INR)</label>
+          <input type="number" id="cPrice" class="form-control" value="3999" placeholder="3999">
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div class="form-group">
+          <label>Faculty Lead *</label>
+          <input type="text" id="cInstructor" class="form-control" required placeholder="e.g. Adv. Priya Menon">
+        </div>
+        <div class="form-group">
+          <label>Faculty Title &amp; Credentials</label>
+          <input type="text" id="cInstructorTitle" class="form-control" placeholder="e.g. Partner, International Corporate Counsel">
+        </div>
+      </div>
+
+      <!-- NEW: Faculty photo / instructor avatar URL -->
+      <div class="form-group">
+        <label>Faculty Photo / Instructor Avatar URL</label>
+        <input type="url" id="cInstructorAvatar" class="form-control" placeholder="https://images.unsplash.com/photo-... (paste faculty headshot URL)">
+        <span style="font-size:12px; color:#94a3b8; display:block; margin-top:4px;">
+          <i class="fas fa-info-circle"></i> Paste a direct image URL of the faculty headshot. If left blank, a professional default portrait will be used.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Course Cover Image URL</label>
+        <input type="url" id="cImage" class="form-control" placeholder="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1400&q=80">
+        <span style="font-size:12px; color:#94a3b8; display:block; margin-top:4px;">
+          <i class="fas fa-image"></i> Cover image for the course card on the public website.
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Executive Synopsis *</label>
+        <textarea id="cDescription" class="form-control" rows="3" required placeholder="Concise overview of curriculum and practice outcomes..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Core Learning Outcomes (1 per line)</label>
+        <textarea id="cOutcomes" class="form-control" rows="3" placeholder="Draft bulletproof cross-border dispute clauses&#10;Master New York Convention enforcement defenses&#10;Structure strategic liability and indemnity caps"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Curriculum Modules (1 module title per line)</label>
+        <textarea id="cModules" class="form-control" rows="3" placeholder="Module 1: Foundations & The Governing Legal Architecture&#10;Module 2: Tribunal Procedure, Evidentiary Injunctions & Defense&#10;Module 3: Cross-Border Asset Recovery & Capstone Execution"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; height:44px; font-weight:700;">
+        <i class="fas fa-plus-circle" style="margin-right:6px;"></i> Publish Masterclass to Public Website
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- BLOG CREATE MODAL -->
+<div id="blogModal" class="admin-modal-overlay">
+  <div class="admin-modal-box">
+    <button class="modal-close-btn" onclick="closeBlogModal()">&times;</button>
+    <h3 style="font-family:var(--font-serif); font-size:24px; margin-bottom:16px;">Publish New Legal Article</h3>
+    
+    <form onsubmit="handleSaveBlog(event)">
+      <div class="form-group">
+        <label>Article Title *</label>
+        <input type="text" id="bTitle" class="form-control" required placeholder="e.g. Maritime Liens and Sister-Ship Arrests in Common Law Ports">
+      </div>
+      <div class="form-group">
+        <label>Subtitle / Executive Summary *</label>
+        <input type="text" id="bSubtitle" class="form-control" required placeholder="Concise 1-2 sentence hook for readers...">
+      </div>
+
+      <!-- NEW: Blog cover image URL -->
+      <div class="form-group">
+        <label>Cover Image URL *</label>
+        <input type="url" id="bImage" class="form-control" required placeholder="https://images.unsplash.com/photo-... (paste article cover image URL)">
+        <span style="font-size:12px; color:#94a3b8; display:block; margin-top:4px;">
+          <i class="fas fa-image"></i> This image will be displayed on the Legal Hub blog card on the public website.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Practice Category *</label>
+        <select id="bCategory" class="form-control" required>
+          <option value="Arbitration">International Arbitration</option>
+          <option value="Cross-Border Contracts">Cross-Border Contracts</option>
+          <option value="Data & Privacy">Data Privacy &amp; GDPR</option>
+          <option value="Maritime & Admiralty">Maritime &amp; Admiralty</option>
+          <option value="Real Estate">Real Estate</option>
+          <option value="Legal Writing">Legal Writing &amp; Advocacy</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Author *</label>
+        <input type="text" id="bAuthor" class="form-control" required value="Dr. Amara Okonkwo">
+      </div>
+      <div class="form-group">
+        <label>Read Time</label>
+        <input type="text" id="bReadTime" class="form-control" value="7 min read">
+      </div>
+      <div class="form-group">
+        <label>Full Content (HTML or formatted text) *</label>
+        <textarea id="bContent" class="form-control" rows="8" required placeholder="<p>Article body paragraphs, headings, blockquotes, and analysis...</p>"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; height:42px;">Publish Article to Legal Hub</button>
+    </form>
+  </div>
+</div>
+
+<!-- ORDER TAX INVOICE MODAL -->
+<div id="orderInvoiceModal" class="admin-modal-overlay">
+  <div class="admin-modal-box" style="max-width:720px; background:#fff; color:#0f172a; padding:28px; border-radius:8px; box-shadow:0 20px 40px rgba(0,0,0,0.3);">
+    <button class="modal-close-btn" style="color:#0f172a; font-size:24px;" onclick="closeOrderInvoiceModal()">&times;</button>
+    <div id="orderInvoiceModalBody"></div>
+  </div>
+</div>
+
+<script>
+// ==================== DUAL-MODE RESILIENT ADMIN CONTROLLER ====================
+let API_BASE = localStorage.getItem('lex_backend_url') || window.LEX_API_URL || '';
+let authToken = localStorage.getItem('lex_admin_token') || '';
+let currentInquiries = [];
+let currentCourses = [];
+let currentEnrollments = [];
+let currentOrders = [];
+let currentBlogs = [];
+let activeInquiryModalId = null;
+let activeInvoiceOrderId = null;
+
+const SEED_ORDERS = [];
+const SEED_INQUIRIES = [];
+const SEED_ENROLLMENTS = [];
+const SEED_COURSES = [];
+const SEED_BLOGS = [];
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+async function apiFetch(endpoint, options = {}) {
+  const headers = options.headers || {};
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+  if (!headers['Content-Type'] && !(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+  try {
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), 3500);
+    const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers, signal: controller.signal });
+    clearTimeout(tid);
+    if (res.ok) return res;
+  } catch (err) {}
+  return null;
+}
+
+async function checkAuth() {
+  if (!authToken) { showLogin(); return; }
+  if (authToken.startsWith('lga-standalone-') || authToken.startsWith('local-')) { showApp(); loadAllData(); return; }
+  try {
+    const res = await apiFetch('/api/auth/verify');
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data.authenticated) { showApp(); loadAllData(); return; }
+    }
+  } catch (e) {}
+  showApp(); loadAllData();
+}
+
+function showLogin() {
+  document.getElementById('loginView').style.display = 'grid';
+  document.getElementById('appView').style.display = 'none';
+  document.getElementById('logoutBtn').style.display = 'none';
+  document.getElementById('systemModeTag').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('loginView').style.display = 'none';
+  document.getElementById('appView').style.display = 'flex';
+  document.getElementById('logoutBtn').style.display = 'inline-flex';
+  document.getElementById('systemModeTag').style.display = 'inline-block';
+}
+
+let clientFailedLogins = 0;
+let clientLockoutUntil = 0;
+let sessionInactivityTimer = null;
+const SESSION_INACTIVITY_LIMIT = 30 * 60 * 1000;
+
+function resetSessionTimer() {
+  if (sessionInactivityTimer) clearTimeout(sessionInactivityTimer);
+  if (authToken) sessionInactivityTimer = setTimeout(() => { logout(true); }, SESSION_INACTIVITY_LIMIT);
+}
+['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(evt => {
+  window.addEventListener(evt, resetSessionTimer, { passive: true });
+});
+
+function sanitizeCsvCell(val) {
+  let str = (val === null || val === undefined) ? '' : String(val);
+  if (/^[=\+\-@\t\r]/.test(str)) str = "'" + str;
+  return `"${str.replace(/"/g, '""')}"`;
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const alertEl = document.getElementById('loginAlert');
+  alertEl.style.display = 'none';
+  const now = Date.now();
+  if (clientLockoutUntil > now) {
+    const waitSec = Math.ceil((clientLockoutUntil - now) / 1000);
+    alertEl.textContent = `Security Lockout: Too many failed login attempts. Please wait ${waitSec} seconds before re-trying.`;
+    alertEl.style.display = 'block';
+    return;
+  }
+  const username = document.getElementById('adminUsername').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  const btn = document.getElementById('loginSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Verifying credentials...';
+  let authenticated = false;
+  try {
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), 2500);
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+      signal: controller.signal
+    });
+    clearTimeout(tid);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.token) {
+        authToken = data.token;
+        localStorage.setItem('lex_admin_token', authToken);
+        localStorage.setItem('lex_admin_mode', 'remote');
+        authenticated = true;
+      }
+    } else if (res.status === 429) {
+      const errData = await res.json().catch(() => ({}));
+      alertEl.textContent = errData.error || 'Security Lockout: Too many failed attempts.';
+      alertEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-key"></i> Authenticate Session';
+      return;
+    }
+  } catch (err) {}
+  if (!authenticated) {
+    const localSavedPw = localStorage.getItem('lex_local_admin_password') || 'lexglobal2026';
+    if ((username === 'admin' || username === 'partner') && password === localSavedPw) {
+      authToken = 'lga-standalone-' + Date.now();
+      localStorage.setItem('lex_admin_token', authToken);
+      localStorage.setItem('lex_admin_mode', 'standalone');
+      authenticated = true;
+    }
+  }
+  if (authenticated) {
+    clientFailedLogins = 0;
+    clientLockoutUntil = 0;
+    resetSessionTimer();
+    showApp();
+    loadAllData();
+  } else {
+    clientFailedLogins++;
+    if (clientFailedLogins >= 5) {
+      clientLockoutUntil = now + (5 * 60 * 1000);
+      alertEl.textContent = 'Security Lockout: 5 consecutive failed attempts. Administrative access locked for 5 minutes.';
+    } else {
+      alertEl.textContent = `Invalid credentials. Please verify your administrative username and password. (${5 - clientFailedLogins} attempts remaining)`;
+    }
+    alertEl.style.display = 'block';
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-key"></i> Authenticate Session';
+}
+
+function logout(isTimeout = false) {
+  authToken = '';
+  localStorage.removeItem('lex_admin_token');
+  if (sessionInactivityTimer) clearTimeout(sessionInactivityTimer);
+  showLogin();
+  if (isTimeout) {
+    const alertEl = document.getElementById('loginAlert');
+    if (alertEl) {
+      alertEl.textContent = 'Session expired due to 30 minutes of inactivity. Please re-authenticate.';
+      alertEl.style.display = 'block';
+    }
+  }
+}
+
+function switchTab(tabName) {
+  const tabs = ['dashboard', 'orders', 'inquiries', 'courses', 'blogs', 'settings'];
+  tabs.forEach(t => {
+    const el = document.getElementById(`tab-${t}`);
+    if (el) el.style.display = (t === tabName) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sidebar .nav-item').forEach(item => item.classList.remove('active'));
+  event?.currentTarget?.classList.add('active');
+}
+
+async function loadAllData() {
+  await Promise.all([loadOrders(), loadInquiries(), loadCourses(), loadEnrollments(), loadBlogs(), loadStats()]);
+  updateModeDisplay();
+  loadRazorpaySettingsUI();
+}
+
+function updateModeDisplay() {
+  const tag = document.getElementById('systemModeTag');
+  const statusEl = document.getElementById('backendConnectionStatus');
+  const urlInput = document.getElementById('backendUrlInput');
+  if (urlInput) urlInput.value = API_BASE;
+  if (API_BASE) {
+    if (tag) tag.innerHTML = '<i class="fas fa-link"></i> Remote API Connected';
+    if (statusEl) statusEl.innerHTML = `<span style="color:#10b981;"><i class="fas fa-check-circle"></i> Connected to backend:</span> <code>${escapeHtml(API_BASE)}</code>`;
+  } else {
+    if (tag) tag.innerHTML = '<i class="fas fa-shield-alt"></i> Netlify Standalone Active';
+    if (statusEl) statusEl.innerHTML = '<span style="color:#f59e0b;"><i class="fas fa-info-circle"></i> Operating in Standalone Netlify Mode (Browser-synced storage).</span>';
+  }
+}
+
+async function loadStats() {
+  const totalRevenue = currentOrders.reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('kpiRevenue', '₹' + totalRevenue.toLocaleString());
+  set('kpiOrders', currentOrders.length);
+  set('kpiInquiries', currentInquiries.length);
+  set('kpiCourses', currentCourses.length);
+  set('kpiPosts', currentBlogs.length);
+  set('ordersTotalRevenue', '₹' + totalRevenue.toLocaleString());
+  set('ordersTotalCount', currentOrders.length);
+  set('badgeOrdersCount', currentOrders.length);
+  set('badgeInquiriesCount', currentInquiries.filter(i => i.status === 'New').length || currentInquiries.length);
+  set('badgeCoursesCount', currentCourses.length);
+}
+
+// ==================== ORDERS ====================
+async function loadOrders() {
+  let loaded = false;
+  const res = await apiFetch('/api/courses/orders');
+  if (res) {
+    try { const data = await res.json(); if (Array.isArray(data)) { currentOrders = data; localStorage.setItem('lga_course_orders', JSON.stringify(currentOrders)); loaded = true; } } catch(e) {}
+  }
+  if (!loaded) {
+    const local = localStorage.getItem('lga_course_orders');
+    if (local) { try { currentOrders = JSON.parse(local); } catch(e) {} } else currentOrders = [...SEED_ORDERS];
+  }
+  renderOrdersTable();
+  renderDashboardOrders();
+}
+
+function renderDashboardOrders() {
+  const tbody = document.getElementById('dashOrdersTableBody');
+  if (!tbody) return;
+  const recent = currentOrders.slice(0, 5);
+  if (!recent.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#777; padding:20px;">No course purchases recorded yet.</td></tr>'; return; }
+  tbody.innerHTML = recent.map(o => `
+    <tr>
+      <td style="color:#aaa; font-size:12px;">${o.timestamp ? new Date(o.timestamp).toLocaleDateString() : 'Recent'}<br><code>${escapeHtml(o.orderId || o.id)}</code></td>
+      <td><strong>${escapeHtml(o.buyerName)}</strong><br><span style="font-size:11px; color:#94a3b8;">${escapeHtml(o.organization || o.buyerEmail)}</span></td>
+      <td><strong style="font-size:13px;">${escapeHtml(o.courseTitle)}</strong><br><span style="font-size:11px; color:var(--primary);">${escapeHtml(o.learningTrack || 'Live Cohort')}</span></td>
+      <td><strong style="color:#fff;">₹${(o.amount || 0).toLocaleString()}</strong></td>
+      <td><code style="font-size:11px; color:#10b981;">${escapeHtml(o.paymentId || 'N/A')}</code></td>
+      <td><span class="badge ${o.paymentStatus === 'Paid' ? 'badge-cleared' : 'badge-urgent'}">${escapeHtml(o.paymentStatus || 'Paid')}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="openOrderInvoiceModal('${escapeHtml(o.orderId || o.id)}')"><i class="fas fa-file-invoice"></i> Invoice</button></td>
+    </tr>`).join('');
+}
+
+function renderOrdersTable() {
+  const tbody = document.getElementById('ordersTableBody');
+  if (!tbody) return;
+  const q = (document.getElementById('orderSearchInput')?.value || '').toLowerCase().trim();
+  const statusFilter = document.getElementById('orderStatusFilter')?.value || '';
+  const filtered = currentOrders.filter(o => {
+    const textBlob = ((o.orderId||'') + ' ' + (o.studentId||'') + ' ' + o.buyerName + ' ' + o.buyerEmail + ' ' + (o.buyerPhone||'') + ' ' + (o.organization||'') + ' ' + o.courseTitle + ' ' + (o.paymentId||'')).toLowerCase();
+    return (!q || textBlob.includes(q)) && (!statusFilter || o.paymentStatus === statusFilter);
+  });
+  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#777; padding:30px;">No matching course orders found.</td></tr>'; return; }
+  tbody.innerHTML = filtered.map(o => `
+    <tr>
+      <td><div style="font-size:12px; color:#94a3b8;">${o.timestamp ? new Date(o.timestamp).toLocaleString() : 'Recent'}</div><code style="font-weight:700; color:#fff;">${escapeHtml(o.orderId || o.id)}</code></td>
+      <td><code style="background:rgba(245,192,12,0.15); color:var(--primary); padding:2px 6px; border-radius:3px; font-size:11px; font-weight:700;">${escapeHtml(o.studentId || 'N/A')}</code><br><strong>${escapeHtml(o.buyerName)}</strong><br><span style="font-size:11px; color:#94a3b8;">${escapeHtml(o.organization || 'Individual')} &middot; <a href="mailto:${escapeHtml(o.buyerEmail)}" style="color:var(--primary);">${escapeHtml(o.buyerEmail)}</a></span></td>
+      <td><strong style="font-size:13px; color:#fff;">${escapeHtml(o.courseTitle)}</strong><br><span style="font-size:11px; color:#94a3b8;"><i class="fas fa-layer-group"></i> ${escapeHtml(o.learningTrack || 'Live Cohort')}</span></td>
+      <td><strong style="color:var(--primary); font-size:15px;">₹${(o.amount || 0).toLocaleString()}</strong><br><span style="font-size:11px; color:#94a3b8;">${escapeHtml(o.paymentMethod || 'Razorpay')}</span></td>
+      <td><code style="font-size:11px; color:#10b981; background:#0f172a; padding:2px 6px; border-radius:3px;">${escapeHtml(o.paymentId || 'N/A')}</code></td>
+      <td><span class="badge ${o.paymentStatus === 'Paid' ? 'badge-cleared' : 'badge-urgent'}"><i class="fas ${o.paymentStatus === 'Paid' ? 'fa-check-circle' : 'fa-clock'}"></i> ${escapeHtml(o.paymentStatus || 'Paid')}</span></td>
+      <td><div style="display:flex; gap:6px;"><button class="btn btn-outline btn-sm" onclick="openOrderInvoiceModal('${escapeHtml(o.orderId || o.id)}')" title="View Formal Tax Invoice"><i class="fas fa-file-invoice"></i></button><button class="btn btn-danger btn-sm" onclick="deleteOrder('${escapeHtml(o.id || o.orderId)}')" title="Delete Order"><i class="fas fa-trash"></i></button></div></td>
+    </tr>`).join('');
+}
+
+function openOrderInvoiceModal(orderId) {
+  const o = currentOrders.find(x => x.orderId === orderId || x.id === orderId);
+  if (!o) return;
+  activeInvoiceOrderId = orderId;
+  const modal = document.getElementById('orderInvoiceModal');
+  const body = document.getElementById('orderInvoiceModalBody');
+  if (!modal || !body) return;
+  const fee = Number(o.amount || 0);
+  const baseFee = Math.round(fee / 1.18);
+  const gst = fee - baseFee;
+  body.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0c0e12; padding-bottom:14px; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;"><div style="width:34px; height:34px; background:#0c0e12; color:var(--primary); display:grid; place-items:center; font-size:16px; border-radius:4px;"><i class="fas fa-balance-scale"></i></div><strong style="font-family:var(--font-accent); font-size:20px; letter-spacing:1px; text-transform:uppercase;">LEX GLOBAL ADVOCACY LLP</strong></div>
+        <div style="font-size:12px; color:#64748b;">LLPIN: ACK-4630 &middot; Advocates &amp; International Arbitrators</div>
+        <div style="font-size:12px; color:#64748b;">Savannah, GA, USA &amp; Nariman Point, Mumbai, India</div>
+      </div>
+      <div style="text-align:right;"><span style="display:inline-block; background:#10b981; color:#fff; font-weight:700; font-size:11px; padding:3px 10px; border-radius:4px; text-transform:uppercase; margin-bottom:6px;"><i class="fas fa-check-circle"></i> Official Tax Invoice (${escapeHtml(o.paymentStatus || 'PAID')})</span><div style="font-size:13px; font-weight:700;">${escapeHtml(o.invoiceNumber || ('INV-LGA-2026-' + Math.floor(1000 + Math.random()*9000)))}</div><div style="font-size:12px; color:#64748b;">Date: ${o.timestamp ? new Date(o.timestamp).toLocaleDateString() : 'N/A'}</div></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:14px; margin-bottom:18px;">
+      <div><span style="font-size:11px; text-transform:uppercase; color:#64748b; font-weight:700; display:block; margin-bottom:4px;">Candidate / Billed To</span><strong style="font-size:14px; color:#0f172a; display:block;">${escapeHtml(o.buyerName)}</strong><div style="font-size:12px; color:#475569;">${escapeHtml(o.buyerEmail)} &middot; ${escapeHtml(o.buyerPhone || '')}</div><div style="font-size:12px; color:#475569;">${escapeHtml(o.organization || 'Individual Practitioner')}</div></div>
+      <div><span style="font-size:11px; text-transform:uppercase; color:#64748b; font-weight:700; display:block; margin-bottom:4px;">Admission Details</span><div style="font-size:13px;"><strong>Student ID:</strong> <code style="background:#e2e8f0; padding:2px 6px; border-radius:3px; font-weight:700;">${escapeHtml(o.studentId || 'N/A')}</code></div><div style="font-size:12px; color:#475569; margin-top:2px;"><strong>Order ID:</strong> ${escapeHtml(o.orderId || o.id)}</div><div style="font-size:12px; color:#475569;"><strong>Razorpay ID:</strong> ${escapeHtml(o.paymentId || 'N/A')}</div></div>
+    </div>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:18px; font-size:13px;">
+      <thead><tr style="background:#f1f5f9; border-bottom:1px solid #cbd5e1; text-align:left;"><th style="padding:10px 12px;">Description</th><th style="padding:10px 12px;">Track</th><th style="padding:10px 12px; text-align:right;">Amount (INR)</th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:10px 12px;"><strong>${escapeHtml(o.courseTitle)}</strong><br><span style="font-size:12px; color:#64748b;">Certified Masterclass &middot; CLE/CPD Accredited</span></td><td style="padding:10px 12px; color:#475569;">${escapeHtml(o.learningTrack || 'Executive Track')}</td><td style="padding:10px 12px; text-align:right; font-weight:700;">₹${baseFee.toLocaleString()}</td></tr>
+        <tr style="border-bottom:1px solid #e2e8f0; color:#64748b;"><td colspan="2" style="padding:6px 12px; text-align:right;">CGST (9%):</td><td style="padding:6px 12px; text-align:right;">₹${Math.round(gst / 2).toLocaleString()}</td></tr>
+        <tr style="border-bottom:1px solid #e2e8f0; color:#64748b;"><td colspan="2" style="padding:6px 12px; text-align:right;">SGST (9%):</td><td style="padding:6px 12px; text-align:right;">₹${Math.round(gst / 2).toLocaleString()}</td></tr>
+        <tr style="background:#f8fafc; font-size:15px; font-weight:800;"><td colspan="2" style="padding:10px 12px; text-align:right;">Total Amount Paid:</td><td style="padding:10px 12px; text-align:right; color:#0f172a;">₹${fee.toLocaleString()}</td></tr>
+      </tbody>
+    </table>
+    <div style="background:#f1f5f9; border-radius:4px; padding:10px 14px; font-size:11px; color:#64748b; margin-bottom:20px;"><i class="fas fa-check-shield" style="color:#10b981;"></i> Payment processed via <strong>${escapeHtml(o.paymentMethod || 'Razorpay')}</strong>. Transaction Reference: <code>${escapeHtml(o.paymentId || 'N/A')}</code>.</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+      <button type="button" class="btn btn-outline" onclick="window.print()" style="background:#0c0e12; color:#fff; border:none;"><i class="fas fa-print" style="margin-right:6px;"></i> Print Tax Invoice</button>
+      <button type="button" class="btn btn-primary" onclick="closeOrderInvoiceModal()">Close</button>
+    </div>`;
+  modal.classList.add('is-active');
+}
+
+function closeOrderInvoiceModal() {
+  const modal = document.getElementById('orderInvoiceModal');
+  if (modal) modal.classList.remove('is-active');
+  activeInvoiceOrderId = null;
+}
+
+async function deleteOrder(orderId) {
+  if (!confirm('Are you sure you wish to delete this order record?')) return;
+  currentOrders = currentOrders.filter(o => o.orderId !== orderId && o.id !== orderId);
+  localStorage.setItem('lga_course_orders', JSON.stringify(currentOrders));
+  renderOrdersTable();
+  renderDashboardOrders();
+  loadStats();
+  apiFetch(`/api/courses/orders/${orderId}`, { method: 'DELETE' });
+}
+
+function exportOrdersCSV() {
+  if (!currentOrders.length) { alert('No course orders available to export.'); return; }
+  const headers = ['Order ID', 'Date', 'Student ID', 'Buyer Name', 'Email', 'Phone', 'Organization', 'Course Title', 'Track', 'Amount', 'Currency', 'Payment Method', 'Payment ID', 'Status'];
+  const rows = currentOrders.map(o => [sanitizeCsvCell(o.orderId || o.id), sanitizeCsvCell(o.timestamp || ''), sanitizeCsvCell(o.studentId || ''), sanitizeCsvCell(o.buyerName || ''), sanitizeCsvCell(o.buyerEmail || ''), sanitizeCsvCell(o.buyerPhone || ''), sanitizeCsvCell(o.organization || ''), sanitizeCsvCell(o.courseTitle || ''), sanitizeCsvCell(o.learningTrack || ''), sanitizeCsvCell(o.amount || 0), sanitizeCsvCell(o.currency || 'INR'), sanitizeCsvCell(o.paymentMethod || ''), sanitizeCsvCell(o.paymentId || ''), sanitizeCsvCell(o.paymentStatus || 'Paid')]);
+  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.map(sanitizeCsvCell).join(','), ...rows.map(e => e.join(','))].join('\n');
+  const link = document.createElement('a');
+  link.setAttribute('href', encodeURI(csvContent));
+  link.setAttribute('download', `lex-global-orders-${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link); link.click(); document.body.removeChild(link);
+}
+
+// Razorpay settings
+function loadRazorpaySettingsUI() {
+  const mode = localStorage.getItem('lex_razorpay_mode') || 'test_simulator';
+  const key = localStorage.getItem('lex_razorpay_key_id') || '';
+  const sel = document.getElementById('razorpayModeSelect');
+  const inp = document.getElementById('razorpayKeyInput');
+  const lbl = document.getElementById('ordersGatewayLabel');
+  if (sel) sel.value = mode;
+  if (inp) inp.value = key;
+  if (lbl) lbl.textContent = mode === 'razorpay_live' ? 'Razorpay (Live Mode)' : 'Razorpay (Test Mode)';
+  toggleRazorpayModeUI();
+}
+function toggleRazorpayModeUI() {
+  const sel = document.getElementById('razorpayModeSelect');
+  const grp = document.getElementById('razorpayKeyGroup');
+  if (sel && grp) grp.style.display = 'block';
+}
+function saveRazorpaySettings() {
+  const mode = document.getElementById('razorpayModeSelect')?.value || 'test_simulator';
+  const key = document.getElementById('razorpayKeyInput')?.value.trim() || '';
+  localStorage.setItem('lex_razorpay_mode', mode);
+  localStorage.setItem('lex_razorpay_key_id', key);
+  const msg = document.getElementById('razorpaySaveMsg');
+  if (msg) { msg.style.display = 'inline-block'; setTimeout(() => { msg.style.display = 'none'; }, 3000); }
+  loadRazorpaySettingsUI();
+}
+
+// ==================== INQUIRIES ====================
+async function loadInquiries() {
+  let loaded = false;
+  const res = await apiFetch('/api/inquiries');
+  if (res) {
+    try { const data = await res.json(); if (Array.isArray(data)) { currentInquiries = data; localStorage.setItem('lga_client_inquiries', JSON.stringify(currentInquiries)); loaded = true; } } catch (e) {}
+  }
+  if (!loaded) {
+    const local = localStorage.getItem('lga_client_inquiries');
+    if (local) { try { currentInquiries = JSON.parse(local); } catch (e) {} } else currentInquiries = [...SEED_INQUIRIES];
+  }
+  renderInquiriesTable();
+  renderDashboardInquiries();
+}
+
+function renderDashboardInquiries() {
+  const tbody = document.getElementById('dashInquiriesTableBody');
+  if (!tbody) return;
+  const recent = currentInquiries.slice(0, 5);
+  if (!recent.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#777;">No inquiries registered yet.</td></tr>'; return; }
+  tbody.innerHTML = recent.map(inq => `
+    <tr>
+      <td style="color:#aaa; font-size:12px;">${inq.createdAt ? new Date(inq.createdAt).toLocaleDateString() : 'Recent'}</td>
+      <td><strong>${escapeHtml(inq.name)}</strong><br><span style="font-size:12px; color:#888;">${escapeHtml(inq.organization || inq.email)}</span></td>
+      <td>${escapeHtml(inq.practiceArea)}</td>
+      <td><span class="badge ${inq.urgency === 'Urgent' || inq.urgency === 'Immediate Attention' ? 'badge-urgent' : 'badge-new'}">${escapeHtml(inq.urgency || 'Routine')}</span></td>
+      <td><span class="badge ${inq.status === 'Cleared' ? 'badge-cleared' : (inq.status === 'Under Review' ? 'badge-review' : 'badge-new')}">${escapeHtml(inq.status || 'New')}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="openInquiryModal('${inq.id}')">View</button></td>
+    </tr>`).join('');
+}
+
+function renderInquiriesTable() {
+  const tbody = document.getElementById('inquiriesTableBody');
+  if (!tbody) return;
+  const q = (document.getElementById('inquirySearchInput')?.value || '').toLowerCase().trim();
+  const statusFilter = document.getElementById('inquiryStatusFilter')?.value || '';
+  const filtered = currentInquiries.filter(i => {
+    const text = (i.name + ' ' + i.email + ' ' + (i.organization||'') + ' ' + (i.description||'')).toLowerCase();
+    return (!q || text.includes(q)) && (!statusFilter || i.status === statusFilter);
+  });
+  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#777; padding:30px;">No matching inquiries found.</td></tr>'; return; }
+  tbody.innerHTML = filtered.map(inq => `
+    <tr>
+      <td style="font-size:12px; color:#aaa;">${inq.createdAt ? new Date(inq.createdAt).toLocaleString() : 'N/A'}</td>
+      <td><strong>${escapeHtml(inq.name)}</strong><br><a href="mailto:${escapeHtml(inq.email)}" style="font-size:12px;">${escapeHtml(inq.email)}</a></td>
+      <td>${escapeHtml(inq.organization || 'Individual')}</td>
+      <td>${escapeHtml(inq.practiceArea)}</td>
+      <td><span class="badge ${inq.urgency === 'Urgent' || inq.urgency === 'Immediate Attention' ? 'badge-urgent' : 'badge-new'}">${escapeHtml(inq.urgency || 'Routine')}</span></td>
+      <td>
+        <select onchange="updateInquiryStatus('${inq.id}', this.value)" class="form-control" style="height:32px; font-size:12px; width:auto;">
+          <option value="New" ${inq.status === 'New' ? 'selected' : ''}>New</option>
+          <option value="Under Review" ${inq.status === 'Under Review' ? 'selected' : ''}>Under Review</option>
+          <option value="Cleared" ${inq.status === 'Cleared' ? 'selected' : ''}>Cleared</option>
+        </select>
+      </td>
+      <td><div style="display:flex; gap:6px;"><button class="btn btn-outline btn-sm" onclick="openInquiryModal('${inq.id}')"><i class="fas fa-eye"></i></button><button class="btn btn-danger btn-sm" onclick="deleteInquiry('${inq.id}')"><i class="fas fa-trash"></i></button></div></td>
+    </tr>`).join('');
+}
+
+async function updateInquiryStatus(id, newStatus) {
+  const inq = currentInquiries.find(x => x.id === id);
+  if (inq) inq.status = newStatus;
+  localStorage.setItem('lga_client_inquiries', JSON.stringify(currentInquiries));
+  renderInquiriesTable();
+  renderDashboardInquiries();
+  loadStats();
+  apiFetch(`/api/inquiries/${id}`, { method: 'PUT', body: JSON.stringify({ status: newStatus }) });
+}
+
+async function deleteInquiry(id) {
+  if (!confirm('Are you sure you wish to delete this inquiry record?')) return;
+  currentInquiries = currentInquiries.filter(x => x.id !== id);
+  localStorage.setItem('lga_client_inquiries', JSON.stringify(currentInquiries));
+  renderInquiriesTable();
+  renderDashboardInquiries();
+  loadStats();
+  apiFetch(`/api/inquiries/${id}`, { method: 'DELETE' });
+}
+
+function openInquiryModal(id) {
+  const inq = currentInquiries.find(x => x.id === id);
+  if (!inq) return;
+  activeInquiryModalId = id;
+  document.getElementById('modalInquiryName').textContent = inq.name;
+  document.getElementById('modalInquiryMeta').innerHTML = `<strong>Email:</strong> ${escapeHtml(inq.email)} &bull; <strong>Phone:</strong> ${escapeHtml(inq.phone || 'None provided')} &bull; <strong>Practice:</strong> ${escapeHtml(inq.practiceArea)} &bull; <strong>Organization:</strong> ${escapeHtml(inq.organization || 'Individual')}`;
+  document.getElementById('modalInquiryDesc').textContent = inq.description || inq.message || 'No description entered.';
+  document.getElementById('modalInquiryStatusSelect').value = inq.status || 'New';
+  document.getElementById('inquiryModal').classList.add('is-active');
+}
+function closeInquiryModal() {
+  document.getElementById('inquiryModal').classList.remove('is-active');
+  activeInquiryModalId = null;
+}
+async function saveInquiryStatusFromModal() {
+  if (!activeInquiryModalId) return;
+  await updateInquiryStatus(activeInquiryModalId, document.getElementById('modalInquiryStatusSelect').value);
+  closeInquiryModal();
+}
+
+function exportInquiriesCSV() {
+  if (!currentInquiries.length) { alert('No inquiries available to export.'); return; }
+  const headers = ['ID', 'Date', 'Name', 'Email', 'Phone', 'Organization', 'Practice Area', 'Urgency', 'Status', 'Description'];
+  const rows = currentInquiries.map(i => [sanitizeCsvCell(i.id), sanitizeCsvCell(i.createdAt || ''), sanitizeCsvCell(i.name || ''), sanitizeCsvCell(i.email || ''), sanitizeCsvCell(i.phone || ''), sanitizeCsvCell(i.organization || ''), sanitizeCsvCell(i.practiceArea || ''), sanitizeCsvCell(i.urgency || ''), sanitizeCsvCell(i.status || ''), sanitizeCsvCell(i.description || i.message || '')]);
+  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.map(sanitizeCsvCell).join(','), ...rows.map(e => e.join(','))].join('\n');
+  const link = document.createElement('a');
+  link.setAttribute('href', encodeURI(csvContent));
+  link.setAttribute('download', `lex-global-inquiries-${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link); link.click(); document.body.removeChild(link);
+}
+
+// ==================== COURSES ====================
+async function loadCourses() {
+  let loaded = false;
+  const res = await apiFetch('/api/courses');
+  if (res) {
+    try { const data = await res.json(); if (Array.isArray(data)) { currentCourses = data; localStorage.setItem('lga_academy_courses', JSON.stringify(currentCourses)); loaded = true; } } catch(e) {}
+  }
+  if (!loaded) {
+    const local = localStorage.getItem('lga_academy_courses');
+    if (local) { try { currentCourses = JSON.parse(local); } catch(e) {} } else currentCourses = [...SEED_COURSES];
+  }
+  renderCoursesTable();
+}
+
+function renderCoursesTable() {
+  const tbody = document.getElementById('coursesTableBody');
+  if (!tbody) return;
+  if (!currentCourses.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:36px;"><i class="fas fa-graduation-cap" style="font-size:32px; display:block; margin-bottom:10px; opacity:0.6;"></i><strong>No masterclasses created yet.</strong><div style="font-size:12px; color:#64748b; margin-top:4px;">Click the button below to add your first executive masterclass to the website.</div><div style="margin-top:14px;"><button class="btn btn-primary btn-sm" onclick="openNewCourseModal()"><i class="fas fa-plus"></i> Add Masterclass Now</button></div></td></tr>';
+    return;
+  }
+  const defaultAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+  const defaultCover = 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=400&q=80';
+  tbody.innerHTML = currentCourses.map(c => `
+    <tr>
+      <td>
+        <div class="cell-flex">
+          <img src="${escapeHtml(c.image || defaultCover)}" alt="" class="admin-thumb" onerror="this.src='${defaultCover}'">
+          <div>
+            <strong>${escapeHtml(c.title)}</strong><br>
+            <span style="font-size:12px; color:var(--primary);">${escapeHtml(c.level || 'Masterclass')}</span>
+          </div>
+        </div>
+      </td>
+      <td>${escapeHtml(c.category)}</td>
+      <td>
+        <div class="cell-flex">
+          <img src="${escapeHtml(c.instructorAvatar || defaultAvatar)}" alt="" class="admin-avatar" onerror="this.src='${defaultAvatar}'">
+          <div>
+            ${escapeHtml(c.instructor)}<br>
+            <span style="font-size:11px; color:#888;">${escapeHtml(c.instructorTitle || '')}</span>
+          </div>
+        </div>
+      </td>
+      <td>${escapeHtml(c.duration)}</td>
+      <td><strong>₹${(c.price || 0).toLocaleString()}</strong></td>
+      <td><span class="badge badge-cleared">${c.students || 0} enrolled</span></td>
+      <td>
+        <button class="btn btn-danger btn-sm" onclick="deleteCourse('${c.id}')"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>`).join('');
+}
+
+function openNewCourseModal() {
+  // Clear fields for a fresh entry
+  ['cTitle','cDuration','cInstructor','cInstructorTitle','cInstructorAvatar','cImage','cDescription','cOutcomes','cModules'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const priceEl = document.getElementById('cPrice'); if (priceEl) priceEl.value = '3999';
+  document.getElementById('courseModal').classList.add('is-active');
+}
+function closeCourseModal() {
+  document.getElementById('courseModal').classList.remove('is-active');
+}
+
+async function handleSaveCourse(e) {
+  e.preventDefault();
+  const title = document.getElementById('cTitle').value.trim();
+  const category = document.getElementById('cCategory').value;
+  const level = document.getElementById('cLevel')?.value || 'Advanced Masterclass';
+  const duration = document.getElementById('cDuration').value.trim() || '6 weeks · 18 lectures · 12 CLE Credits';
+  const price = document.getElementById('cPrice').value;
+  const instructor = document.getElementById('cInstructor').value.trim();
+  const instructorTitle = document.getElementById('cInstructorTitle').value.trim() || 'Partner & Practice Lead';
+  // NEW: admin-controlled faculty avatar URL
+  const instructorAvatar = document.getElementById('cInstructorAvatar')?.value.trim() || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+  const image = document.getElementById('cImage')?.value.trim() || 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1400&q=80';
+  const description = document.getElementById('cDescription').value.trim();
+  const outcomesRaw = document.getElementById('cOutcomes').value.trim();
+  const outcomes = outcomesRaw.split('\n').map(x => x.trim()).filter(Boolean);
+  const modulesRaw = document.getElementById('cModules')?.value.trim() || '';
+  const moduleLines = modulesRaw.split('\n').map(x => x.trim()).filter(Boolean);
+
+  const courseId = 'c-' + Date.now();
+  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+  const curriculum = moduleLines.length > 0 ? moduleLines.map((modTitle, mIdx) => ({
+    title: modTitle.startsWith('Module') ? modTitle : `Module ${mIdx + 1}: ${modTitle}`,
+    lessons: [
+      { id: `${courseId}-m${mIdx}-l1`, title: `${modTitle} — Comprehensive Statutory Architecture`, duration: '45 min', type: 'video', preview: mIdx === 0 },
+      { id: `${courseId}-m${mIdx}-l2`, title: `${modTitle} — Practical Clause Drafting Workshop`, duration: '50 min', type: 'workshop', preview: false },
+      { id: `${courseId}-m${mIdx}-l3`, title: `${modTitle} — Cross-Border Precedent & Evidentiary Study`, duration: '40 min', type: 'case-study', preview: false }
+    ]
+  })) : [
+    {
+      title: 'Module 1: Foundations & Analytical Framework',
+      lessons: [
+        { id: `${courseId}-m0-l1`, title: 'Comprehensive Practical Framework & Statutory Analysis', duration: '45 min', type: 'video', preview: true },
+        { id: `${courseId}-m0-l2`, title: 'Drafting Bulletproof Agreements & Clause Workshop', duration: '50 min', type: 'workshop', preview: false }
+      ]
+    },
+    {
+      title: 'Module 2: Strategic Execution & Dispute Mitigation',
+      lessons: [
+        { id: `${courseId}-m1-l1`, title: 'Cross-Border Execution & Precedent Scrutiny', duration: '55 min', type: 'case-study', preview: false },
+        { id: `${courseId}-m1-l2`, title: 'Final Certification & Capstone Review', duration: '40 min', type: 'masterclass', preview: false }
+      ]
+    }
+  ];
+
+  const newCourse = {
+    id: courseId,
+    slug,
+    title,
+    category,
+    level,
+    duration,
+    price: Number(price) || 0,
+    currency: 'INR',
+    instructor,
+    instructorTitle,
+    instructorAvatar,  // NEW
+    image,
+    description,
+    accreditation: 'Accredited by Global Bar CLE Council',
+    outcomes: outcomes.length > 0 ? outcomes : [
+      'Master strategic drafting and dispute mitigation',
+      'Navigate multi-jurisdictional compliance protocols',
+      'Execute cross-border enforcement and risk allocation'
+    ],
+    curriculum,
+    rating: 4.9,
+    students: 1,
+    published: true
+  };
+
+  currentCourses.unshift(newCourse);
+  localStorage.setItem('lga_academy_courses', JSON.stringify(currentCourses));
+  renderCoursesTable();
+  loadStats();
+  closeCourseModal();
+  apiFetch('/api/courses', { method: 'POST', body: JSON.stringify(newCourse) });
+}
+
+async function deleteCourse(id) {
+  if (!confirm('Are you sure you want to delete this course?')) return;
+  currentCourses = currentCourses.filter(c => c.id !== id);
+  localStorage.setItem('lga_academy_courses', JSON.stringify(currentCourses));
+  renderCoursesTable();
+  loadStats();
+  apiFetch(`/api/courses/${id}`, { method: 'DELETE' });
+}
+
+// ==================== ENROLLMENTS ====================
+async function loadEnrollments() {
+  let loaded = false;
+  const res = await apiFetch('/api/enrollments');
+  if (res) {
+    try { const data = await res.json(); if (Array.isArray(data)) { currentEnrollments = data; loaded = true; } } catch (e) {}
+  }
+  if (!loaded) {
+    const local = localStorage.getItem('lga_academy_enrollments');
+    if (local) { try { currentEnrollments = JSON.parse(local); } catch (e) {} }
+    if (!currentEnrollments.length) {
+      currentEnrollments = [...SEED_ENROLLMENTS];
+      localStorage.setItem('lga_academy_enrollments', JSON.stringify(currentEnrollments));
+    }
+  }
+  renderEnrollmentsTable();
+  renderDashboardEnrollments();
+}
+
+function renderDashboardEnrollments() {
+  const tbody = document.getElementById('dashEnrollmentsTableBody');
+  if (!tbody) return;
+  const recent = currentEnrollments.slice(0, 5);
+  if (!recent.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#777;">No student enrollments yet.</td></tr>'; return; }
+  tbody.innerHTML = recent.map(enr => `
+    <tr>
+      <td><code>${escapeHtml(enr.studentId || enr.id)}</code></td>
+      <td><strong>${escapeHtml(enr.name)}</strong><br><span style="font-size:12px; color:#888;">${escapeHtml(enr.organization || enr.email)}</span></td>
+      <td>${escapeHtml(enr.courseTitle || 'Masterclass')}</td>
+      <td><span style="font-size:12px; color:var(--text-muted);">${escapeHtml(enr.mode || 'Live Cohort')}</span></td>
+      <td><span class="badge badge-cleared">Confirmed</span></td>
+    </tr>`).join('');
+}
+
+function renderEnrollmentsTable() {
+  const tbody = document.getElementById('enrollmentsTableBody');
+  if (!tbody) return;
+  const summary = document.getElementById('enrollmentSummaryText');
+  if (summary) summary.textContent = `${currentEnrollments.length} candidate(s) enrolled`;
+  if (!currentEnrollments.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#777; padding:24px;">No enrollments recorded.</td></tr>'; return; }
+  tbody.innerHTML = currentEnrollments.map(enr => `
+    <tr>
+      <td><code>${escapeHtml(enr.studentId || enr.id)}</code></td>
+      <td style="font-size:12px; color:#aaa;">${enr.enrolledAt ? new Date(enr.enrolledAt).toLocaleDateString() : 'Recent'}</td>
+      <td><strong>${escapeHtml(enr.name)}</strong><br><a href="mailto:${escapeHtml(enr.email)}" style="font-size:12px;">${escapeHtml(enr.email)}</a></td>
+      <td>${escapeHtml(enr.organization || 'Individual')}</td>
+      <td>${escapeHtml(enr.courseTitle)}</td>
+      <td><span class="badge badge-new">${escapeHtml(enr.mode || 'Live Cohort')}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteEnrollment('${enr.id}')"><i class="fas fa-trash"></i></button></td>
+    </tr>`).join('');
+}
+
+async function deleteEnrollment(id) {
+  if (!confirm('Remove this enrollment record?')) return;
+  currentEnrollments = currentEnrollments.filter(e => e.id !== id);
+  localStorage.setItem('lga_academy_enrollments', JSON.stringify(currentEnrollments));
+  renderEnrollmentsTable();
+  renderDashboardEnrollments();
+  loadStats();
+  apiFetch(`/api/enrollments/${id}`, { method: 'DELETE' });
+}
+
+// ==================== BLOGS ====================
+async function loadBlogs() {
+  let loaded = false;
+  const res = await apiFetch('/api/blogs');
+  if (res) {
+    try { const data = await res.json(); if (Array.isArray(data)) { currentBlogs = data; localStorage.setItem('lga_publications', JSON.stringify(currentBlogs)); loaded = true; } } catch (e) {}
+  }
+  if (!loaded) {
+    const local = localStorage.getItem('lga_publications');
+    if (local) { try { currentBlogs = JSON.parse(local); } catch (e) {} } else currentBlogs = [...SEED_BLOGS];
+  }
+  renderBlogsTable();
+}
+
+function renderBlogsTable() {
+  const tbody = document.getElementById('blogsTableBody');
+  if (!tbody) return;
+  if (!currentBlogs.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:36px;"><i class="fas fa-newspaper" style="font-size:32px; display:block; margin-bottom:10px; opacity:0.6;"></i><strong>No publications published yet.</strong><div style="font-size:12px; color:#64748b; margin-top:4px;">Publish legal research articles and legal commentary directly to the website.</div><div style="margin-top:14px;"><button class="btn btn-primary btn-sm" onclick="openNewBlogModal()"><i class="fas fa-plus"></i> Publish Article</button></div></td></tr>';
+    return;
+  }
+  const defaultCover = 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=200&q=80';
+  tbody.innerHTML = currentBlogs.map(b => `
+    <tr>
+      <td>
+        <div class="cell-flex">
+          <img src="${escapeHtml(b.image || defaultCover)}" alt="" class="admin-thumb" onerror="this.src='${defaultCover}'">
+          <div>
+            <strong>${escapeHtml(b.title)}</strong><br>
+            <span style="font-size:12px; color:#888;">${escapeHtml(b.subtitle || '')}</span>
+          </div>
+        </div>
+      </td>
+      <td><span class="badge badge-new">${escapeHtml(b.category)}</span></td>
+      <td>${escapeHtml(b.author)}</td>
+      <td style="font-size:12px; color:#aaa;">${escapeHtml(b.date)}</td>
+      <td>${b.views || 0}</td>
+      <td><span class="badge ${b.published !== false ? 'badge-cleared' : 'badge-review'}">${b.published !== false ? 'Published' : 'Draft'}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteBlog('${b.id}')"><i class="fas fa-trash"></i></button></td>
+    </tr>`).join('');
+}
+
+function openNewBlogModal() {
+  ['bTitle','bSubtitle','bImage','bContent'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('bAuthor').value = 'Dr. Amara Okonkwo';
+  document.getElementById('bReadTime').value = '7 min read';
+  document.getElementById('blogModal').classList.add('is-active');
+}
+function closeBlogModal() {
+  document.getElementById('blogModal').classList.remove('is-active');
+}
+
+async function handleSaveBlog(e) {
+  e.preventDefault();
+  const title = document.getElementById('bTitle').value.trim();
+  const subtitle = document.getElementById('bSubtitle').value.trim();
+  // NEW: admin-controlled cover image URL
+  const image = document.getElementById('bImage').value.trim();
+  const category = document.getElementById('bCategory').value;
+  const author = document.getElementById('bAuthor').value.trim();
+  const readTime = document.getElementById('bReadTime').value.trim();
+  const content = document.getElementById('bContent').value.trim();
+
+  const newPost = {
+    id: 'p-' + Date.now(),
+    title,
+    subtitle,
+    image,   // NEW
+    category,
+    author,
+    date: new Date().toISOString().slice(0, 10),
+    readTime: readTime || '6 min read',
+    content,
+    views: 1,
+    published: true
+  };
+
+  currentBlogs.unshift(newPost);
+  localStorage.setItem('lga_publications', JSON.stringify(currentBlogs));
+  renderBlogsTable();
+  loadStats();
+  closeBlogModal();
+  apiFetch('/api/blogs', { method: 'POST', body: JSON.stringify(newPost) });
+}
+
+async function deleteBlog(id) {
+  if (!confirm('Are you sure you wish to delete this publication?')) return;
+  currentBlogs = currentBlogs.filter(b => b.id !== id);
+  localStorage.setItem('lga_publications', JSON.stringify(currentBlogs));
+  renderBlogsTable();
+  loadStats();
+  apiFetch(`/api/blogs/${id}`, { method: 'DELETE' });
+}
+
+// ==================== SETTINGS ====================
+function saveBackendUrl() {
+  const url = document.getElementById('backendUrlInput').value.trim().replace(/\/+$/, '');
+  if (!url) { alert('Please enter a valid backend URL.'); return; }
+  localStorage.setItem('lex_backend_url', url);
+  API_BASE = url;
+  alert('Backend API URL saved! Re-testing connection...');
+  loadAllData();
+}
+function disconnectBackendUrl() {
+  localStorage.removeItem('lex_backend_url');
+  API_BASE = '';
+  document.getElementById('backendUrlInput').value = '';
+  alert('Reset to Standalone Netlify Mode.');
+  loadAllData();
+}
+
+async function handleChangePassword(e) {
+  e.preventDefault();
+  const newPw = document.getElementById('newPasswordInput').value;
+  const confirmPw = document.getElementById('confirmPasswordInput').value;
+  if (newPw !== confirmPw) { alert('Passwords do not match.'); return; }
+  if (newPw.length < 8) { alert('Password must be at least 8 characters long.'); return; }
+  localStorage.setItem('lex_local_admin_password', newPw);
+  apiFetch('/api/auth/password', { method: 'POST', body: JSON.stringify({ newPassword: newPw }) });
+  alert('Master administrative password updated successfully!');
+  document.getElementById('newPasswordInput').value = '';
+  document.getElementById('confirmPasswordInput').value = '';
+}
+
+async function downloadDatabaseBackup() {
+  const fullBackup = {
+    exportedAt: new Date().toISOString(),
+    firm: "LEX GLOBAL ADVOCACY LLP",
+    inquiries: currentInquiries,
+    enrollments: currentEnrollments,
+    courses: currentCourses,
+    publications: currentBlogs
+  };
+  const blob = new Blob([JSON.stringify(fullBackup, null, 2)], { type: 'application/json' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `lex-global-backup-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+}
+
+window.addEventListener('DOMContentLoaded', () => { checkAuth(); });
+</script>
+</body>
+</html>

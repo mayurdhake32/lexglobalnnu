@@ -1,0 +1,6 @@
+{
+  "name": "Lex Global Advocacy — Legal Counsel, Academy & Hub",
+  "description": "Dynamic international legal platform featuring expert-led legal courses, an interactive legal blogs & commentary hub, learning management system with certification, and practitioner bench.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
