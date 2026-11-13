@@ -178,7 +178,7 @@ export const TeamModal: React.FC = () => {
                 className="px-5 py-2 text-xs font-semibold rounded-full bg-[#0A1D37] text-white hover:bg-[#0F2647] flex items-center justify-center gap-1.5 flex-1 sm:flex-none"
               >
                 <Mail className="w-3.5 h-3.5 text-[#B08D57]" />
-                <span>Instruct Counsel</span>
+                <span>{member.role.toLowerCase().includes('founder') ? 'Connect with Founder' : 'Instruct Counsel'}</span>
               </button>
             </div>
           </div>

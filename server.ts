@@ -4,7 +4,15 @@ import fs from 'fs';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import nodemailer from 'nodemailer';
 import { createServer as createViteServer } from 'vite';
+import {
+  DEFAULT_GATEWAY_CONFIG,
+  sanitizeGatewayConfig,
+  detectGatewayProviders,
+  dispatchGatewayAlert,
+  formatInquiryNotification
+} from './src/lib/requestGateway.ts';
 
 dotenv.config();
 
@@ -12,16 +20,22 @@ const app = express();
 app.disable('x-powered-by');
 
 function getArg(flag: string): string | undefined {
-  const index = process.argv.indexOf(flag);
-  if (index !== -1 && index + 1 < process.argv.length) {
-    return process.argv[index + 1];
+  const eqPrefix = `${flag}=`;
+  for (let i = 0; i < process.argv.length; i++) {
+    const arg = process.argv[i];
+    if (arg.startsWith(eqPrefix)) {
+      return arg.slice(eqPrefix.length);
+    }
+    if (arg === flag && i + 1 < process.argv.length) {
+      return process.argv[i + 1];
+    }
   }
   return undefined;
 }
 
 // Ensure dev server binds to port 3000 and 0.0.0.0
-const PORT = parseInt(getArg('--port') || (process.env.NODE_ENV === 'production' && process.env.PORT ? process.env.PORT : '3000'), 10);
-const HOST = getArg('--host') || '0.0.0.0';
+const PORT = parseInt(getArg('--port') || process.env.PORT || '3000', 10) || 3000;
+const HOST = getArg('--host') || process.env.HOST || '0.0.0.0';
 const DB_PATH = path.resolve(process.cwd(), 'data', 'db.json');
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'lexglobal2026';
 
@@ -107,9 +121,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// JSON Body parser with payload limit to guard against DOS
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+// JSON Body parser with higher limit to support pasted gallery photos
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 
 // Serve static assets from public directory and root workspace
 app.use(express.static(path.resolve(process.cwd(), 'public')));
@@ -119,20 +133,55 @@ app.use(express.static(process.cwd()));
 function readDb() {
   try {
     if (!fs.existsSync(DB_PATH)) {
-      return { posts: [], courses: [], team: [], inquiries: [], enrollments: [], orders: [] };
+      return {
+        posts: [],
+        journals: [],
+        gallery: [],
+        siteSettings: { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true },
+        courses: [],
+        team: [],
+        inquiries: [],
+        enrollments: [],
+        orders: [],
+        gatewayConfig: { ...DEFAULT_GATEWAY_CONFIG },
+        gatewayLogs: []
+      };
     }
     const raw = fs.readFileSync(DB_PATH, 'utf-8');
     const data = JSON.parse(raw);
     data.posts = data.posts || [];
+    data.journals = data.journals || [];
+    data.gallery = data.gallery || [];
+    data.siteSettings = {
+      showJournal: true,
+      showLegalHub: true,
+      showAcademy: true,
+      showGallery: true,
+      ...(data.siteSettings || {})
+    };
     data.courses = data.courses || [];
     data.team = data.team || [];
     data.inquiries = data.inquiries || [];
     data.enrollments = data.enrollments || [];
     data.orders = data.orders || [];
+    data.gatewayConfig = sanitizeGatewayConfig(data.gatewayConfig, process.env);
+    data.gatewayLogs = Array.isArray(data.gatewayLogs) ? data.gatewayLogs : [];
     return data;
   } catch (err) {
     console.error('Error reading DB:', err);
-    return { posts: [], courses: [], team: [], inquiries: [], enrollments: [], orders: [] };
+    return {
+      posts: [],
+      journals: [],
+      gallery: [],
+      siteSettings: { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true },
+      courses: [],
+      team: [],
+      inquiries: [],
+      enrollments: [],
+      orders: [],
+      gatewayConfig: { ...DEFAULT_GATEWAY_CONFIG },
+      gatewayLogs: []
+    };
   }
 }
 
@@ -148,6 +197,32 @@ function writeDb(data: any) {
   }
 }
 
+// Cryptographic Session Verification (supports persistent HMAC signature and in-memory cache)
+function verifyToken(token: string): boolean {
+  if (!token) return false;
+  const session = activeSessions.get(token);
+  if (session && Date.now() <= session.expiresAt) {
+    return true;
+  }
+  try {
+    const parts = token.split('.');
+    if (parts.length === 2) {
+      const [timestampStr, signature] = parts;
+      const timestamp = parseInt(timestampStr, 10);
+      const db = readDb();
+      const validPw = db.adminPassword || ADMIN_PASSWORD;
+      if (!isNaN(timestamp) && (Date.now() - timestamp) < SESSION_TTL_MS && timestamp <= (Date.now() + 60000)) {
+        const expectedSig = crypto.createHmac('sha256', validPw).update(timestampStr).digest('hex');
+        if (crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSig))) {
+          activeSessions.set(token, { createdAt: timestamp, expiresAt: timestamp + SESSION_TTL_MS });
+          return true;
+        }
+      }
+    }
+  } catch (err) {}
+  return false;
+}
+
 // Authentication Middleware with Expiration Check
 function requireAuth(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization || '';
@@ -158,9 +233,8 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
     return;
   }
 
-  const session = activeSessions.get(token);
-  if (!session || Date.now() > session.expiresAt) {
-    if (session) activeSessions.delete(token);
+  if (!verifyToken(token)) {
+    activeSessions.delete(token);
     res.status(401).json({ error: 'Session expired or invalid. Please re-authenticate.' });
     return;
   }
@@ -224,8 +298,10 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
 
   if (typeof password === 'string' && safeCompare(password, validPw)) {
     // Reset failed counter upon successful verification
-    failedLoginMap.delete(ip);
-    const token = crypto.randomBytes(32).toString('hex');
+    // Generate cryptographically signed HMAC token that persists across reboots
+    const timestampStr = String(now);
+    const signature = crypto.createHmac('sha256', validPw).update(timestampStr).digest('hex');
+    const token = `${timestampStr}.${signature}`;
     activeSessions.set(token, {
       createdAt: now,
       expiresAt: now + SESSION_TTL_MS
@@ -254,8 +330,7 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
 app.get('/api/auth/verify', (req: Request, res: Response) => {
   const authHeader = req.headers.authorization || '';
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  const session = activeSessions.get(token);
-  const isValid = !!(session && Date.now() <= session.expiresAt);
+  const isValid = verifyToken(token);
   res.json({ authenticated: isValid });
 });
 
@@ -279,7 +354,7 @@ app.get('/api/blogs', (req: Request, res: Response) => {
   const db = readDb();
   const authHeader = req.headers.authorization || '';
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  const isAdmin = activeSessions.has(token);
+  const isAdmin = verifyToken(token);
 
   const posts = isAdmin ? db.posts : (db.posts || []).filter((p: any) => p.published !== false);
   res.json(posts || []);
@@ -370,7 +445,7 @@ app.put('/api/blogs/:id', requireAuth, (req: Request, res: Response) => {
 app.delete('/api/blogs/:id', requireAuth, (req: Request, res: Response) => {
   const db = readDb();
   const initialLen = db.posts.length;
-  db.posts = db.posts.filter((p: any) => p.id !== req.params.id);
+  db.posts = db.posts.filter((p: any) => p.id !== req.params.id && p.slug !== req.params.id);
 
   if (db.posts.length === initialLen) {
     res.status(404).json({ error: 'Article not found.' });
@@ -381,6 +456,145 @@ app.delete('/api/blogs/:id', requireAuth, (req: Request, res: Response) => {
   res.json({ success: true, message: 'Article deleted successfully.' });
 });
 
+// Blogs: Delete All (Protected)
+app.delete('/api/blogs', requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  db.posts = [];
+  writeDb(db);
+  res.json({ success: true, message: 'All Legal Hub publications deleted.' });
+});
+
+// ==================== LAW JOURNAL (LGRLJ) & SITE SETTINGS ROUTES ====================
+
+app.get('/api/journals', (req: Request, res: Response) => {
+  const db = readDb();
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+  const isAdmin = verifyToken(token);
+  const journals = isAdmin ? (db.journals || []) : (db.journals || []).filter((j: any) => j.published !== false);
+  res.json(journals);
+});
+
+app.post('/api/journals', requireAuth, (req: Request, res: Response) => {
+  const { title, subtitle, tagline, description, year, badge, image, issueUrl, websiteUrl, published } = req.body;
+  if (!title) {
+    res.status(400).json({ error: 'Journal title is required.' });
+    return;
+  }
+  const db = readDb();
+  const newJournal = {
+    id: 'j-' + Date.now(),
+    title: sanitizeText(title),
+    subtitle: sanitizeText(subtitle || 'Volume 1 · Issue 1'),
+    tagline: sanitizeText(tagline || 'An International Peer-Reviewed Law Journal'),
+    description: sanitizeText(description || ''),
+    year: sanitizeText(year || String(new Date().getFullYear())),
+    badge: sanitizeText(badge || 'Peer-Reviewed · ISSN Registered'),
+    image: image || 'lexjournal.jpeg',
+    issueUrl: issueUrl || 'https://www.lexglobalreview.org',
+    websiteUrl: websiteUrl || 'https://www.lexglobalreview.org',
+    published: published !== false
+  };
+  db.journals = db.journals || [];
+  db.journals.unshift(newJournal);
+  writeDb(db);
+  res.status(201).json(newJournal);
+});
+
+app.delete('/api/journals/:id', requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  const initialLen = (db.journals || []).length;
+  db.journals = (db.journals || []).filter((j: any) => j.id !== req.params.id && j.slug !== req.params.id);
+  if (db.journals.length === initialLen) {
+    res.status(404).json({ error: 'Journal publication not found.' });
+    return;
+  }
+  writeDb(db);
+  res.json({ success: true, message: 'Journal publication deleted successfully.' });
+});
+
+app.delete('/api/journals', requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  db.journals = [];
+  writeDb(db);
+  res.json({ success: true, message: 'All Law Journal publications deleted.' });
+});
+
+app.get('/api/site-settings', (req: Request, res: Response) => {
+  const db = readDb();
+  res.json(db.siteSettings || { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true });
+});
+
+app.put('/api/site-settings', requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  const { showJournal, showLegalHub, showAcademy, showGallery } = req.body || {};
+  db.siteSettings = {
+    showJournal: showJournal !== undefined ? Boolean(showJournal) : (db.siteSettings?.showJournal ?? true),
+    showLegalHub: showLegalHub !== undefined ? Boolean(showLegalHub) : (db.siteSettings?.showLegalHub ?? true),
+    showAcademy: showAcademy !== undefined ? Boolean(showAcademy) : (db.siteSettings?.showAcademy ?? true),
+    showGallery: showGallery !== undefined ? Boolean(showGallery) : (db.siteSettings?.showGallery ?? true)
+  };
+  writeDb(db);
+  res.json(db.siteSettings);
+});
+
+// ==================== MEETUP GALLERY ROUTES (ADMIN-ONLY WRITE) ====================
+
+app.get('/api/gallery', (req: Request, res: Response) => {
+  const db = readDb();
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+  const isAdmin = verifyToken(token);
+  const items = isAdmin ? (db.gallery || []) : (db.gallery || []).filter((g: any) => g.published !== false);
+  res.json(items);
+});
+
+app.post('/api/gallery', requireAuth, (req: Request, res: Response) => {
+  const { title, eventName, location, date, caption, image, published } = req.body || {};
+  const rawImg = typeof image === 'string' ? image.trim() : '';
+  if (!rawImg || /^javascript:/i.test(rawImg)) {
+    res.status(400).json({ error: 'A valid pasted photo or image URL is required.' });
+    return;
+  }
+
+  const db = readDb();
+  const newItem = {
+    id: 'gal-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+    title: sanitizeText(title || 'Meetup Highlight'),
+    eventName: sanitizeText(eventName || 'Firm Meetup & Gathering'),
+    location: sanitizeText(location || 'Mumbai'),
+    date: sanitizeText(date || new Date().toISOString().slice(0, 10)),
+    caption: sanitizeText(caption || ''),
+    image: rawImg,
+    published: published !== false,
+    createdAt: new Date().toISOString()
+  };
+
+  db.gallery = db.gallery || [];
+  db.gallery.unshift(newItem);
+  writeDb(db);
+  res.status(201).json(newItem);
+});
+
+app.delete('/api/gallery/:id', requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  const initialLen = (db.gallery || []).length;
+  db.gallery = (db.gallery || []).filter((g: any) => g.id !== req.params.id);
+  if (db.gallery.length === initialLen) {
+    res.status(404).json({ error: 'Gallery photo not found.' });
+    return;
+  }
+  writeDb(db);
+  res.json({ success: true, message: 'Gallery photo deleted successfully.' });
+});
+
+app.delete('/api/gallery', requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  db.gallery = [];
+  writeDb(db);
+  res.json({ success: true, message: 'All gallery photos deleted.' });
+});
+
 // ==================== COURSES & ACADEMY ROUTES ====================
 
 // Courses: List
@@ -388,10 +602,24 @@ app.get('/api/courses', (req: Request, res: Response) => {
   const db = readDb();
   const authHeader = req.headers.authorization || '';
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  const isAdmin = activeSessions.has(token);
+  const isAdmin = verifyToken(token);
 
   const courses = isAdmin ? db.courses : (db.courses || []).filter((c: any) => c.published !== false);
   res.json(courses || []);
+});
+
+// List Orders (Protected - registered before /api/courses/:slug to prevent route collision)
+app.get(['/api/orders', '/api/courses/orders'], requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  res.json(db.orders || []);
+});
+
+// Delete Order (Protected - registered before /api/courses/:slug)
+app.delete(['/api/orders/:id', '/api/courses/orders/:id'], requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  db.orders = (db.orders || []).filter((o: any) => o.id !== req.params.id && o.orderId !== req.params.id);
+  writeDb(db);
+  res.json({ success: true, message: 'Order record removed.' });
 });
 
 // Courses: Get by Slug or ID
@@ -448,7 +676,7 @@ app.post('/api/courses', requireAuth, (req: Request, res: Response) => {
 app.delete('/api/courses/:id', requireAuth, (req: Request, res: Response) => {
   const db = readDb();
   const initialLen = db.courses.length;
-  db.courses = db.courses.filter((c: any) => c.id !== req.params.id);
+  db.courses = db.courses.filter((c: any) => c.id !== req.params.id && c.slug !== req.params.id);
 
   if (db.courses.length === initialLen) {
     res.status(404).json({ error: 'Course not found.' });
@@ -592,23 +820,75 @@ app.post('/api/orders', rateLimiter(60000, 15), (req: Request, res: Response) =>
   res.status(201).json({ success: true, order: newOrder });
 });
 
-// List Orders (Protected)
-app.get('/api/orders', requireAuth, (req: Request, res: Response) => {
-  const db = readDb();
-  res.json(db.orders || []);
-});
+// ==================== CLIENT REQUEST GATEWAY HELPERS ====================
 
-// Delete Order (Protected)
-app.delete('/api/orders/:id', requireAuth, (req: Request, res: Response) => {
-  const db = readDb();
-  db.orders = (db.orders || []).filter((o: any) => o.id !== req.params.id);
-  writeDb(db);
-  res.json({ success: true, message: 'Order record removed.' });
-});
+async function sendViaSmtp(opts: { to: string; replyTo: string; subject: string; text: string; html: string }) {
+  const user = process.env.SMTP_USER || process.env.GMAIL_USER;
+  const pass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
+  if (!user || !pass) {
+    throw new Error('SMTP credentials not configured');
+  }
+  const host = process.env.SMTP_HOST || (process.env.GMAIL_USER ? 'smtp.gmail.com' : 'smtp.gmail.com');
+  const port = parseInt(process.env.SMTP_PORT || '465', 10) || 465;
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure: port === 465,
+    auth: { user, pass }
+  });
+  const info = await transporter.sendMail({
+    from: `"Lex Global Advocacy Intake" <${user}>`,
+    to: opts.to,
+    replyTo: opts.replyTo,
+    subject: opts.subject,
+    text: opts.text,
+    html: opts.html
+  });
+  return { messageId: info.messageId };
+}
+
+async function triggerGatewayForInquiry(inquiry: any, db: any) {
+  const cfg = sanitizeGatewayConfig(db.gatewayConfig, process.env);
+  const report = await dispatchGatewayAlert(inquiry, cfg, process.env, {
+    sendSmtp: sendViaSmtp
+  });
+
+  inquiry.notificationStatus = {
+    dispatchedAt: report.dispatchedAt,
+    emailTarget: report.emailTarget,
+    whatsappTarget: report.whatsappTarget,
+    emailStatus: report.email.status,
+    emailProvider: report.email.provider,
+    emailDetail: report.email.detail,
+    whatsappStatus: report.whatsapp.status,
+    whatsappProvider: report.whatsapp.provider,
+    whatsappDetail: report.whatsapp.detail
+  };
+
+  db.gatewayLogs = Array.isArray(db.gatewayLogs) ? db.gatewayLogs : [];
+  db.gatewayLogs.unshift({
+    id: 'gw-' + Date.now(),
+    inquiryId: inquiry.id,
+    clientName: inquiry.name,
+    practiceArea: inquiry.practiceArea,
+    dispatchedAt: report.dispatchedAt,
+    emailTarget: report.emailTarget,
+    whatsappTarget: report.whatsappTarget,
+    emailStatus: report.email.status,
+    emailProvider: report.email.provider,
+    emailDetail: report.email.detail,
+    whatsappStatus: report.whatsapp.status,
+    whatsappProvider: report.whatsapp.provider,
+    whatsappDetail: report.whatsapp.detail
+  });
+  db.gatewayLogs = db.gatewayLogs.slice(0, 50);
+
+  return report;
+}
 
 // ==================== INQUIRIES & CONTACT ROUTES ====================
 
-const handleInquirySubmission = (req: Request, res: Response) => {
+const handleInquirySubmission = async (req: Request, res: Response) => {
   const { name, email, phone, organization, practiceArea, jurisdiction, description, message, subject, urgency } = req.body;
   const content = description || message || '';
 
@@ -623,7 +903,7 @@ const handleInquirySubmission = (req: Request, res: Response) => {
   }
 
   const db = readDb();
-  const newInquiry = {
+  const newInquiry: any = {
     id: 'inq-' + Date.now(),
     name: sanitizeText(name),
     email: sanitizeText(email),
@@ -640,20 +920,34 @@ const handleInquirySubmission = (req: Request, res: Response) => {
 
   db.inquiries = db.inquiries || [];
   db.inquiries.unshift(newInquiry);
+
+  const report = await triggerGatewayForInquiry(newInquiry, db);
   writeDb(db);
 
   res.status(201).json({
     success: true,
     message: 'Confidential inquiry submitted successfully.',
-    id: newInquiry.id
+    id: newInquiry.id,
+    gateway: {
+      emailTarget: report.emailTarget,
+      whatsappTarget: report.whatsappTarget,
+      emailStatus: report.email.status,
+      emailProvider: report.email.provider,
+      emailDetail: report.email.detail,
+      whatsappStatus: report.whatsapp.status,
+      whatsappProvider: report.whatsapp.provider,
+      whatsappDetail: report.whatsapp.detail,
+      whatsappRelayUrl: report.whatsappRelayUrl,
+      mailtoRelayUrl: report.mailtoRelayUrl
+    }
   });
 };
 
 app.post('/api/inquiries', rateLimiter(60000, 10), handleInquirySubmission);
 app.post('/api/contact', rateLimiter(60000, 10), handleInquirySubmission);
 
-// Inquiries: List (Protected)
-app.get('/api/inquiries', requireAuth, (req: Request, res: Response) => {
+// Inquiries: List (Protected - both /api/inquiries and /api/contact)
+app.get(['/api/inquiries', '/api/contact'], requireAuth, (req: Request, res: Response) => {
   const db = readDb();
   res.json(db.inquiries || []);
 });
@@ -672,12 +966,85 @@ app.put('/api/inquiries/:id', requireAuth, (req: Request, res: Response) => {
   res.json(inq);
 });
 
+// Inquiries: Re-dispatch via Notification Gateway (Protected)
+app.post('/api/inquiries/:id/notify', requireAuth, async (req: Request, res: Response) => {
+  const db = readDb();
+  const inq = (db.inquiries || []).find((i: any) => i.id === req.params.id);
+  if (!inq) {
+    res.status(404).json({ error: 'Inquiry not found.' });
+    return;
+  }
+  const report = await triggerGatewayForInquiry(inq, db);
+  writeDb(db);
+  res.json({ success: true, inquiry: inq, gateway: report });
+});
+
 // Inquiries: Delete (Protected)
 app.delete('/api/inquiries/:id', requireAuth, (req: Request, res: Response) => {
   const db = readDb();
   db.inquiries = (db.inquiries || []).filter((i: any) => i.id !== req.params.id);
   writeDb(db);
   res.json({ success: true, message: 'Inquiry removed.' });
+});
+
+// ==================== GATEWAY CONFIGURATION & TEST ROUTES ====================
+
+app.get('/api/gateway/settings', requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  const cfg = sanitizeGatewayConfig(db.gatewayConfig, process.env);
+  res.json({
+    ...cfg,
+    providers: detectGatewayProviders(process.env),
+    recentLogs: (db.gatewayLogs || []).slice(0, 15)
+  });
+});
+
+app.put('/api/gateway/settings', requireAuth, (req: Request, res: Response) => {
+  const db = readDb();
+  const { notifyEmail, notifyWhatsapp, emailEnabled, whatsappEnabled, formsubmitFallback } = req.body || {};
+  db.gatewayConfig = sanitizeGatewayConfig(
+    {
+      notifyEmail: notifyEmail !== undefined ? sanitizeText(notifyEmail) : db.gatewayConfig?.notifyEmail,
+      notifyWhatsapp: notifyWhatsapp !== undefined ? sanitizeText(notifyWhatsapp) : db.gatewayConfig?.notifyWhatsapp,
+      emailEnabled: emailEnabled !== undefined ? Boolean(emailEnabled) : db.gatewayConfig?.emailEnabled,
+      whatsappEnabled: whatsappEnabled !== undefined ? Boolean(whatsappEnabled) : db.gatewayConfig?.whatsappEnabled,
+      formsubmitFallback: formsubmitFallback !== undefined ? Boolean(formsubmitFallback) : db.gatewayConfig?.formsubmitFallback
+    },
+    process.env
+  );
+  writeDb(db);
+  res.json({
+    ...db.gatewayConfig,
+    providers: detectGatewayProviders(process.env),
+    recentLogs: (db.gatewayLogs || []).slice(0, 15)
+  });
+});
+
+app.post('/api/gateway/test', requireAuth, async (req: Request, res: Response) => {
+  const db = readDb();
+  const testInquiry = {
+    id: 'test-' + Date.now(),
+    name: 'Gateway Verification Check',
+    email: 'intake-test@lexglobaladvocacy.example',
+    phone: '+91-9307373024',
+    organization: 'LEX GLOBAL ADVOCACY LLP (Admin Test)',
+    practiceArea: 'Automated Gateway Diagnostics',
+    urgency: 'Routine',
+    description: 'Automated test request verifying email & WhatsApp gateway routing for client inquiries.',
+    createdAt: new Date().toISOString()
+  };
+  const report = await triggerGatewayForInquiry(testInquiry, db);
+  const formatted = formatInquiryNotification(testInquiry, sanitizeGatewayConfig(db.gatewayConfig, process.env));
+  writeDb(db);
+  res.json({
+    success: true,
+    gateway: {
+      ...report,
+      mailtoRelayUrl: formatted.mailtoRelayUrl,
+      whatsappRelayUrl: formatted.whatsappRelayUrl
+    },
+    recentLogs: (db.gatewayLogs || []).slice(0, 15)
+  });
 });
 
 // ==================== ADMIN PORTAL DASHBOARD STATS & EXPORT ====================
@@ -692,6 +1059,8 @@ app.get('/api/admin/stats', requireAuth, (req: Request, res: Response) => {
     totalEnrollments: (db.enrollments || []).length,
     totalCourses: (db.courses || []).length,
     totalPosts: (db.posts || []).length,
+    totalJournals: (db.journals || []).length,
+    totalGallery: (db.gallery || []).length,
     totalOrders: orders.length,
     totalRevenue
   });
@@ -725,14 +1094,31 @@ app.get(['/admin', '/admin.html'], (req: Request, res: Response) => {
 // ==================== FRONTEND SERVING ====================
 async function startServer() {
   const isProduction = process.env.NODE_ENV === 'production';
+  let viteServer: Awaited<ReturnType<typeof createViteServer>> | null = null;
 
   if (!isProduction) {
-    // Mount Vite dev server middleware
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
+    // Initialize Vite middleware in the background so Express binds port 3000 immediately
+    const vitePromise = createViteServer({
+      server: {
+        middlewareMode: true,
+        hmr: process.env.DISABLE_HMR !== 'true',
+      },
       appType: 'spa',
+    }).then((vite) => {
+      viteServer = vite;
+      return vite;
+    }).catch((err) => {
+      console.error('Vite middleware initialization warning:', err);
+      return null;
     });
-    app.use(vite.middlewares);
+
+    app.use(async (req, res, next) => {
+      const vite = viteServer || (await vitePromise);
+      if (vite) {
+        return vite.middlewares(req, res, next);
+      }
+      next();
+    });
   } else {
     // In production, serve built static assets from dist/
     const distPath = path.resolve(process.cwd(), 'dist');
@@ -742,15 +1128,32 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, HOST, () => {
+  const server = app.listen(PORT, HOST, () => {
     console.log(`\n  VITE v8.3.0  ready in 210 ms\n`);
     console.log(`  ➜  Local:   http://localhost:${PORT}/`);
     console.log(`  ➜  Network: http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}/`);
     console.log(`  ➜  Admin:   http://localhost:${PORT}/admin.html\n`);
     console.log(`Lex Global Advocacy Server running on http://${HOST}:${PORT}`);
   });
+
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    console.error('Server listen error:', err);
+    process.exit(1);
+  });
+
+  const shutdown = async () => {
+    try {
+      if (viteServer) await viteServer.close();
+    } catch {}
+    server.close(() => process.exit(0));
+    setTimeout(() => process.exit(0), 2000).unref();
+  };
+
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 }
 
 startServer().catch((err) => {
   console.error('Failed to start server:', err);
+  process.exit(1);
 });

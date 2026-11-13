@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="LEX GLOBAL ADVOCACY LLP">
 <meta property="og:title" content="LEX GLOBAL ADVOCACY LLP | International Law Firm, Legal Academy & Journal">
 <meta property="og:description" content="Premier international law firm defending corporate, institutional, and individual rights across 42+ jurisdictions worldwide. Publisher of Lex Global Review of Law and Justice (LGRLJ).">
-<meta property="og:image" content="/assets/aistudio/journallex_4cecad79.jpeg">
+<meta property="og:image" content="lexjournal.jpeg">
 <meta property="og:image:alt" content="Lex Global Review of Law and Justice Volume 1 Issue 1 2026">
 <meta property="og:locale" content="en_US">
 
@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="LEX GLOBAL ADVOCACY LLP | Legal Counsel, Academy & Journal">
 <meta name="twitter:description" content="Full-service international law firm, accredited masterclasses, and publisher of the peer-reviewed Lex Global Review of Law and Justice (LGRLJ).">
-<meta name="twitter:image" content="/assets/aistudio/journallex_4cecad79.jpeg">
+<meta name="twitter:image" content="lexjournal.jpeg">
 
 <!-- Schema.org JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -40,18 +40,30 @@
       "legalName": "LEX GLOBAL ADVOCACY LLP",
       "url": "https://www.lexglobalreview.org/",
       "logo": "/lexglobaladvo.jpeg",
-      "image": "/assets/aistudio/journallex_4cecad79.jpeg",
+      "image": "lexjournal.jpeg",
       "telephone": "+91-9307373024",
       "email": "dp.lexglobaladvocacy@gmail.com",
       "priceRange": "$$$$",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "91 Springboard BKC 2, 6th Floor, Vinay Bhavya Complex, Wing B, CST Road, Kalina, Santacruz East",
-        "addressLocality": "Mumbai",
-        "addressRegion": "Maharashtra",
-        "postalCode": "400098",
-        "addressCountry": "IN"
-      },
+      "address": [
+        {
+          "@type": "PostalAddress",
+          "name": "Mumbai Headquarters",
+          "streetAddress": "91 Springboard BKC 2, 6th Floor, Vinay Bhavya Complex, Wing B, CST Road, Kalina, Santacruz East",
+          "addressLocality": "Mumbai",
+          "addressRegion": "Maharashtra",
+          "postalCode": "400098",
+          "addressCountry": "IN"
+        },
+        {
+          "@type": "PostalAddress",
+          "name": "Pune Headquarters",
+          "streetAddress": "Flat no. 9 + 16, Damodar Prasad Apartment, B Wing, Hingne Khurd, Sinhgad Road",
+          "addressLocality": "Pune",
+          "addressRegion": "Maharashtra",
+          "postalCode": "411051",
+          "addressCountry": "IN"
+        }
+      ],
       "geo": {
         "@type": "GeoCoordinates",
         "latitude": 19.0728,
@@ -343,16 +355,17 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; }
 .header-nav > ul {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 18px;
 }
-.header-nav > ul > li { position: relative; }
+.header-nav > ul > li { position: relative; flex-shrink: 0; }
 .header-nav > ul > li > a {
   position: relative;
   display: block;
   padding: 6px 0;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
+  white-space: nowrap;
   color: #F0F2F5;
   transition: color 0.2s ease;
 }
@@ -1333,6 +1346,105 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; }
   .blogs-grid { grid-template-columns: 1fr; }
 }
 
+/* ============================================================
+   MEETUP & CONFERENCE GALLERY SECTION
+   ============================================================ */
+.gallery-section {
+  padding: 100px 0;
+  background: #FFFFFF;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+@media (max-width: 1023px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 639px) {
+  .gallery-grid { grid-template-columns: 1fr; }
+}
+.gallery-card {
+  background: var(--ivory-surface);
+  border: 1px solid var(--ivory-border);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+.gallery-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+}
+.gallery-media-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--black-surface);
+}
+.gallery-media-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gallery-card:hover .gallery-media-wrap img {
+  transform: scale(1.04);
+}
+.gallery-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(12, 14, 18, 0.65) 0%, rgba(12, 14, 18, 0.15) 45%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 14px;
+}
+.gallery-card:hover .gallery-scrim {
+  opacity: 1;
+}
+.gallery-scrim-hint {
+  color: #FFFFFF;
+  font-family: var(--font-accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
+.gallery-body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.gallery-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.gallery-title {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-dark);
+  margin: 0;
+}
+.gallery-caption {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #475569;
+  margin: 2px 0 0;
+}
+
 .blog-card {
   background: #FFFFFF;
   border: 1px solid var(--ivory-border);
@@ -1747,6 +1859,34 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; }
   border-color: var(--primary);
   color: var(--black);
 }
+.social-icon-btn.social-light {
+  background: #FFFFFF;
+  border-color: var(--ivory-border);
+  color: var(--text-dark);
+}
+.social-icon-btn.social-light:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--black);
+}
+.social-strip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ivory-border);
+}
+.social-strip-label {
+  font-family: var(--font-accent);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+}
 
 /* ============================================================
    MODALS (ATTORNEY, PRACTICE, SYLLABUS, ARTICLE, CONSULTATION)
@@ -2090,7 +2230,7 @@ section, div[id] {
 @media (max-width: 768px) {
   /* Section padding tightening for comfortable mobile reading */
   .story-section, .attorneys-section, .practices-section,
-  .academy-section, .journal-section, .blogs-section,
+  .academy-section, .journal-section, .blogs-section, .gallery-section,
   .history-section, .commitment-section, .contact-section {
     padding: 60px 0;
   }
@@ -2163,6 +2303,179 @@ section, div[id] {
     word-break: break-word;
   }
 }
+
+/* ============================================================
+   BAR COUNCIL OF INDIA (BCI) STATUTORY DISCLAIMER MODAL
+   ============================================================ */
+.bci-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 14, 20, 0.92);
+  backdrop-filter: blur(10px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  animation: fadeIn 0.25s ease-out;
+}
+.bci-modal-box {
+  background: #FFFFFF;
+  max-width: 880px;
+  width: 100%;
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+  border-radius: 10px;
+  border-top: 6px solid var(--primary);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.7);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.bci-modal-header {
+  padding: 28px 32px 20px;
+  border-bottom: 1px solid var(--ivory-border);
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  background: var(--ivory-light);
+}
+.bci-seal-badge {
+  width: 54px;
+  height: 54px;
+  background: var(--black);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px var(--gold-glow);
+}
+.bci-eyebrow {
+  display: inline-block;
+  font-family: var(--font-accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+}
+.bci-title {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 3vw, 26px);
+  margin: 0 0 4px;
+  color: var(--black);
+  line-height: 1.25;
+}
+.bci-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+.bci-modal-body {
+  padding: 24px 32px;
+  overflow-y: auto;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #2D3748;
+}
+.bci-rule-callout {
+  background: var(--ivory-surface);
+  border-left: 4px solid var(--primary);
+  padding: 14px 18px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 20px;
+  font-size: 13.5px;
+  display: flex;
+  gap: 12px;
+  color: var(--text-dark);
+}
+.bci-rule-callout strong {
+  display: block;
+  color: var(--primary-dark);
+  font-family: var(--font-accent);
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.bci-lead-text {
+  font-size: 14.5px;
+  margin-bottom: 18px;
+  color: var(--text-dark);
+}
+.bci-clauses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bci-clause-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: #FAFAFA;
+  border: 1px solid #EDF2F7;
+  padding: 14px 16px;
+  border-radius: 6px;
+}
+.bci-num {
+  width: 26px;
+  height: 26px;
+  background: var(--primary);
+  color: var(--black);
+  font-weight: 700;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.bci-desc {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #334155;
+}
+.bci-desc strong {
+  color: var(--black);
+  display: block;
+  margin-bottom: 2px;
+}
+.bci-modal-footer {
+  padding: 18px 32px 24px;
+  border-top: 1px solid var(--ivory-border);
+  background: var(--ivory-light);
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.bci-btn-accept {
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.bci-btn-decline {
+  padding: 12px 24px;
+  font-size: 13px;
+  color: var(--text-dark);
+  border-color: #CBD5E1;
+}
+.bci-btn-decline:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+  color: #E11D48;
+}
+@media (max-width: 639px) {
+  .bci-modal-header { padding: 20px 18px 16px; gap: 12px; }
+  .bci-modal-body { padding: 18px 18px; }
+  .bci-modal-footer { padding: 16px 18px 20px; flex-direction: column; }
+  .bci-btn-accept, .bci-btn-decline { width: 100%; justify-content: center; text-align: center; }
+  .bci-seal-badge { width: 44px; height: 44px; font-size: 18px; }
+}
 </style>
 </head>
 <body>
@@ -2199,7 +2512,13 @@ section, div[id] {
             <li><a href="#practice-areas">Practice Areas</a></li>
             <li><a href="#courses">Legal Academy</a></li>
             <li><a href="#blogs">Legal Hub</a></li>
+            <li><a href="#gallery">Gallery</a></li>
             <li><a href="#contact">Contact &amp; Intake</a></li>
+            <li>
+              <a href="javascript:void(0)" onclick="openBciDisclaimerModal(false)" style="color:var(--primary-dark); font-weight:600;" title="Bar Council of India Statutory Compliance">
+                <i class="fas fa-scale-balanced" style="color:var(--primary);"></i> BCI Disclaimer
+              </a>
+            </li>
             <li>
               <a href="/admin.html" class="portal-badge" title="Partner &amp; Staff Administrative Portal">
                 <i class="fas fa-user-shield"></i> Portal
@@ -2257,8 +2576,15 @@ section, div[id] {
         <li><a href="#practice-areas">Practice Areas (28+) <i class="fas fa-chevron-right" style="font-size:12px; color:var(--primary);"></i></a></li>
         <li><a href="#courses">Legal Academy &amp; CLE <i class="fas fa-chevron-right" style="font-size:12px; color:var(--primary);"></i></a></li>
         <li><a href="#blogs">Legal Hub &amp; Publications <i class="fas fa-chevron-right" style="font-size:12px; color:var(--primary);"></i></a></li>
+        <li><a href="#gallery">Meetup Gallery <i class="fas fa-chevron-right" style="font-size:12px; color:var(--primary);"></i></a></li>
         <li><a href="#history">Practice History <i class="fas fa-chevron-right" style="font-size:12px; color:var(--primary);"></i></a></li>
         <li><a href="#contact">Privileged Consultation <i class="fas fa-chevron-right" style="font-size:12px; color:var(--primary);"></i></a></li>
+        <li>
+          <a href="javascript:void(0)" onclick="closeMobileDrawer(); openBciDisclaimerModal(false);">
+            <span><i class="fas fa-scale-balanced" style="color:var(--primary); margin-right:8px;"></i> BCI Statutory Disclaimer</span>
+            <i class="fas fa-chevron-right" style="font-size:12px; color:var(--primary);"></i>
+          </a>
+        </li>
         <li style="margin-top:12px;">
           <a href="/admin.html" style="background:rgba(197,160,89,0.15); border:1px solid var(--primary); color:var(--primary-light);">
             <span><i class="fas fa-user-shield" style="margin-right:8px;"></i> Partner / Staff Portal</span>
@@ -2393,7 +2719,7 @@ section, div[id] {
 
     <!-- ===================== LAW JOURNAL (LGRLJ) — FLAGSHIP PERIODICAL ===================== -->
     <section class="journal-section" id="journal">
-      <div class="grid-container">
+      <div class="grid-container" id="journalGridContainer">
         <div class="journal-grid">
           
           <!-- Journal Cover Card (Clickable to user-provided redirected link) -->
@@ -2407,7 +2733,7 @@ section, div[id] {
               title="Click to view Lex Global Review of Law and Justice (Volume 1, Issue 1)"
               aria-label="Lex Global Review of Law and Justice - Read Volume 1, Issue 1 online">
               <img
-                src="/assets/aistudio/journallex_4cecad79.jpeg"
+                src="lexjournal.jpeg"
                 alt="Lex Global Review of Law and Justice (LGRLJ) - Volume 1, Issue 1 Cover"
                 class="journal-cover-img"
                 loading="eager"
@@ -2491,6 +2817,18 @@ section, div[id] {
                 Visit Journal Website &rarr;
               </a>
             </div>
+
+            <div class="social-strip-row">
+              <span class="social-strip-label"><i class="fas fa-share-nodes" style="color:var(--primary); margin-right:6px;"></i> Follow &amp; Share Publications</span>
+              <div class="social-links-row">
+                <a class="social-icon-btn social-light" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.lexglobalreview.org" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a class="social-icon-btn social-light" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a class="social-icon-btn social-light" href="https://x.com/intent/tweet?url=https%3A%2F%2Fwww.lexglobalreview.org&amp;text=Lex%20Global%20Review%20of%20Law%20and%20Justice" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><i class="fab fa-x-twitter"></i></a>
+                <a class="social-icon-btn social-light" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.lexglobalreview.org" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a class="social-icon-btn social-light" href="https://www.youtube.com/channel/UCg9VbGtXxIWeXYYlmZK2mVQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a class="social-icon-btn social-light" href="https://wa.me/?text=Lex%20Global%20Review%20of%20Law%20and%20Justice%20https%3A%2F%2Fwww.lexglobalreview.org" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -2565,106 +2903,119 @@ section, div[id] {
         </div>
 
         <div class="attorneys-grid">
-          <!-- 1. Dr. Santosh Kakde -->
-          <article class="attorney-card" onclick="openAttorneyModal('Dr. Santosh Kakde')">
-            <div class="attorney-img-wrap">
-              <img src="santoshkakde.png" alt="Dr. Santosh Kakde">
-            </div>
-            <div class="attorney-card-body">
-              <h3 class="attorney-name">Dr. Santosh Kakde</h3>
-              <span class="attorney-title">Senior Counsel &amp; Medico-Legal</span>
-              <p class="attorney-spec">Over 3 decades of multidisciplinary mastery in medicine, law, consumer dispute resolution, and healthcare governance.</p>
-              <span class="attorney-view-cta">View Full Dossier &rarr;</span>
-            </div>
-          </article>
-
-          <!-- 2. Adv. Mahesh N. Dhake -->
-          <article class="attorney-card" onclick="openAttorneyModal('Adv. Mahesh N. Dhake')">
-            <div class="attorney-img-wrap">
-              <img src="maheshdhake.jpeg" alt="Adv. Mahesh N. Dhake">
-            </div>
-            <div class="attorney-card-body">
-              <h3 class="attorney-name">Adv. Mahesh N. Dhake</h3>
-              <span class="attorney-title">Partner &middot; Banking &amp; Finance</span>
-              <p class="attorney-spec">25+ years practicing advocate; former Member of District Consumer Commission, Ahmednagar; banking &amp; corporate recovery.</p>
-              <span class="attorney-view-cta">View Full Dossier &rarr;</span>
-            </div>
-          </article>
-
-          <!-- 3. Adv. Sanjay Patil -->
+          <!-- 1. Adv. Sanjay Patil -->
           <article class="attorney-card" onclick="openAttorneyModal('Adv. Sanjay Patil')">
             <div class="attorney-img-wrap">
               <img src="sanjaypatil.jpeg" alt="Adv. Sanjay Patil">
             </div>
             <div class="attorney-card-body">
               <h3 class="attorney-name">Adv. Sanjay Patil</h3>
-              <span class="attorney-title">Senior Counsel &middot; Former Judge</span>
-              <p class="attorney-spec">Former District Court Judge and State Consumer Commission advisor; unmatched expertise in judicial procedure and complex dispute resolution.</p>
+              <span class="attorney-title">Former District Judge &amp; Former President, District Consumer Commission</span>
+              <p class="attorney-spec">Former District Judge and Former President, District Consumer Commission; unmatched expertise in judicial procedure, civil appeals, and complex dispute resolution.</p>
               <span class="attorney-view-cta">View Full Dossier &rarr;</span>
             </div>
           </article>
 
-          <!-- 4. Adv. Kishor Vadane -->
+          <!-- 2. Adv. Kishor Vadane -->
           <article class="attorney-card" onclick="openAttorneyModal('Adv Kishor Vadane')">
             <div class="attorney-img-wrap">
               <img src="kishor vadane.jpeg" alt="Adv. Kishor Vadane">
             </div>
             <div class="attorney-card-body">
               <h3 class="attorney-name">Adv. Kishor Vadane</h3>
-              <span class="attorney-title">Partner &middot; International Arbitration</span>
-              <p class="attorney-spec">Head of International Commercial &amp; Treaty Arbitration; dedicated legal strategist defending clients' cross-border commercial interests.</p>
+              <span class="attorney-title">Former District Judge &amp; Former President, District Consumer Commission</span>
+              <p class="attorney-spec">Former District Judge and Former President, District Consumer Commission; leads cross-border commercial disputes and international arbitration strategy.</p>
               <span class="attorney-view-cta">View Full Dossier &rarr;</span>
             </div>
           </article>
 
-          <!-- 5. Adv. Shri Ravindra Nagre -->
-          <article class="attorney-card" onclick="openAttorneyModal('Adv. Shri Ravindra Nagre')">
+          <!-- 3. Adv. Shridhar Kulkarni -->
+          <article class="attorney-card" onclick="openAttorneyModal('Adv. Shridhar Kulkarni')">
             <div class="attorney-img-wrap">
-              <img src="RAVINDRANAGARE.jpeg" alt="Adv. Shri Ravindra Nagre">
+              <img src="shridhark.jpeg" alt="Adv. Shridhar Kulkarni">
             </div>
             <div class="attorney-card-body">
-              <h3 class="attorney-name">Adv. Shri Ravindra Nagre</h3>
-              <span class="attorney-title">Former Commission President</span>
-              <p class="attorney-spec">27+ years legal practice with 5+ years judicial experience as President of Consumer Commission; authority on civil, criminal and consumer litigation.</p>
+              <h3 class="attorney-name">Adv. Shridhar Kulkarni</h3>
+              <span class="attorney-title">Former District Judge &amp; Former President, District Consumer Commission</span>
+              <p class="attorney-spec">Former District &amp; Additional Sessions Judge and Former President, District Consumer Commission; veteran authority on civil trials, consumer appeals, and adjudication.</p>
               <span class="attorney-view-cta">View Full Dossier &rarr;</span>
             </div>
           </article>
 
-          <!-- 6. Dr. Sofia Lindqvist -->
-          <article class="attorney-card" onclick="openAttorneyModal('Dr. Sofia Lindqvist')">
+          <!-- 4. Dr. Santosh Kakade (Founder & CEO) -->
+          <article class="attorney-card" onclick="openAttorneyModal('Dr. Santosh Kakade')">
             <div class="attorney-img-wrap">
-              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80" alt="Dr. Sofia Lindqvist">
+              <img src="santoshkakde.png" alt="Dr. Santosh Kakade">
             </div>
             <div class="attorney-card-body">
-              <h3 class="attorney-name">Dr. Sofia Lindqvist</h3>
-              <span class="attorney-title">Partner &middot; Data &amp; Privacy</span>
-              <p class="attorney-spec">Directs global data protection, GDPR, Transfer Impact Assessments (TIAs), and multinational AI regulatory governance defense.</p>
+              <h3 class="attorney-name">Dr. Santosh Kakade</h3>
+              <span class="attorney-title">Founder &amp; CEO &middot; Former President &amp; Member, State Consumer Commission, Mumbai &middot; Senior Medicolegal Consultant</span>
+              <p class="attorney-spec">Distinguished legal academician, medical professional, surgeon, and senior medicolegal consultant with over three decades in medicine, law, healthcare administration, and consumer dispute resolution.</p>
               <span class="attorney-view-cta">View Full Dossier &rarr;</span>
             </div>
           </article>
 
-          <!-- 7. Kathleen Horne -->
-          <article class="attorney-card" onclick="openAttorneyModal('Kathleen Horne')">
+          <!-- 5. Adv. Ravindra Nagre -->
+          <article class="attorney-card" onclick="openAttorneyModal('Adv. Ravindra Nagre')">
             <div class="attorney-img-wrap">
-              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80" alt="Kathleen Horne">
+              <img src="RAVINDRANAGARE.jpeg" alt="Adv. Ravindra Nagre">
             </div>
             <div class="attorney-card-body">
-              <h3 class="attorney-name">Kathleen Horne</h3>
-              <span class="attorney-title">Partner &middot; Admiralty &amp; Maritime</span>
-              <p class="attorney-spec">Esteemed authority on vessel arrests, maritime liens, charterparty laytime disputes, and international shipping insolvency.</p>
+              <h3 class="attorney-name">Adv. Ravindra Nagre</h3>
+              <span class="attorney-title">Former President, District Consumer Commission</span>
+              <p class="attorney-spec">27+ years legal practice with judicial tenure as Former President, District Consumer Commission; authority on civil, criminal and consumer litigation.</p>
               <span class="attorney-view-cta">View Full Dossier &rarr;</span>
             </div>
           </article>
 
-          <!-- 8. Carlton E. Joyce -->
-          <article class="attorney-card" onclick="openAttorneyModal('Carlton E. Joyce')">
+          <!-- 6. Adv. Anand Bhalchandra Joshi -->
+          <article class="attorney-card" onclick="openAttorneyModal('Adv. Anand Bhalchandra Joshi')">
             <div class="attorney-img-wrap">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80" alt="Carlton E. Joyce">
+              <img src="anandjoshi1.jpeg" alt="Adv. Anand Bhalchandra Joshi">
             </div>
             <div class="attorney-card-body">
-              <h3 class="attorney-name">Carlton E. Joyce</h3>
-              <span class="attorney-title">Partner &middot; Construction &amp; FIDIC</span>
-              <p class="attorney-spec">Counsel to infrastructure developers, EPC consortia, and public-private partnerships in delay claims and major project disputes.</p>
+              <h3 class="attorney-name">Adv. Anand Bhalchandra Joshi</h3>
+              <span class="attorney-title">Former President, DCDRC (District Consumer Commission)</span>
+              <p class="attorney-spec">B.A., LL.B., LL.M., GDC&amp;A, Diploma in Cyber Law, Cr.Vastu Shastra &middot; Authority on consumer protection jurisprudence, cyber law, co-operative law, and banking &amp; insurance claims.</p>
+              <span class="attorney-view-cta">View Full Dossier &rarr;</span>
+            </div>
+          </article>
+
+          <!-- 7. Adv. Sanjay Borwal -->
+          <article class="attorney-card" onclick="openAttorneyModal('Adv. Sanjay Borwal')">
+            <div class="attorney-img-wrap">
+              <img src="sanjayb.jpeg" alt="Adv. Sanjay Borwal">
+            </div>
+            <div class="attorney-card-body">
+              <h3 class="attorney-name">Adv. Sanjay Borwal</h3>
+              <span class="attorney-title">Former President, District Consumer Commission</span>
+              <p class="attorney-spec">Former President, District Consumer Commission; expert in consumer grievance redressal, public utility &amp; power disputes, builder-buyer contracts, and civil trials.</p>
+              <span class="attorney-view-cta">View Full Dossier &rarr;</span>
+            </div>
+          </article>
+
+          <!-- 8. Adv. Avinash Vinayak Prabhune -->
+          <article class="attorney-card" onclick="openAttorneyModal('Adv. Avinash Prabhune')">
+            <div class="attorney-img-wrap">
+              <img src="avinash_prabhune.jpg" alt="Adv. Avinash Vinayak Prabhune">
+            </div>
+            <div class="attorney-card-body">
+              <h3 class="attorney-name">Adv. Avinash Vinayak Prabhune</h3>
+              <span class="attorney-title">Former Member, Addl. District Consumer Commission, Nagpur</span>
+              <p class="attorney-spec">B.A. LL.B. &middot; 21+ years in Consumer Protection, Electricity (MERC/CGRF/Ombudsman) &amp; RTI Act; Former MERC Consumer Representative; 36 yrs MSPGCL Engineering experience.</p>
+              <span class="attorney-view-cta">View Full Dossier &rarr;</span>
+            </div>
+          </article>
+
+          <!-- 9. Adv. Mahesh Dhake -->
+          <article class="attorney-card" onclick="openAttorneyModal('Adv. Mahesh N. Dhake')">
+            <div class="attorney-img-wrap">
+              <img src="maheshdhake.jpeg" alt="Adv. Mahesh Dhake">
+            </div>
+            <div class="attorney-card-body">
+              <h3 class="attorney-name">Adv. Mahesh Dhake</h3>
+              <span class="attorney-title">Former Member, District Consumer Commission</span>
+              <p class="attorney-spec">BSL.LL.B., A.D.C.A., and AI and Law &middot; 25+ years practicing advocate; Former Member, District Consumer Commission, Ahmednagar; banking, SARFAESI, D.R.T &amp; corporate recovery.</p>
               <span class="attorney-view-cta">View Full Dossier &rarr;</span>
             </div>
           </article>
@@ -2758,6 +3109,33 @@ section, div[id] {
         <div class="blogs-grid" id="blogsGrid">
           <!-- Dynamically populated from BLOGS_DATA -->
         </div>
+
+        <div class="social-strip-row" style="margin-top:32px;">
+          <span class="social-strip-label"><i class="fas fa-bullhorn" style="color:var(--primary); margin-right:6px;"></i> Follow The Legal Hub &amp; Publications</span>
+          <div class="social-links-row">
+            <a class="social-icon-btn social-light" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a class="social-icon-btn social-light" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a class="social-icon-btn social-light" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><i class="fab fa-x-twitter"></i></a>
+            <a class="social-icon-btn social-light" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a class="social-icon-btn social-light" href="https://www.youtube.com/channel/UCg9VbGtXxIWeXYYlmZK2mVQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a class="social-icon-btn social-light" href="https://wa.me/919307373024" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEETUP & CONFERENCE GALLERY (ADMIN-MANAGED DEFAULT SECTION) -->
+    <section class="gallery-section" id="gallery">
+      <div class="grid-container">
+        <div class="section-header-centered">
+          <span class="section-eyebrow">Events &amp; Meetups</span>
+          <h2>Meetup &amp; Conference Gallery</h2>
+          <p>Visual moments from legal seminars, bar council gatherings, judicial conclaves, and firm meetups curated and published by our administrative bench.</p>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Dynamically populated from GALLERY_DATA (pasted exclusively through Admin Portal) -->
+        </div>
       </div>
     </section>
 
@@ -2833,8 +3211,16 @@ section, div[id] {
               <div class="contact-channel-item">
                 <div class="channel-icon"><i class="fas fa-map-marker-alt"></i></div>
                 <div class="channel-text">
-                  <strong>Headquarters</strong>
+                  <strong>Mumbai Headquarters</strong>
                   <span>91 SPRINGBOARD BKC 2, 6TH FLOOR, VINAY BHAVYA COMPLEX, WING B, CST ROAD, KALINA, SANTACRUZ EAST, MUMBAI, MAHARASHTRA &ndash; 400098</span>
+                </div>
+              </div>
+
+              <div class="contact-channel-item">
+                <div class="channel-icon"><i class="fas fa-building"></i></div>
+                <div class="channel-text">
+                  <strong>Pune Headquarters</strong>
+                  <span>Flat no. 9 + 16, Damodar Prasad Apartment, B Wing, Hingne Khurd, Sinhgad Road, Pune &ndash; 411051</span>
                 </div>
               </div>
 
@@ -2858,11 +3244,12 @@ section, div[id] {
             <div style="border-top:1px solid var(--black-border); padding-top:20px;">
               <strong style="font-size:12px; font-family:var(--font-accent); letter-spacing:1px; text-transform:uppercase; color:var(--primary); display:block; margin-bottom:12px;">Official Firm Social Channels</strong>
               <div class="social-links-row">
-                <a class="social-icon-btn" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                <a class="social-icon-btn" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a class="social-icon-btn" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="fab fa-x-twitter"></i></a>
-                <a class="social-icon-btn" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a class="social-icon-btn" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a class="social-icon-btn" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a class="social-icon-btn" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a class="social-icon-btn" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><i class="fab fa-x-twitter"></i></a>
+                <a class="social-icon-btn" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a class="social-icon-btn" href="https://www.youtube.com/channel/UCg9VbGtXxIWeXYYlmZK2mVQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a class="social-icon-btn" href="https://wa.me/919307373024" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
               </div>
             </div>
           </div>
@@ -2920,8 +3307,11 @@ section, div[id] {
               </div>
 
               <p class="form-disclaimer">
-                <i class="fas fa-lock" style="color:var(--primary); margin-right:4px;"></i>
-                Privilege Notice: Transmission of this form does not form an attorney-client relationship until conflict clearance is confirmed and an engagement letter is countersigned.
+                <i class="fas fa-scale-balanced" style="color:var(--primary); margin-right:4px;"></i>
+                <strong>Bar Council of India Privilege Notice:</strong> Transmission of this form does not create an advocate-client relationship until formal conflict clearance is confirmed and an engagement letter / Vakalatnama is executed. Handled under Section 126 of the Indian Evidence Act / Section 132 BSA, 2023 and DPDP Act, 2023.
+                <a href="javascript:void(0)" onclick="openBciDisclaimerModal(false)" style="color:var(--primary-dark); text-decoration:underline; font-weight:700; margin-left:4px;">
+                  View Detailed BCI Statutory Disclaimer &rarr;
+                </a>
               </p>
 
               <button type="submit" class="btn-gold" id="contactSubmitBtn" style="width:100%;">
@@ -2940,15 +3330,31 @@ section, div[id] {
     <div class="footer-main-grid">
       <div class="footer-info-col">
         <h2>We Look Forward to Working With You</h2>
-        <h3>Headquarters Location</h3>
+        <h3>Mumbai Headquarters</h3>
         <p>
           <a href="https://www.google.com/maps/search/?api=1&amp;query=91Springboard+BKC+2%2C+Vinay+Bhavya+Complex%2C+CST+Road%2C+Kalina%2C+Santacruz+East%2C+Mumbai%2C+Maharashtra+400098" target="_blank" rel="noopener noreferrer">
             91 SPRINGBOARD BKC 2, 6TH FLOOR, VINAY BHAVYA COMPLEX, WING B,<br>
             CST ROAD, KALINA, SANTACRUZ EAST, MUMBAI, MAHARASHTRA &ndash; 400098
           </a>
         </p>
+        <h3>Pune Headquarters</h3>
+        <p>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Damodar+Prasad+Apartment%2C+Hingne+Khurd%2C+Sinhgad+Road%2C+Pune+411051" target="_blank" rel="noopener noreferrer">
+            FLAT NO. 9 + 16, DAMODAR PRASAD APARTMENT, B WING,<br>
+            HINGNE KHURD, SINHGAD ROAD, PUNE &ndash; 411051
+          </a>
+        </p>
         <h3>Telephone Priority Line</h3>
         <p><a href="tel:+91-9307373024" style="font-size:22px; font-weight:700; color:var(--primary-light);">+91-9307373024</a></p>
+        <h3>Official Social Channels</h3>
+        <div class="social-links-row" style="margin-top:8px;">
+          <a class="social-icon-btn" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a class="social-icon-btn" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a class="social-icon-btn" href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><i class="fab fa-x-twitter"></i></a>
+          <a class="social-icon-btn" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a class="social-icon-btn" href="https://www.youtube.com/channel/UCg9VbGtXxIWeXYYlmZK2mVQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+          <a class="social-icon-btn" href="https://wa.me/919307373024" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
       </div>
       <div class="footer-map-col">
         <iframe
@@ -2971,6 +3377,23 @@ section, div[id] {
       </div>
     </div>
 
+    <!-- Detailed Bar Council of India Compliance Banner -->
+    <div style="background:#090C10; border-top:1px solid #1C2433; border-bottom:1px solid #1C2433; padding:22px 0;">
+      <div class="grid-container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+        <div style="max-width:880px; font-size:12.5px; color:#8FA0B8; line-height:1.7;">
+          <strong style="color:var(--primary); font-family:var(--font-accent); letter-spacing:1px; text-transform:uppercase; display:inline-flex; align-items:center; gap:6px; margin-bottom:4px;">
+            <i class="fas fa-scale-balanced"></i> Bar Council of India Statutory Compliance &amp; Rule 36 Notice:
+          </strong><br>
+          As per the rules of the Bar Council of India (Section IV, Chapter II, Part VI of BCI Rules framed under the Advocates Act, 1961), law firms and advocates in India are strictly prohibited from soliciting work or advertising. The material on this website is for informational and legal scholarship purposes only, made available upon the user's voluntary request.
+        </div>
+        <div>
+          <button type="button" onclick="openBciDisclaimerModal(false)" class="btn-ivory-outline" style="font-size:11.5px; padding:8px 18px; border-color:var(--primary); color:var(--primary-light); text-transform:uppercase; letter-spacing:1px; white-space:nowrap;">
+            <i class="fas fa-file-contract" style="margin-right:6px;"></i> Read Full BCI Disclaimer
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Copyright Bar -->
     <div class="footer-bottom-bar">
       <div class="grid-container footer-bottom-inner">
@@ -2988,7 +3411,13 @@ section, div[id] {
           <span>&middot;</span>
           <a href="#blogs">Legal Hub</a>
           <span>&middot;</span>
+          <a href="#gallery">Gallery</a>
+          <span>&middot;</span>
           <a href="#contact">Privileged Intake</a>
+          <span>&middot;</span>
+          <a href="javascript:void(0)" onclick="openBciDisclaimerModal(false)" style="color:var(--primary-light); font-weight:600;">
+            <i class="fas fa-scale-balanced"></i> BCI Disclaimer
+          </a>
           <span>&middot;</span>
           <a href="/admin.html" style="color:var(--primary-light); font-weight:700;">
             <i class="fas fa-user-shield"></i> Partner / Staff Portal
@@ -3011,6 +3440,107 @@ section, div[id] {
   <div class="custom-modal-box">
     <button class="custom-modal-close" onclick="closeCustomModal()" aria-label="Close modal">&times;</button>
     <div id="customModalContent"></div>
+  </div>
+</div>
+
+<!-- ===================== BAR COUNCIL OF INDIA (BCI) STATUTORY DISCLAIMER MODAL ===================== -->
+<div class="bci-modal-overlay" id="bciDisclaimerModal" role="dialog" aria-modal="true" aria-labelledby="bciModalHeading" style="display:none;">
+  <div class="bci-modal-box">
+    <div class="bci-modal-header">
+      <div class="bci-seal-badge">
+        <i class="fas fa-scale-balanced"></i>
+      </div>
+      <div>
+        <span class="bci-eyebrow">Advocates Act, 1961 &middot; Bar Council of India Compliance</span>
+        <h2 id="bciModalHeading" class="bci-title">STATUTORY LEGAL DISCLAIMER</h2>
+        <p class="bci-sub">LEX GLOBAL ADVOCACY LLP &middot; Advocates &amp; International Arbitrators &middot; LLPIN: ACK-4630</p>
+      </div>
+    </div>
+
+    <div class="bci-modal-body">
+      <div class="bci-rule-callout">
+        <i class="fas fa-gavel" style="color:var(--primary); font-size:20px; margin-top:2px;"></i>
+        <div>
+          <strong>Statutory Compliance under Rule 36 of the Bar Council of India Rules:</strong>
+          <span>Under the Advocates Act, 1961 and professional conduct standards established by the Bar Council of India (Section IV, Chapter II, Part VI), advocates and law firms in India are strictly restrained from soliciting work or advertising in any form, direct or indirect.</span>
+        </div>
+      </div>
+
+      <p class="bci-lead-text">
+        By clicking <strong>"I AGREE &amp; PROCEED"</strong> below and entering this website, you explicitly acknowledge, certify, and agree to the following terms and declarations:
+      </p>
+
+      <div class="bci-clauses-list">
+        <div class="bci-clause-item">
+          <div class="bci-num">1</div>
+          <div class="bci-desc">
+            <strong>Prohibition of Solicitation and Advertisement:</strong>
+            There has been no advertisement, personal communication, solicitation, invitation, or inducement of any sort whatsoever from LEX GLOBAL ADVOCACY LLP or any of its partners, associates, consultants, or staff to solicit any work or promote professional engagements through this website.
+          </div>
+        </div>
+
+        <div class="bci-clause-item">
+          <div class="bci-num">2</div>
+          <div class="bci-desc">
+            <strong>Voluntary &amp; Informational Request by User:</strong>
+            The user wishes to gain more information about LEX GLOBAL ADVOCACY LLP, its practice areas, admitted advocates, academic publications, and continuing legal education of their own accord, solely for personal knowledge, educational, or informational purposes.
+          </div>
+        </div>
+
+        <div class="bci-clause-item">
+          <div class="bci-num">3</div>
+          <div class="bci-desc">
+            <strong>No Legal Advice or Formal Legal Opinion:</strong>
+            The information, commentary, masterclass syllabi, and articles published on this website do not constitute legal advice, counsel, or a formal legal opinion. Users must not act upon any material without seeking independent, jurisdiction-specific professional legal advice from qualified advocates licensed in the relevant jurisdiction.
+          </div>
+        </div>
+
+        <div class="bci-clause-item">
+          <div class="bci-num">4</div>
+          <div class="bci-desc">
+            <strong>No Advocate-Client Relationship or Retainer:</strong>
+            Neither browsing, transmitting, or receiving information from this website, nor submitting intake inquiries via online forms creates an advocate-client relationship. An advocate-client relationship is formally constituted only upon successful conflict clearance, execution of a formal Vakalatnama / Engagement Letter, and mutual agreement of terms.
+          </div>
+        </div>
+
+        <div class="bci-clause-item">
+          <div class="bci-num">5</div>
+          <div class="bci-desc">
+            <strong>Privileged Confidentiality &amp; Data Protection:</strong>
+            All electronic inquiries transmitted through our intake forms are treated with strict confidentiality under Section 126 of the Indian Evidence Act, 1872 / Section 132 of Bharatiya Sakshya Adhiniyam, 2023 (BSA), and the Digital Personal Data Protection Act, 2023 (DPDP Act). Unsolicited confidential case facts should not be transmitted prior to formal conflict clearance.
+          </div>
+        </div>
+
+        <div class="bci-clause-item">
+          <div class="bci-num">6</div>
+          <div class="bci-desc">
+            <strong>Peer-Reviewed Academic Publishing (LGRLJ):</strong>
+            All scholarly publications, including the peer-reviewed <em>Lex Global Review of Law and Justice (LGRLJ)</em>, research commentaries, and Continuing Legal Education (CLE) courses, are published solely to foster jurisprudence and academic excellence.
+          </div>
+        </div>
+
+        <div class="bci-clause-item">
+          <div class="bci-num">7</div>
+          <div class="bci-desc">
+            <strong>Limitation of Liability &amp; Intellectual Property:</strong>
+            LEX GLOBAL ADVOCACY LLP assumes no liability for any consequence of any action taken by any party relying on material or information contained on this website. All logos, trade names, journal covers, and publications are the exclusive intellectual property of the firm.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bciDeclineNotice" style="display:none; margin:0 32px 16px; padding:12px 16px; background:#FEF2F2; border:1px solid #FCA5A5; border-radius:6px; font-size:13px; color:#991B1B;">
+      <strong>Access Declined:</strong> Under Bar Council of India Rule 36, viewing firm information requires acknowledging this statutory notice. Please close this browser tab or click <strong>I AGREE &amp; PROCEED</strong> to continue.
+    </div>
+
+    <div class="bci-modal-footer">
+      <button type="button" class="btn-gold bci-btn-accept" id="bciAcceptBtn" onclick="acceptBciDisclaimer()">
+        <i class="fas fa-check-circle" style="margin-right:6px;"></i> I AGREE &amp; PROCEED
+      </button>
+      <button type="button" class="btn-ivory-outline bci-btn-decline" id="bciDeclineBtn" onclick="declineBciDisclaimer()">
+        <i class="fas fa-times-circle" style="margin-right:6px;"></i> DECLINE &amp; EXIT
+      </button>
+    </div>
   </div>
 </div>
 
@@ -3045,77 +3575,195 @@ function escapeHtml(str) {
 
 /* ==================== 1. ATTORNEYS DATA ==================== */
 const ATTORNEYS_DATA = {
-  'Dr. Santosh Kakde': {
-    name: 'Dr. Santosh Kakde',
-    title: 'Senior Counsel & Medico-Legal Specialist',
-    practice: 'International Trade, Health Law & Medico-Legal Adjudication',
+  'Dr. Santosh Kakade': {
+    name: 'Prof. Dr. Santosh Keshav Kakade',
+    badge: 'Founder & CEO',
+    title: 'Founder & CEO · Former President & Member, State Consumer Commission, Mumbai · Senior Medicolegal Consultant',
+    practice: 'Medical Law, Medicolegal Consultancy, Healthcare Governance, Consumer Jurisprudence & AI/Cyber Governance',
     image: 'santoshkakde.png',
-    bio: 'Prof. Dr. Santosh Keshav Kakade is a distinguished legal academician, medical professional, surgeon and medicolegal consultant with over three decades of multidisciplinary experience in medicine, law, healthcare administration, consumer dispute resolution, and legal education. His unique combination of surgical, legal, and management expertise enables him to provide authoritative guidance on complex medical negligence claims, hospital governance, artificial intelligence health liability, and data protection.',
-    admissions: ['Supreme Court of India', 'Bar Council of Maharashtra & Goa'],
-    education: 'Ph.D. in Law, LL.M, LL.B, M.S. (Surgeon), Diploma in Arbitration & ADR, LL.D. Research Scholar'
+    bioParagraphs: [
+      'Prof. Dr. Santosh Keshav Kakade is a distinguished legal academician, medical professional, surgeon and medicolegal consultant with over three decades of multidisciplinary experience in medicine, law, healthcare administration, consumer dispute resolution and legal education.',
+      'His unique combination of medical, legal and management expertise enables him to provide comprehensive professional guidance on medical negligence, healthcare regulations, medical ethics, professional liability, hospital governance and healthcare dispute resolution. He has extensive experience in adjudication, academic leadership, institutional administration and medico-legal research.',
+      'His current professional interests also encompass the evolving interface of healthcare, artificial intelligence, data protection and cybersecurity.'
+    ],
+    bio: 'Prof. Dr. Santosh Keshav Kakade is a distinguished legal academician, medical professional, surgeon and medicolegal consultant with over three decades of multidisciplinary experience in medicine, law, healthcare administration, consumer dispute resolution and legal education.',
+    expertise: [
+      'Medical Law and Medicolegal Consultancy',
+      'Medical Negligence and Professional Liability',
+      'Medical Ethics, Informed Consent and Patient Rights',
+      'Healthcare Laws, Regulations and Compliance',
+      'Hospital Administration and Healthcare Management',
+      'Consumer Protection and Healthcare Dispute Resolution',
+      'Arbitration, Mediation and Alternative Dispute Resolution',
+      'Cyber Law, Data Protection and AI Governance'
+    ],
+    qualifications: [
+      {
+        category: 'Law and Legal Research',
+        items: ['Ph.D. in Law', 'LL.M.', 'LL.B.', 'Diploma in Arbitration and Alternative Dispute Resolution', 'LL.D. Research']
+      },
+      {
+        category: 'Medicine',
+        items: ['MBBS', 'M.S. (General Surgery)', 'Diploma in Orthopaedics', 'Diplomate of National Board (DNB), General Surgery']
+      },
+      {
+        category: 'Management',
+        items: ['MBA (Hospital Management)', 'Executive MBA (Finance)']
+      },
+      {
+        category: 'Information Technology and Cybersecurity',
+        items: [
+          'Postgraduate Diploma in Data Science and Artificial Intelligence',
+          'Advanced Course in Cyber Security',
+          'Cyber Crime Investigator Certification',
+          'Postgraduate Diploma in Cyber Security and Forensics',
+          'Diploma in Electronics and Computer Hardware',
+          'Diploma in Systems and Networking Analysis'
+        ]
+      },
+      {
+        category: 'Professional Certifications',
+        items: ['ISO Lead Auditor Training – Quality Management Systems.']
+      }
+    ],
+    positions: [
+      'Former In-charge President and Non-Judicial Member, Maharashtra State Consumer Disputes Redressal Commission, Mumbai.',
+      'Former Professor of Law and Management, Maharashtra National Law University, Aurangabad.',
+      'Former Director, Executive MBA in Medical Law and Hospital Management.',
+      'Former Consultant-in-Charge, Emergency Department, Aditya Birla Memorial Hospital, Pune.',
+      'Distinguished Visiting Professor of Law, Symbiosis Law School, Pune.',
+      'Founding Director, Lex Global Advocacy LLP, Mumbai.',
+      'Founder Director, Core India Institute of Legal Medicine Pvt. Ltd., Pune.'
+    ],
+    admissions: [],
+    education: 'Ph.D. in Law, LL.M., LL.B., MBBS, M.S. (General Surgery), DNB (General Surgery), MBA (Hospital Management), Executive MBA (Finance), PG Diplomas in Data Science & AI and Cyber Security & Forensics'
   },
   'Adv. Mahesh N. Dhake': {
-    name: 'Adv. Mahesh N. Dhake',
-    title: 'Partner &middot; Banking & Corporate Finance',
-    practice: 'Corporate Finance, Banking, D.R.T, & Commercial Recovery',
+    name: 'Adv. Mahesh Dhake',
+    title: 'Former Member, District Consumer Commission · Banking & Corporate Finance',
+    practice: 'Consumer Redressal, Corporate Finance, Banking, D.R.T, AI and Law & Commercial Recovery',
     image: 'maheshdhake.jpeg',
-    bio: 'Advocate Mahesh Nilkantha Dhake is an experienced legal professional with over 25 years in active legal practice since 1999. He served as Member of the District Consumer Commission, Ahmednagar, from 17 May 2018 to 16 May 2023. With extensive commercial knowledge and courtroom tenacity, Advocate Mahesh Dhake counsels institutional banks, corporate debtors, and financial entities across debt restructuring, SARFAESI, and D.R.T enforcement.',
+    bio: 'Advocate Mahesh Nilkantha Dhake (BSL.LL.B., A.D.C.A., and AI and Law) is an experienced legal professional with over 25 years in active legal practice since 1999. He served as Member of the District Consumer Disputes Redressal Commission, Ahmednagar, from 17 May 2018 to 16 May 2023. Combining foundational technology and AI & Law training with extensive commercial courtroom tenacity, Advocate Mahesh Dhake counsels institutional banks, corporate debtors, and financial entities across consumer claims, debt restructuring, SARFAESI, and D.R.T enforcement.',
     admissions: ['Bar Council of Maharashtra & Goa', 'Bombay High Court'],
-    education: 'LL.B'
+    education: 'BSL.LL.B., A.D.C.A., AI and Law'
   },
   'Adv. Sanjay Patil': {
     name: 'Adv. Sanjay Patil',
-    title: 'Senior Counsel & Former District Court Judge',
+    title: 'Former District Judge & Former President, District Consumer Commission',
     practice: 'Judicial Adjudication, Consumer Protection & Appellate Practice',
     image: 'sanjaypatil.jpeg',
-    bio: 'Shri Sanjay Patil is a revered jurist and former District Court Judge with distinguished service in the Indian judicial system. Associated with the State Consumer Commission, his judicial acumen provides clients with profound strategic clarity regarding procedural fairness, evidence weight, trial strategy, and high-value consumer appeals.',
+    bio: 'Adv. Sanjay Patil is a revered jurist, Former District Judge, and Former President of the District Consumer Disputes Redressal Commission with distinguished service in the Indian judicial system. His judicial acumen provides clients with profound strategic clarity regarding procedural fairness, evidence weight, trial strategy, and high-value consumer and civil appeals.',
     admissions: ['Bar Council of Maharashtra & Goa', 'Bombay High Court', 'State Consumer Commission'],
-    education: 'LL.B, Judicial Service Training'
+    education: 'LL.B, Former District & Sessions Judge'
   },
   'Adv Kishor Vadane': {
     name: 'Adv. Kishor Vadane',
-    title: 'Partner & Head of International Arbitration',
-    practice: 'International Commercial & Treaty Arbitration, Cross-Border Disputes',
+    title: 'Former District Judge & Former President, District Consumer Commission',
+    practice: 'Judicial Adjudication, Consumer Redressal & International Arbitration',
     image: 'kishor vadane.jpeg',
-    bio: 'Advocate Kishor Vadane leads the firm\'s arbitration and cross-border commercial strategy. With extensive expertise in both institutional (ICC, LCIA, SIAC) and domestic ad-hoc arbitrations, he assists corporate conglomerates in negotiating emergency freezing injunctions, managing complex evidentiary submissions, and enforcing awards under the 1958 New York Convention.',
+    bio: 'Advocate Kishor Vadane is a distinguished Former District Judge and Former President of the District Consumer Disputes Redressal Commission, who also leads the firm\'s arbitration and cross-border commercial strategy. Combining extensive judicial experience on the bench with mastery of institutional (ICC, LCIA, SIAC) and domestic arbitrations, he advises clients on complex civil disputes, consumer appeals, and award enforcement under the 1958 New York Convention.',
     admissions: ['Bar Council of Maharashtra & Goa', 'Bombay High Court', 'State Consumer Commission'],
-    education: 'LL.B'
+    education: 'LL.B, Former District & Sessions Judge'
   },
-  'Adv. Shri Ravindra Nagre': {
-    name: 'Adv. Shri Ravindra Nagre',
-    title: 'Former President, District Consumer Disputes Redressal Commission',
+  'Adv. Ravindra Nagre': {
+    name: 'Adv. Ravindra Nagre',
+    title: 'Former President, District Consumer Commission',
     practice: 'Civil, Criminal Trial Advocacy & Consumer Jurisprudence',
     image: 'RAVINDRANAGARE.jpeg',
-    bio: 'Adv. Ravindra Pandurang Nagre brings over 27 years of advocacy experience alongside more than 5 years of dedicated judicial service as President of the Consumer Disputes Redressal Commission. Holding B.Sc. and LL.M. degrees, he is a formidable courtroom trial strategist across civil disputes, criminal bail and trials, statutory consumer claims, and appellate reviews.',
+    bio: 'Adv. Ravindra Pandurang Nagre brings over 27 years of advocacy experience alongside dedicated judicial service as Former President of the District Consumer Disputes Redressal Commission. Holding B.Sc. and LL.M. degrees, he is a formidable courtroom trial strategist across civil disputes, criminal bail and trials, statutory consumer claims, and appellate reviews.',
     admissions: ['Bar Council of Maharashtra & Goa', 'Bombay High Court', 'State Consumer Commission'],
     education: 'B.Sc., LL.M.'
   },
-  'Dr. Sofia Lindqvist': {
-    name: 'Dr. Sofia Lindqvist',
-    title: 'Partner & Head of Data, Privacy & AI Governance',
-    practice: 'Global Data Privacy, GDPR, DPDP Act 2023 & Cyber Law',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80',
-    bio: 'Dr. Sofia Lindqvist directs the firm\'s cross-border privacy and cybersecurity practice. A former advisor to European regulatory working groups, she counsels multinational enterprise platforms on Transfer Impact Assessments (TIAs), EU AI Act compliance, and 72-hour international data breach emergency response commands.',
-    admissions: ['Swedish Bar Association', 'Law Society of England & Wales'],
-    education: 'Dr. iur., Stockholm University'
+  'Adv. Shridhar Kulkarni': {
+    name: 'Adv. Shridhar Kulkarni',
+    title: 'Former District Judge & Former President, District Consumer Commission',
+    practice: 'Judicial Adjudication, Consumer Protection Appeals & Commercial Arbitration',
+    image: 'shridhark.jpeg',
+    bio: 'Adv. Shridhar Kulkarni is an esteemed Former District and Additional Sessions Judge and Former President of the District Consumer Disputes Redressal Commission in Maharashtra. With an extensive judicial career spanning decades on the bench, he has authored landmark decisions in complex civil trials, criminal proceedings, consumer disputes, and statutory appeals. His deep insight into judicial procedure, evidence appraisal, and dispute conciliation provides institutional clients with authoritative guidance in high-stakes litigation and arbitration.',
+    admissions: ['Bar Council of Maharashtra & Goa', 'Higher Judicial Service (Retd.)', 'State Consumer Disputes Redressal Commission'],
+    education: 'B.A., LL.M., Former District & Sessions Judge'
   },
-  'Kathleen Horne': {
-    name: 'Kathleen Horne',
-    title: 'Partner & Admiralty Practice Lead',
-    practice: 'Admiralty, Ship Arrests, Maritime Liens & Restructuring',
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80',
-    bio: 'Kathleen Horne is an international authority on admiralty jurisdiction, emergency ex-parte vessel arrest orders, maritime lien rankings, charterparty demurrage arbitration, and marine insurance claims across major deepwater ports.',
-    admissions: ['State Bar of Georgia', 'Southeastern Admiralty Law Institute'],
-    education: 'J.D., Mercer University Walter F. George School of Law'
+  'Adv. Anand Bhalchandra Joshi': {
+    name: 'Adv. Anand Bhalchandra Joshi',
+    title: 'Former President, DCDRC (District Consumer Commission)',
+    practice: 'Consumer Protection Jurisprudence, Cyber Law, Co-operative Societies (GDC&A), Banking & Financial Liability, Insurance Repudiations',
+    image: 'anandjoshi1.jpeg',
+    bio: 'Adv. Anand Bhalchandra Joshi (B.A., LL.B., LL.M., GDC&A, Diploma in Cyber Law, Cr.Vastu Shastra) served with distinction as Former President of the District Consumer Disputes Redressal Commission (DCDRC). A veteran practitioner and former judicial presiding officer, he has adjudicated thousands of consumer disputes encompassing banking deficiencies, insurance claim repudiations, cyber compliance issues, co-operative society governance, unfair trade practices, and real estate developer defaults under the Consumer Protection Acts of 1986 and 2019.',
+    admissions: ['Bar Council of Maharashtra & Goa', 'District & Sessions Court Bar', 'State Consumer Commission'],
+    education: 'B.A., LL.B., LL.M., GDC&A, Diploma in Cyber Law, Cr.Vastu Shastra · Former President, DCDRC'
   },
-  'Carlton E. Joyce': {
-    name: 'Carlton E. Joyce',
-    title: 'Partner & Infrastructure Counsel',
-    practice: 'Construction Litigation, FIDIC Contracts & Mega Projects',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80',
-    bio: 'Carlton E. Joyce represents infrastructure concessionaires, EPC consortia, and public-private partnership entities in engineering delay disputes, FIDIC contract claims, and complex multi-party arbitrations.',
-    admissions: ['State Bar of Georgia', 'Federal Bar Association'],
-    education: 'J.D., Emory University School of Law'
+  'Adv. Sanjay Borwal': {
+    name: 'Adv. Sanjay Borwal',
+    title: 'Former President, District Consumer Commission',
+    practice: 'Consumer Redressal, Public Utility Disputes, Builder-Buyer Litigations & Civil Practice',
+    image: 'sanjayb.jpeg',
+    bio: 'Adv. Sanjay Borwal is a Former President of the District Consumer Disputes Redressal Commission and an experienced advocate with deep competence in consumer grievance redressal forums (CGRF) and utility regulatory frameworks. His judicial leadership spans landmark orders penalizing deficient corporate and public utility services, enforcing builder-buyer contractual timelines, and resolving complex commercial claims.',
+    admissions: ['Bar Council of Maharashtra & Goa', 'Bombay High Court', 'Consumer Grievance Redressal Forum'],
+    education: 'B.A., LL.B., Former Consumer Commission President'
+  },
+  'Adv. Avinash Prabhune': {
+    name: 'Adv. Avinash Vinayak Prabhune',
+    title: 'Former Member, Additional District Consumer Disputes Redressal Commission, Nagpur',
+    practice: 'Consumer Protection, Electricity Regulatory Law (MERC / CGRF / Ombudsman) & Right to Information (RTI)',
+    image: 'avinash_prabhune.jpg',
+    bioParagraphs: [
+      'Adv. Avinash Vinayak Prabhune served as Member at the Additional District Consumer Disputes Redressal Commission, Nagpur, for approximately 64+ months (May 2018 to October 2023), and has been practising law as an Advocate since October 2023.',
+      'He has worked in the fields of Consumer Protection, Electricity, and the Right to Information (RTI) for over 21 years in an individual capacity, while also bringing 36 years of industrial sector experience as an Assistant Engineer with MSPGCL (Maharashtra State Power Generation Co. Ltd.).'
+    ],
+    experience: [
+      'Worked as Member at Additional District Consumer Disputes Redressal Commission, Nagpur, for approximately 64+ months (May 2018 to October 2023).',
+      'Working in the fields of Consumer Protection, Electricity and Right to Information (RTI) for the last 21 years in an individual capacity.',
+      'Hon\'ble Maharashtra Electricity Regulatory Commission (MERC), Mumbai, nominated him to the Panel of Consumer Representatives (Individual Category) for the period February 2013 to August 2016, representing the interests of electricity consumers before Hon\'ble MERC.',
+      'Represented the interests of electricity consumers before Hon\'ble CGRF / Electricity Ombudsman / MERC since 2005.',
+      'Worked with MSPGCL (Maharashtra State Power Generation Co. Ltd.) as Assistant Engineer with 36 years of experience in the industry sector.',
+      'Practising law as an Advocate since October 2023.'
+    ],
+    courtsAppeared: [
+      'Hon\'ble Supreme Court',
+      'Hon\'ble High Court',
+      'Hon\'ble NCDRC',
+      'Hon\'ble SCDRC, Mumbai / Nagpur',
+      'Hon\'ble DCDRC, Nagpur'
+    ],
+    qualifications: [
+      {
+        category: 'Educational Qualifications',
+        items: [
+          'B.A. LL.B. — Rashtrasant Tukdoji Maharaj Nagpur University, Nagpur',
+          'Certificate Course in Consumer Protection — IGNOU, New Delhi',
+          'Diploma in Electrical Engineering — Board of Technical Education, Maharashtra State, Mumbai'
+        ]
+      }
+    ],
+    guestFaculty: [
+      'Yashwantrao Chavan Academy of Development Administration (YASHADA), Pune, Maharashtra — Provided training in the Vidarbha region.',
+      'MSPGCL State-Level Generation Training Centres — Koradi and Nashik.',
+      'MSPGCL Power Stations — Bhusawal, Chandrapur, Paras and Khaperkheda.',
+      'Regional Training Institute, Nagpur — Indian Audit & Accounts Department, A.G. Office, Nagpur.',
+      'Rajiv Gandhi National Institute of Intellectual Property Management, Nagpur.'
+    ],
+    awards: [
+      {
+        title: '1. National-Level Recognition – RTI Yashogatha (2016)',
+        detail: 'The Hon\'ble Central Information Commission (CIC), Delhi, published a book titled RTI Yashogatha on 7 November 2016. His RTI success story regarding the inclusion of date of birth on UID Aadhaar cards was selected and published in the book at the national level. The book was released by the Hon\'ble Union Home Minister of India.'
+      },
+      {
+        title: '2. Sajag Nagrik Manch Pune Award (March 2017)',
+        detail: 'Sajag Nagrik Manch Pune (NGO) selected him for an award in March 2017, consisting of a certificate and a cash award of ₹10,000, for his various activities in the field of RTI involving larger public interest.'
+      },
+      {
+        title: '3. State-Level Conference Paper Presentation (30 March 2016)',
+        detail: 'Presented a paper at the state-level conference on Completion of 10 Years for RTI Act at Yashwantrao Chavan Academy of Development Administration (YASHADA), Maharashtra State, Pune.'
+      }
+    ],
+    admissions: [
+      'Hon\'ble Supreme Court',
+      'Hon\'ble High Court',
+      'Hon\'ble NCDRC',
+      'Hon\'ble SCDRC, Mumbai / Nagpur',
+      'Hon\'ble DCDRC, Nagpur'
+    ],
+    education: 'B.A. LL.B. (RTMNU, Nagpur) · Certificate Course in Consumer Protection (IGNOU, New Delhi) · Diploma in Electrical Engineering (BTE, Maharashtra)'
   }
 };
 
@@ -3305,7 +3953,7 @@ const PRACTICES_DATA = {
     title: 'Medical Jurisprudence, Negligence & Hospital Law',
     category: 'Medical',
     icon: 'fa-heartbeat',
-    scope: 'Supervised by Dr. Santosh Kakde. Defending medical professionals and hospitals against medical negligence claims, ethics inquiries before the National Medical Commission (NMC), and bio-medical regulatory disputes.',
+    scope: 'Supervised by Dr. Santosh Kakade. Defending medical professionals and hospitals against medical negligence claims, ethics inquiries before the National Medical Commission (NMC), and bio-medical regulatory disputes.',
     highlights: ['Bolam and Jacob Mathew tests defense in medical negligence','National Medical Commission (NMC) disciplinary inquiries','Clinical Establishments Act compliance & hospital licensing','Informed consent protocols and medicolegal audit advisory'],
     matters: ['Defended leading cardiac hospital against wrongful surgical negligence claim before NCDRC','Advised multi-specialty hospital group on revised NMC ethics guidelines','Provided expert medicolegal opinion resolving high-stakes malpractice arbitration'],
     statutes: ['National Medical Commission Act, 2019','Clinical Establishments Act, 2010','Transplantation of Human Organs Act, 1994','Drugs and Cosmetics Act, 1940'],
@@ -3403,450 +4051,28 @@ const PRACTICES_DATA = {
   }
 };
 
-/* ==================== 3. COURSES & ACADEMY (6 Seeded Masterclasses) ==================== */
-const COURSES_DATA = [
-  {
-    id: 'c1',
-    slug: 'international-commercial-arbitration',
-    title: 'International Commercial Arbitration: Strategy & Practice',
-    category: 'Arbitration',
-    level: 'Advanced Masterclass',
-    duration: '8 weeks · 24 lectures · 16 CLE Credits',
-    price: 4999,
-    currency: 'INR',
-    instructor: 'Dr. Amara Okonkwo',
-    instructorTitle: 'Arbitrator on LCIA, SIAC & ICC Panels',
-    instructorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-    rating: 4.9,
-    students: 1420,
-    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1400&q=80',
-    description: 'Master arbitration agreements, seat selection, emergency arbitral measures, evidence, and cross-border enforcement under the 1958 New York Convention.',
-    outcomes: [
-      'Draft ironclad multi-tiered dispute resolution clauses robust against jurisdictional challenge',
-      'Select arbitration seat, governing law, and tribunal composition strategically',
-      'Deploy emergency arbitrator mechanisms and interim injunctions across borders',
-      'Master the 1958 New York Convention defences and global asset attachment'
-    ],
-    curriculum: [
-      {
-        title: 'Module 1: The Arbitration Agreement & Jurisdictional Foundations',
-        lessons: [
-          { title: 'The New York Convention 1958 in Modern Practice', duration: '28 min', type: 'video' },
-          { title: 'Drafting Dispute Resolution Clauses: Pathology & Perfection', duration: '32 min', type: 'video' },
-          { title: 'Selecting the Seat vs Venue: Practical Repercussions', duration: '24 min', type: 'text' }
-        ]
-      },
-      {
-        title: 'Module 2: Procedural Management & Evidence Under IBA Rules',
-        lessons: [
-          { title: 'Emergency Arbitrators & Interim Measures', duration: '25 min', type: 'video' },
-          { title: 'Witness Statements, Document Production & Redfern Schedules', duration: '30 min', type: 'workshop' },
-          { title: 'Virtual Hearings & Cybersecurity Protocols', duration: '20 min', type: 'simulation' }
-        ]
-      },
-      {
-        title: 'Module 3: Award Formulation, Set-Aside & Enforcement',
-        lessons: [
-          { title: 'Drafting Awards: Minimising Set-Aside Vulnerability', duration: '29 min', type: 'video' },
-          { title: 'Cross-Border Enforcement & Sovereign Asset Attachment', duration: '35 min', type: 'case-study' }
-        ]
-      }
-    ],
-    faqs: [
-      { question: 'Is this course tailored to a specific country?', answer: 'The curriculum addresses international commercial arbitration principles under the New York Convention, UNCITRAL Model Law, ICC, and LCIA rules, with comparative notes for the UK, EU, Singapore, US, and India.' },
-      { question: 'Will I receive an accredited certificate?', answer: 'Yes. Upon passing all module knowledge checks and the final assessment, you will unlock a verifiable Lex Global Advocacy Certificate of Completion.' }
-    ],
-    quiz: {
-      question: 'Under Article V(1)(c) of the 1958 New York Convention, what is a recognised ground for refusing recognition and enforcement of an award?',
-      options: [
-        'The arbitral tribunal rendered an award not dealing with a difference contemplated by or not falling within the terms of the submission to arbitration',
-        'The prevailing party was represented by counsel from a non-member state',
-        'The hearing was conducted in an official language other than Latin or French',
-        'The respondent was dissatisfied with the commercial outcome of the damages computation'
-      ],
-      correctIndex: 0,
-      explanation: 'Article V(1)(c) provides that enforcement may be refused if the award deals with a difference not contemplated by or not falling within the submission to arbitration.'
-    }
-  },
-  {
-    id: 'c2',
-    slug: 'cross-border-contract-drafting',
-    title: 'Cross-Border Contract Drafting & Negotiation',
-    category: 'Cross-Border Contracts',
-    level: 'Executive Practitioner',
-    duration: '6 weeks · 18 lectures · 12 CLE Credits',
-    price: 3499,
-    currency: 'INR',
-    instructor: 'Adv. Priya Menon',
-    instructorTitle: 'International Commercial & M&A Counsel',
-    instructorAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
-    rating: 4.8,
-    students: 1180,
-    image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1400&q=80',
-    description: 'Master commercial contracts bridging common law and civil law doctrines, indemnities, liability caps, force majeure, and Incoterms 2020.',
-    outcomes: [
-      'Structure governing law, forum selection, and enforcement mechanisms seamlessly',
-      'Draft battle-tested indemnity, limitation of liability, and liquidated damages provisions',
-      'Harmonize international terms with Incoterms 2020 and Vienna Sales Convention (CISG)',
-      'Negotiate representations, warranties, and disclosure letters across borders'
-    ],
-    curriculum: [
-      {
-        title: 'Module 1: Architecture of the International Agreement',
-        lessons: [
-          { title: 'Governing Law vs Forum Clauses: Resolving Conflict of Laws', duration: '22 min', type: 'video' },
-          { title: 'Reps, Warranties & Indemnities: Common vs Civil Law Divergence', duration: '28 min', type: 'video' }
-        ]
-      },
-      {
-        title: 'Module 2: Risk Allocation & Commercial Protections',
-        lessons: [
-          { title: 'Drafting Consequential Loss & Liability Caps', duration: '26 min', type: 'workshop' },
-          { title: 'Modern Force Majeure, Hardship & Sanctions Clauses', duration: '24 min', type: 'case-study' }
-        ]
-      }
-    ],
-    faqs: [
-      { question: 'Is this applicable to tech contracts?', answer: 'Yes, dedicated case studies explore cross-border SaaS, SLA indemnities, and data licensing agreements.' }
-    ],
-    quiz: {
-      question: 'Which of the following is true regarding a governing law clause in a cross-border commercial contract?',
-      options: [
-        'A governing law clause automatically dictates which court has exclusive procedural jurisdiction',
-        'A governing law clause selects the substantive legal system used to interpret rights, while jurisdiction determines the forum for disputes',
-        'Governing law is invalid if parties choose a neutral third-country legal system',
-        'Governing law clauses supersede mandatory public policy of the enforcement state'
-      ],
-      correctIndex: 1,
-      explanation: 'Substantive governing law (e.g., English or Swiss law) interprets the meaning and performance of the contract, whereas jurisdiction determines the forum.'
-    }
-  },
-  {
-    id: 'c3',
-    slug: 'global-data-privacy-compliance',
-    title: 'Global Data Privacy, GDPR & AI Governance',
-    category: 'Data & Privacy',
-    level: 'Specialist Masterclass',
-    duration: '7 weeks · 21 lectures · 14 CPD Credits',
-    price: 3999,
-    currency: 'INR',
-    instructor: 'Dr. Sofia Lindqvist',
-    instructorTitle: 'European & International Privacy Counsel',
-    instructorAvatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80',
-    rating: 4.9,
-    students: 950,
-    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80',
-    description: 'Navigate GDPR, EU AI Act, international transfer mechanisms (SCCs, BCRs), and regulatory breach reporting protocols with confidence.',
-    outcomes: [
-      'Conduct rigorous Transfer Impact Assessments (TIAs) compliant with Schrems II precedents',
-      'Execute EU and UK Standard Contractual Clauses with necessary supplementary measures',
-      'Establish a 72-hour cross-border data breach notification response command',
-      'Implement AI governance checks aligned with the EU AI Act risk categorisation'
-    ],
-    curriculum: [
-      {
-        title: 'Module 1: Principles & Cross-Border Mechanisms',
-        lessons: [
-          { title: 'GDPR Fundamentals in Cross-Border Operations', duration: '24 min', type: 'video' },
-          { title: 'Standard Contractual Clauses & Supplementary Technical Measures', duration: '30 min', type: 'video' }
-        ]
-      },
-      {
-        title: 'Module 2: Breach Response & Emerging AI Regulatory Regimes',
-        lessons: [
-          { title: 'The 72-Hour Data Breach Protocol', duration: '25 min', type: 'simulation' },
-          { title: 'EU AI Act Compliance for Enterprise Counsel', duration: '28 min', type: 'case-study' }
-        ]
-      }
-    ],
-    faqs: [
-      { question: 'Does this cover India DPDP Act 2023?', answer: 'Yes, comparative matrices contrasting GDPR with India DPDP Act 2023 and US state laws are included.' }
-    ],
-    quiz: {
-      question: 'Following the CJEU Schrems II ruling, what must an organisation conduct before transferring personal data outside the EEA using SCCs?',
-      options: [
-        'A verbal notification to the European Data Protection Board',
-        'A Transfer Impact Assessment (TIA) evaluating destination country surveillance laws and supplementary safeguards',
-        'A mandatory 30-day public notice in the EU Official Gazette',
-        'A notarised indemnity waiver signed by all individual data subjects'
-      ],
-      correctIndex: 1,
-      explanation: 'Schrems II mandates that data exporters conduct a Transfer Impact Assessment to determine whether destination laws provide equivalent protection.'
-    }
-  },
-  {
-    id: 'c4',
-    slug: 'admiralty-maritime-law-practice',
-    title: 'Admiralty Practice, Ship Arrests & Maritime Liens',
-    category: 'Maritime & Admiralty',
-    level: 'Specialized Practice',
-    duration: '6 weeks · 18 lectures · 12 CLE Credits',
-    price: 4499,
-    currency: 'INR',
-    instructor: 'Kathleen Horne',
-    instructorTitle: 'Partner, Maritime & Admiralty',
-    instructorAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
-    rating: 4.9,
-    students: 670,
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=1400&q=80',
-    description: 'Master admiralty jurisdiction in High Courts, ex-parte vessel arrest applications, maritime lien ranking, charterparty laytime disputes, and P&I letters of undertaking.',
-    outcomes: [
-      'Draft ex-parte admiralty arrest caveats and applications swiftly',
-      'Analyze maritime lien priority and judicial sale distributions',
-      'Negotiate P&I Club Letters of Undertaking (LOU) to release arrested tonnage',
-      'Resolve charterparty laytime, demurrage, and safe port claims'
-    ],
-    curriculum: [
-      {
-        title: 'Module 1: Admiralty Jurisdiction & Ship Arrest',
-        lessons: [
-          { title: 'Arrest Conventions 1952 & 1999 in Modern Practice', duration: '28 min', type: 'video' },
-          { title: 'Drafting Ex-Parte Ship Arrest Plaints', duration: '32 min', type: 'workshop' }
-        ]
-      },
-      {
-        title: 'Module 2: Maritime Liens & P&I Undertakings',
-        lessons: [
-          { title: 'Ranking of Claims: Crew Wages, Mortgages & Necessaries', duration: '25 min', type: 'case-study' },
-          { title: 'P&I LOUs and Security Deposit Formulations', duration: '22 min', type: 'simulation' }
-        ]
-      }
-    ],
-    faqs: [
-      { question: 'Does this cover the Indian Admiralty Act 2017?', answer: 'Yes, the full statutory framework of the Admiralty (Jurisdiction and Settlement of Maritime Claims) Act, 2017 is taught.' }
-    ],
-    quiz: {
-      question: 'Which claim typically enjoys the highest priority of maritime lien against an arrested vessel?',
-      options: [
-        'Unsecured supplier bills for catering',
-        'Crew wages and master disbursements',
-        'General administrative legal costs of the charterer',
-        'Disputed demurrage claims between traders'
-      ],
-      correctIndex: 1,
-      explanation: 'Seamen wages and master disbursements have historically enjoyed the highest priority of statutory maritime liens under international maritime law.'
-    }
-  },
-  {
-    id: 'c5',
-    slug: 'real-estate-due-diligence-maharera',
-    title: 'Real Estate Title Diligence, Conveyancing & MahaRERA',
-    category: 'Real Estate',
-    level: 'Comprehensive Practical Course',
-    duration: '8 weeks · 24 lectures · 16 CLE Credits',
-    price: 3799,
-    currency: 'INR',
-    instructor: 'Adv. Sanjay Patil',
-    instructorTitle: 'Senior Counsel, Real Estate & Former Judge',
-    instructorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
-    rating: 4.8,
-    students: 1310,
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=80',
-    description: 'Master 30-year forensic root-of-title searches, 7/12 land revenue mutations, NA conversion, joint development agreements, and MahaRERA complaint advocacy.',
-    outcomes: [
-      'Conduct 30-to-50 year forensic title searches across land registers',
-      'Identify agricultural conversion hurdles, encumbrances, and lis pendens litigation',
-      'Structure Joint Development Agreements (JDA) and commercial leases',
-      'Litigate homebuyer claims and project compliance before RERA authorities'
-    ],
-    curriculum: [
-      {
-        title: 'Module 1: Title Tracing & Revenue Records',
-        lessons: [
-          { title: '7/12 Extracts, Khata, Ferfar & Index II Verification', duration: '30 min', type: 'video' },
-          { title: 'Public Notices, Encumbrance Certificates & Search Reports', duration: '26 min', type: 'workshop' }
-        ]
-      },
-      {
-        title: 'Module 2: RERA Compliance & Dispute Resolution',
-        lessons: [
-          { title: 'MahaRERA Project Registration & Escrow Governance', duration: '28 min', type: 'video' },
-          { title: 'Filing Homebuyer Complaints: Section 18 Interest & Refunds', duration: '24 min', type: 'case-study' }
-        ]
-      }
-    ],
-    faqs: [
-      { question: 'Is this applicable across India?', answer: 'Yes, while state revenue terminologies (e.g. 7/12, Patta) are highlighted, RERA is a national federal law with uniform principles.' }
-    ],
-    quiz: {
-      question: 'What is the doctrine of "Lis Pendens" in real property conveyancing?',
-      options: [
-        'A property automatically doubles in value once registered',
-        'While a suit regarding title in immovable property is pending, the property cannot be alienated so as to affect the rights of any party under the decree',
-        'Title deeds become public domain after 100 years',
-        'Only commercial banks can conduct real estate auctions'
-      ],
-      correctIndex: 1,
-      explanation: 'Under Section 52 of the Transfer of Property Act, property under active litigation cannot be transferred so as to prejudice the rights of litigants.'
-    }
-  },
-  {
-    id: 'c6',
-    slug: 'international-advocacy-plain-language',
-    title: 'The Art of Appellate Advocacy & Plain-Language Drafting',
-    category: 'Litigation & Advocacy',
-    level: 'Executive Masterclass',
-    duration: '5 weeks · 15 lectures · 10 CLE Credits',
-    price: 0,
-    currency: 'INR',
-    instructor: 'Adv. Sameer Qureshi',
-    instructorTitle: 'Director of Advocacy & Appellate Counsel',
-    instructorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-    rating: 4.9,
-    students: 2340,
-    image: 'https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&w=1400&q=80',
-    description: 'Transform complex legal arguments into compelling, razor-sharp submissions, client memos, and judicial briefs. Offered free for all legal professionals.',
-    outcomes: [
-      'Master the Executive Summary and IRAC/CREAC structural architectures',
-      'Eliminate nominalisations, passive obfuscations, and archaic legal cliches',
-      'Frame procedural issues persuasively to win judicial sympathy early',
-      'Draft concise, actionable client advisory opinions in plain business English'
-    ],
-    curriculum: [
-      {
-        title: 'Module 1: The Architecture of Clear Thought',
-        lessons: [
-          { title: 'The One-Page Executive Legal Memo', duration: '18 min', type: 'video' },
-          { title: 'Paragraph Momentum & Topic Sentences', duration: '20 min', type: 'text' }
-        ]
-      },
-      {
-        title: 'Module 2: Persuasive Brief Writing',
-        lessons: [
-          { title: 'Crafting the Question Presented', duration: '22 min', type: 'workshop' },
-          { title: 'Pivoting Hostile Judicial Questions in Oral Advocacy', duration: '25 min', type: 'simulation' }
-        ]
-      }
-    ],
-    faqs: [
-      { question: 'Is this course completely free?', answer: 'Yes. Lex Global Advocacy provides this course free of tuition as part of our pro-bono educational charter.' }
-    ],
-    quiz: {
-      question: 'What is the primary advantage of active voice in legal advocacy writing?',
-      options: [
-        'It makes sentences longer and more impressive',
-        'It identifies the actor clearly, reduces ambiguity regarding legal duty, and makes arguments more forceful and direct',
-        'It prevents the opposing party from cross-examining documents',
-        'It is strictly required by the New York Convention'
-      ],
-      correctIndex: 1,
-      explanation: 'Active voice specifies who must perform what action, removing uncertainty regarding legal responsibility.'
-    }
-  }
-];
+/* ==================== 3. COURSES & ACADEMY ==================== */
+const COURSES_DATA = [];
 
-/* ==================== 4. BLOGS & PUBLICATIONS (6 Seeded Articles) ==================== */
-const BLOGS_DATA = [
+/* ==================== 4. BLOGS, JOURNALS & PUBLICATIONS ==================== */
+const BLOGS_DATA = [];
+const JOURNALS_DATA = [
   {
-    id: 'p1',
-    slug: 'new-york-convention-enforcement-primer',
-    title: 'The 1958 New York Convention: A Strategic Guide to Global Award Enforcement',
-    subtitle: 'Why the New York Convention remains the undisputed bedrock of cross-border dispute resolution — and how sophisticated counsel pre-empt Article V challenges.',
-    category: 'Arbitration',
-    author: 'Dr. Amara Okonkwo',
-    authorRole: 'Managing Partner & Arbitrator',
-    date: '2026-10-18',
-    readTime: '8 min read',
-    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1400&q=80',
-    content: `
-      <p class="lead" style="font-size:18px; font-style:italic; border-left:4px solid var(--primary); padding-left:16px; margin:20px 0; color:#334155;">
-        "An arbitral award is only as valuable as the assets it can successfully attach. International arbitration that ignores post-award execution is an academic exercise."
-      </p>
-      <h3 style="font-size:22px; margin:24px 0 10px;">The Enduring Genius of the 1958 Architecture</h3>
-      <p>Over 170 contracting states adhere to the Convention on the Recognition and Enforcement of Foreign Arbitral Awards (the New York Convention). Its foundational premise is deceptively simple: foreign arbitral awards must be recognized as binding and enforced generally in accordance with the rules of procedure of the territory where the award is relied upon, without re-litigating the underlying merits of the dispute.</p>
-      <p>Unlike judgments rendered by state courts—which often require bilateral enforcement treaties, letters rogatory, or reciprocal exequatur proceedings—arbitral awards benefit from an international presumption of validity.</p>
-      <h3 style="font-size:22px; margin:24px 0 10px;">The Exhaustive Grounds of Article V</h3>
-      <p>Article V represents an exhaustive list of defenses. A national enforcing court cannot craft novel common-law grounds to deny enforcement; it is strictly constrained to the defenses established under Article V(1) (raised by the resisting party) and Article V(2) (invoked ex officio by the court).</p>
-      <ul>
-        <li><strong>Incapacity and Agreement Invalidity (Article V(1)(a)):</strong> Must be evaluated strictly against the law chosen by the parties or the law of the seat.</li>
-        <li><strong>Lack of Proper Notice or Due Process (Article V(1)(b)):</strong> Prevents enforcement if a party was denied an equal opportunity to present its case.</li>
-        <li><strong>Excess of Mandate (Article V(1)(c)):</strong> Deals with decisions on matters beyond the scope of the submission to arbitration.</li>
-      </ul>
-    `
-  },
-  {
-    id: 'p2',
-    slug: 'gdpr-cross-border-transfers-post-schrems',
-    title: 'Cross-Border Data Transfers Under GDPR: The Compliance Blueprint',
-    subtitle: 'Navigating Standard Contractual Clauses, Transfer Impact Assessments (TIAs), and supplementary encryption protocols in high-risk foreign jurisdictions.',
-    category: 'Data & Privacy',
-    author: 'Dr. Sofia Lindqvist',
-    authorRole: 'Head of Data & Privacy',
-    date: '2026-10-14',
-    readTime: '9 min read',
-    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80',
-    content: `
-      <h3 style="font-size:22px; margin:24px 0 10px;">The Global Reach of Chapter V GDPR</h3>
-      <p>Under Chapter V of the General Data Protection Regulation (Regulation (EU) 2016/679), personal data cannot leave the European Economic Area unless the importing country guarantees an essentially equivalent level of protection, or the data exporter implements appropriate safeguards.</p>
-      <h3 style="font-size:22px; margin:24px 0 10px;">The Modern Transfer Impact Assessment (TIA)</h3>
-      <p>Merely signing the European Commission’s modular Standard Contractual Clauses (SCCs) is no longer a safe harbor. Following the Court of Justice of the European Union (CJEU) landmark Schrems II decision, exporters must carry out a documented Transfer Impact Assessment evaluating destination public surveillance laws.</p>
-    `
-  },
-  {
-    id: 'p3',
-    slug: 'drafting-bulletproof-indemnities-international-contracts',
-    title: 'Drafting Bulletproof Indemnities in Cross-Border Commercial Agreements',
-    subtitle: 'Bridging the common law and civil law divide on consequential damages, gross negligence carve-outs, and liability caps.',
-    category: 'Cross-Border Contracts',
-    author: 'Adv. Priya Menon',
-    authorRole: 'Partner, Transactional Practice',
-    date: '2026-10-06',
-    readTime: '7 min read',
-    image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1400&q=80',
-    content: `
-      <h3 style="font-size:22px; margin:24px 0 10px;">Why Indemnities Generate Intense Cross-Border Friction</h3>
-      <p>In common-law drafting traditions (England, US, Singapore, India), an indemnity creates an independent, debt-based primary obligation to hold another harmless. In civil-law jurisdictions (France, Germany, Switzerland), an indemnity is frequently assimilated into the statutory framework of breach of contractual duty and damages.</p>
-    `
-  },
-  {
-    id: 'p4',
-    slug: 'cross-border-ecommerce-consumer-disputes',
-    title: 'Consumer Rights in Cross-Border E-Commerce: Jurisdiction & Chargebacks',
-    subtitle: 'How digital buyers and global merchants navigate payment disputes, unfair contract terms, and forum non conveniens.',
-    category: 'Consumer Protection',
-    author: 'Adv. Rohan Desai',
-    authorRole: 'Consumer Lead',
-    date: '2026-09-28',
-    readTime: '6 min read',
-    image: 'https://images.unsplash.com/photo-1453945619913-79ec89a82c51?auto=format&fit=crop&w=1400&q=80',
-    content: `
-      <h3 style="font-size:22px; margin:24px 0 10px;">The Global Shopping Cart: Whose Law Governs?</h3>
-      <p>When an individual in Madrid or Mumbai purchases a subscription or physical good from an entity registered in Delaware or Dublin, standard click-wrap terms of service frequently specify exclusive foreign courts. However, modern consumer protection legislation renders foreign jurisdiction clauses unenforceable if the merchant directed commercial activities to the consumer's state.</p>
-    `
-  },
-  {
-    id: 'p5',
-    slug: 'sovereign-immunity-asset-tracing',
-    title: 'Sovereign Immunity & Asset Tracing in International Arbitration',
-    subtitle: 'The commercial activity exception: When states act as market participants, their foreign assets become subject to execution.',
-    category: 'Arbitration',
-    author: 'Dr. Amara Okonkwo',
-    authorRole: 'Managing Partner',
-    date: '2026-09-18',
-    readTime: '10 min read',
-    image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80',
-    content: `
-      <h3 style="font-size:22px; margin:24px 0 10px;">Jurisdiction Waiver vs. Execution Immunity</h3>
-      <p>Securing an arbitral award against a sovereign state is only half the battle. While submitting to an ICC or ICSID arbitration clause constitutes an unequivocal waiver of immunity from jurisdiction, it rarely operates as an automatic waiver of immunity from execution. Commercial asset tracing is imperative.</p>
-    `
-  },
-  {
-    id: 'p6',
-    slug: 'maharera-delay-compensation-jurisprudence',
-    title: 'MahaRERA Section 18: Navigating Delayed Possession & Interest Remedies',
-    subtitle: 'An analytical review of Maharashtra Real Estate Regulatory Authority precedents on promoter default and escrow obligations.',
-    category: 'Real Estate',
-    author: 'Adv. Sanjay Patil',
-    authorRole: 'Senior Counsel, Real Estate',
-    date: '2026-09-04',
-    readTime: '8 min read',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=80',
-    content: `
-      <h3 style="font-size:22px; margin:24px 0 10px;">The Statutory Mandate of Section 18</h3>
-      <p>Under Section 18 of the Real Estate (Regulation and Development) Act, 2016 (RERA), if a promoter fails to give possession in accordance with the agreement for sale, the allottee has an unqualified statutory option to withdraw from the project and claim full refund with interest, or remain in the project and claim monthly delay interest.</p>
-    `
+    id: 'j-lgrlj-v1-i1',
+    title: 'Lex Global Review of Law and Justice (LGRLJ)',
+    subtitle: 'Volume 1 · Issue 1',
+    tagline: '“Justice · Scholarship · Integrity · Excellence” — An International Peer-Reviewed Law Journal',
+    description: 'Introduced by Lex Global Advocacy LLP, Mumbai, the Lex Global Review of Law and Justice (LGRLJ) is a flagship scholarly periodical dedicated to critical doctrinal jurisprudence, transnational commercial arbitration, cross-border treaty frameworks, and contemporary global justice.',
+    year: '2026',
+    badge: 'Peer-Reviewed · ISSN Registered',
+    image: 'lexjournal.jpeg',
+    issueUrl: 'https://www.lexglobalreview.org/index.php/lgrlj/issue/view/1',
+    websiteUrl: 'https://www.lexglobalreview.org',
+    published: true
   }
 ];
+const GALLERY_DATA = [];
+let SITE_SETTINGS = { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true };
 
 /* ==================== 5. MODAL SYSTEM ==================== */
 function openCustomModal(html, maxWidth = null) {
@@ -3882,30 +4108,126 @@ window.addEventListener('keydown', (e) => {
 
 /* ==================== 6. ATTORNEY MODAL ==================== */
 window.openAttorneyModal = function(name) {
-  const att = ATTORNEYS_DATA[name];
+  const att = ATTORNEYS_DATA[name]
+    || (name === 'Dr. Santosh Kakde' ? ATTORNEYS_DATA['Dr. Santosh Kakade'] : null)
+    || (name === 'Adv. Shri Ravindra Nagre' ? ATTORNEYS_DATA['Adv. Ravindra Nagre'] : null)
+    || (name === 'Adv. Anand Joshi' ? ATTORNEYS_DATA['Adv. Anand Bhalchandra Joshi'] : null)
+    || (name === 'Adv. Avinash Vinayak Prabhune' ? ATTORNEYS_DATA['Adv. Avinash Prabhune'] : null);
   if (!att) return;
-  const admissionsList = (att.admissions || []).map(a => `<li style="padding:4px 0;"><i class="fas fa-check" style="color:var(--primary); margin-right:8px;"></i>${escapeHtml(a)}</li>`).join('');
+  const hasAdmissions = Array.isArray(att.admissions) && att.admissions.length > 0;
+  const admissionsList = hasAdmissions ? att.admissions.map(a => `<li style="padding:4px 0;"><i class="fas fa-check" style="color:var(--primary); margin-right:8px;"></i>${escapeHtml(a)}</li>`).join('') : '';
+  const badgeLabel = att.badge || 'Distinguished Counsel';
+  const isFounder = (att.badge || '').toLowerCase().includes('founder');
+  const ctaLabel = isFounder ? 'Connect with Founder &amp; CEO' : `Consult with ${escapeHtml(att.name.split(' ')[0] || 'Counsel')}`;
+
+  const contactBarHtml = (att.address || att.phone || att.email) ? `
+    <div style="background:#FAF8F5; border:1px solid var(--ivory-border); border-radius:6px; padding:14px 18px; margin-bottom:22px; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; font-size:13.5px; color:#334155;">
+      ${att.address ? `<div><strong style="display:block; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--primary-dark); margin-bottom:3px;"><i class="fas fa-map-marker-alt" style="margin-right:6px;"></i>Address</strong>${escapeHtml(att.address)}</div>` : ''}
+      ${(att.phone || att.email) ? `<div><strong style="display:block; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--primary-dark); margin-bottom:3px;"><i class="fas fa-address-book" style="margin-right:6px;"></i>Direct Contact</strong>${att.phone ? `<div>Mobile: <a href="tel:${escapeHtml(att.phone)}" style="color:var(--text-dark); font-weight:700;">${escapeHtml(att.phone)}</a></div>` : ''}${att.email ? `<div>Email: <a href="mailto:${escapeHtml(att.email)}" style="color:var(--primary-dark); font-weight:600;">${escapeHtml(att.email)}</a></div>` : ''}</div>` : ''}
+    </div>
+  ` : '';
+
+  const bioHtml = Array.isArray(att.bioParagraphs) && att.bioParagraphs.length
+    ? att.bioParagraphs.map(p => `<p style="font-size:15px; line-height:1.85; color:#334155; margin-bottom:12px;">${escapeHtml(p)}</p>`).join('')
+    : `<p style="font-size:15px; line-height:1.85; color:#334155;">${escapeHtml(att.bio)}</p>`;
+
+  const expertiseHtml = Array.isArray(att.expertise) && att.expertise.length ? `
+    <div style="margin-bottom:24px;">
+      <h4 style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dark); margin-bottom:10px;">Expertise</h4>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:8px;">
+        ${att.expertise.map(item => `<div style="font-size:13.5px; color:#334155; background:var(--ivory-surface); padding:8px 12px; border-radius:4px; border-left:3px solid var(--primary);"><i class="fas fa-check" style="color:var(--primary); margin-right:8px;"></i>${escapeHtml(item)}</div>`).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  const experienceHtml = Array.isArray(att.experience) && att.experience.length ? `
+    <div style="margin-bottom:24px;">
+      <h4 style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dark); margin-bottom:10px;">Experience as Member / Advocate / Professional</h4>
+      <ul style="margin:0; padding-left:18px; font-size:14px; color:#334155; line-height:1.8;">
+        ${att.experience.map(item => `<li style="margin-bottom:5px;">${escapeHtml(item)}</li>`).join('')}
+      </ul>
+    </div>
+  ` : '';
+
+  const qualificationsHtml = Array.isArray(att.qualifications) && att.qualifications.length ? `
+    <div style="margin-bottom:24px;">
+      <h4 style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dark); margin-bottom:12px;">Educational &amp; Professional Qualifications</h4>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:14px;">
+        ${att.qualifications.map(group => `
+          <div style="background:#FAF8F5; border:1px solid var(--ivory-border); border-radius:6px; padding:14px 16px;">
+            <div style="font-family:var(--font-accent); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--primary-dark); margin-bottom:8px;">${escapeHtml(group.category)}</div>
+            <ul style="margin:0; padding-left:16px; font-size:13px; color:#334155; line-height:1.7;">
+              ${(group.items || []).map(q => `<li>${escapeHtml(q)}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  const guestFacultyHtml = Array.isArray(att.guestFaculty) && att.guestFaculty.length ? `
+    <div style="margin-bottom:24px;">
+      <h4 style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dark); margin-bottom:10px;">Experience as Guest Faculty for the RTI Act, 2005</h4>
+      <ul style="margin:0; padding-left:18px; font-size:14px; color:#334155; line-height:1.8;">
+        ${att.guestFaculty.map(item => `<li style="margin-bottom:4px;">${escapeHtml(item)}</li>`).join('')}
+      </ul>
+    </div>
+  ` : '';
+
+  const awardsHtml = Array.isArray(att.awards) && att.awards.length ? `
+    <div style="margin-bottom:24px;">
+      <h4 style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dark); margin-bottom:10px;">Awards &amp; Recognition</h4>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        ${att.awards.map(a => `
+          <div style="background:#FAF8F5; border:1px solid var(--ivory-border); border-left:3px solid var(--primary); border-radius:6px; padding:12px 16px;">
+            <strong style="display:block; font-size:14px; color:var(--text-dark); margin-bottom:4px;"><i class="fas fa-award" style="color:var(--primary); margin-right:6px;"></i>${escapeHtml(a.title)}</strong>
+            <p style="margin:0; font-size:13.5px; color:#475569; line-height:1.65;">${escapeHtml(a.detail)}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  const positionsHtml = Array.isArray(att.positions) && att.positions.length ? `
+    <div style="margin-bottom:24px;">
+      <h4 style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dark); margin-bottom:10px;">Past Positions and Professional Associations</h4>
+      <ul style="margin:0; padding-left:18px; font-size:14px; color:#334155; line-height:1.8;">
+        ${att.positions.map(pos => `<li style="margin-bottom:4px;">${escapeHtml(pos)}</li>`).join('')}
+      </ul>
+    </div>
+  ` : '';
+
+  const directPhone = att.phone ? att.phone : '+91-9307373024';
 
   openCustomModal(`
     <div style="display:flex; gap:24px; align-items:flex-start; margin-bottom:24px; flex-wrap:wrap;">
       <img src="${escapeHtml(att.image)}" alt="${escapeHtml(att.name)}" style="width:140px; height:160px; object-fit:cover; border-radius:6px; border:2px solid var(--primary); box-shadow:0 8px 20px var(--gold-glow);">
       <div style="flex:1; min-width:240px;">
-        <span style="font-family:var(--font-accent); font-size:12px; font-weight:700; color:var(--primary-dark); letter-spacing:2px; text-transform:uppercase;">Distinguished Counsel</span>
+        <span style="font-family:var(--font-accent); font-size:12px; font-weight:700; color:var(--primary-dark); letter-spacing:2px; text-transform:uppercase;">${escapeHtml(badgeLabel)}</span>
         <h2 style="font-size:28px; margin:4px 0 6px;">${escapeHtml(att.name)}</h2>
         <div style="font-family:var(--font-accent); font-size:14px; color:var(--primary-dark); font-weight:600; text-transform:uppercase;">${escapeHtml(att.title)}</div>
         <div style="font-size:14px; color:var(--text-muted); margin-top:6px;">${escapeHtml(att.practice)}</div>
       </div>
     </div>
 
+    ${contactBarHtml}
+
     <div style="margin-bottom:24px;">
       <h4 style="font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dark); margin-bottom:8px;">Biographical Summary</h4>
-      <p style="font-size:15px; line-height:1.85; color:#334155;">${escapeHtml(att.bio)}</p>
+      ${bioHtml}
     </div>
+
+    ${expertiseHtml}
+    ${experienceHtml}
+    ${qualificationsHtml}
+    ${guestFacultyHtml}
+    ${awardsHtml}
+    ${positionsHtml}
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; background:var(--ivory-surface); padding:20px; border-radius:6px; border-left:4px solid var(--primary); margin-bottom:24px;">
       <div>
-        <strong style="font-size:12px; font-family:var(--font-accent); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px; color:var(--text-dark);">Bar Admissions &amp; Enrolments</strong>
-        <ul style="font-size:13px; color:#475569;">${admissionsList || 'Supreme Court and State Bar Councils'}</ul>
+        <strong style="font-size:12px; font-family:var(--font-accent); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px; color:var(--text-dark);">${att.courtsAppeared ? 'Appeared Before' : 'Bar Admissions &amp; Enrolments'}</strong>
+        <ul style="font-size:13px; color:#475569; min-height:18px;">${admissionsList}</ul>
       </div>
       <div>
         <strong style="font-size:12px; font-family:var(--font-accent); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px; color:var(--text-dark);">Academic &amp; Judicial Credentials</strong>
@@ -3914,11 +4236,11 @@ window.openAttorneyModal = function(name) {
     </div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; border-top:1px solid #E2E8F0; padding-top:18px;">
-      <a href="tel:+91-9307373024" style="color:var(--text-dark); font-weight:700; font-size:15px; display:inline-flex; align-items:center; gap:8px;">
-        <i class="fas fa-phone-alt" style="color:var(--primary);"></i> +91-9307373024
+      <a href="tel:${escapeHtml(directPhone)}" style="color:var(--text-dark); font-weight:700; font-size:15px; display:inline-flex; align-items:center; gap:8px;">
+        <i class="fas fa-phone-alt" style="color:var(--primary);"></i> ${escapeHtml(directPhone)}
       </a>
       <button class="btn-gold" onclick="closeCustomModal(); openConsultationModal('${escapeHtml(att.name)}')">
-        Consult with ${escapeHtml(att.name.split(' ')[0] || 'Counsel')} &rarr;
+        ${ctaLabel} &rarr;
       </button>
     </div>
   `);
@@ -4028,11 +4350,15 @@ function renderCourses(items) {
   const container = document.getElementById('coursesGrid');
   if (!container) return;
   if (!items.length) {
+    const emptyTitle = COURSES_DATA.length === 0 ? 'No Masterclasses Published Yet' : 'No Matching Masterclasses';
+    const emptySub = COURSES_DATA.length === 0
+      ? 'Upcoming accredited continuing legal education courses will appear here once published via the Partner / Staff Portal.'
+      : 'Try selecting a different practice category to view available masterclasses.';
     container.innerHTML = `
       <div style="grid-column:1/-1; text-align:center; padding:50px 20px; background:#fff; border:1px dashed var(--ivory-border); border-radius:6px;">
         <i class="fas fa-graduation-cap" style="font-size:36px; color:var(--primary); margin-bottom:12px; display:block;"></i>
-        <h4 style="font-size:18px; margin-bottom:6px;">Masterclasses Updating</h4>
-        <p style="margin:0; font-size:14px;">Accredited continuing legal education courses will refresh momentarily.</p>
+        <h4 style="font-size:18px; margin-bottom:6px;">${emptyTitle}</h4>
+        <p style="margin:0; font-size:14px;">${emptySub}</p>
       </div>
     `;
     return;
@@ -4086,6 +4412,7 @@ window.filterCoursesCat = function(cat) {
 
 window.openSyllabusModal = function(id) {
   const c = COURSES_DATA.find(x => x.id === id) || COURSES_DATA[0];
+  if (!c) return;
   const modulesHtml = (c.curriculum || []).map((m, idx) => `
     <div style="background:var(--ivory-base); border:1px solid var(--ivory-border); border-radius:6px; padding:16px 20px; margin-bottom:12px;">
       <h4 style="font-size:15px; margin-bottom:10px; color:var(--text-dark); display:flex; align-items:center; gap:8px;">
@@ -4172,6 +4499,7 @@ window.handleQuizCheck = function(e, correctIdx, explanation) {
 
 window.openEnrollmentModal = function(id) {
   const c = COURSES_DATA.find(x => x.id === id) || COURSES_DATA[0];
+  if (!c) return;
   openCustomModal(`
     <div style="border-bottom:2px solid var(--primary); padding-bottom:14px; margin-bottom:20px;">
       <span style="font-family:var(--font-accent); font-size:12px; font-weight:700; color:var(--primary-dark); letter-spacing:2px; text-transform:uppercase;">Masterclass Registration</span>
@@ -4263,11 +4591,15 @@ function renderBlogs(items) {
   const container = document.getElementById('blogsGrid');
   if (!container) return;
   if (!items.length) {
+    const emptyTitle = BLOGS_DATA.length === 0 ? 'No Publications Published Yet' : 'No Publications Found';
+    const emptySub = BLOGS_DATA.length === 0
+      ? 'Legal commentaries, research notes, and statutory briefings will appear here once published via the Partner / Staff Portal.'
+      : 'Try a different keyword or category.';
     container.innerHTML = `
       <div style="grid-column:1/-1; text-align:center; padding:50px 20px; background:#fff; border:1px dashed var(--ivory-border); border-radius:6px;">
         <i class="fas fa-newspaper" style="font-size:36px; color:var(--primary); margin-bottom:12px; display:block;"></i>
-        <h4 style="font-size:18px; margin-bottom:6px;">No Publications Found</h4>
-        <p style="margin:0; font-size:14px;">Try a different keyword or category.</p>
+        <h4 style="font-size:18px; margin-bottom:6px;">${emptyTitle}</h4>
+        <p style="margin:0; font-size:14px;">${emptySub}</p>
       </div>
     `;
     return;
@@ -4306,6 +4638,7 @@ window.filterBlogs = function() {
 
 window.openBlogModal = function(id) {
   const b = BLOGS_DATA.find(x => x.id === id) || BLOGS_DATA[0];
+  if (!b) return;
   openCustomModal(`
     <div style="border-bottom:2px solid var(--primary); padding-bottom:16px; margin-bottom:20px;">
       <span style="font-family:var(--font-accent); font-size:12px; font-weight:700; color:var(--primary-dark); letter-spacing:2px; text-transform:uppercase;">Legal Commentary &middot; ${escapeHtml(b.category)}</span>
@@ -4327,37 +4660,21 @@ window.openBlogModal = function(id) {
       ${b.content}
     </div>
 
-    <div style="background:var(--ivory-surface); border:1px solid var(--ivory-border); border-radius:6px; padding:20px; margin-bottom:24px;">
-      <h4 style="font-size:15px; margin-bottom:10px; color:var(--text-dark);">Discussion &amp; Scholarly Insights</h4>
-      <p style="font-size:13px; color:#64748b; margin-bottom:12px;">Share your academic or courtroom analysis on this topic with our editors.</p>
-      <form onsubmit="handleCommentSubmit(event)">
-        <input type="text" placeholder="Your name and designation..." required style="width:100%; height:42px; padding:0 12px; font-size:14px; border:1px solid var(--ivory-border); border-radius:4px; margin-bottom:8px; background:#fff;">
-        <textarea rows="3" placeholder="Enter your privileged legal commentary..." required style="width:100%; padding:10px 12px; font-size:14px; border:1px solid var(--ivory-border); border-radius:4px; margin-bottom:10px; background:#fff;"></textarea>
-        <button type="submit" class="btn-syllabus" style="background:var(--gold-foil); color:var(--black); border:none;">Publish Commentary</button>
-      </form>
-      <div id="commentConfirmBox" style="display:none; margin-top:10px; font-size:13px; color:#065F46; background:#ECFDF5; padding:8px 12px; border-radius:4px;">
-        <i class="fas fa-check-circle"></i> Commentary submitted for editorial review.
-      </div>
-    </div>
-
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; border-top:1px solid #E2E8F0; padding-top:18px;">
-      <div style="font-size:13px; color:#64748b;">
-        <i class="fas fa-share-alt" style="color:var(--primary); margin-right:6px;"></i> Share:
-        <a href="https://www.linkedin.com/" target="_blank" style="margin-left:8px;"><i class="fab fa-linkedin"></i></a>
-        <a href="https://x.com/" target="_blank" style="margin-left:8px;"><i class="fab fa-x-twitter"></i></a>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:13px; color:#64748b;">
+        <span style="font-weight:600; color:var(--text-dark); margin-right:4px;"><i class="fas fa-share-alt" style="color:var(--primary); margin-right:4px;"></i> Share &amp; Follow:</span>
+        <a class="social-icon-btn social-light" style="width:32px; height:32px; font-size:13px;" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a class="social-icon-btn social-light" style="width:32px; height:32px; font-size:13px;" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a class="social-icon-btn social-light" style="width:32px; height:32px; font-size:13px;" href="https://x.com/intent/tweet?text=${encodeURIComponent(b.title + ' - Lex Global Advocacy LLP')}&amp;url=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener noreferrer" aria-label="Share on X" title="X"><i class="fab fa-x-twitter"></i></a>
+        <a class="social-icon-btn social-light" style="width:32px; height:32px; font-size:13px;" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a class="social-icon-btn social-light" style="width:32px; height:32px; font-size:13px;" href="https://www.youtube.com/channel/UCg9VbGtXxIWeXYYlmZK2mVQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a class="social-icon-btn social-light" style="width:32px; height:32px; font-size:13px;" href="https://wa.me/?text=${encodeURIComponent(b.title + ' - ' + window.location.href)}" target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
       </div>
       <button class="btn-gold" onclick="closeCustomModal(); openConsultationModal('', '${escapeHtml(b.category)}')">
         Consult Counsel on this Issue &rarr;
       </button>
     </div>
   `);
-};
-
-window.handleCommentSubmit = function(e) {
-  e.preventDefault();
-  const box = document.getElementById('commentConfirmBox');
-  if (box) { box.style.display = 'block'; }
-  e.target.reset();
 };
 
 /* ==================== 11. PRIVILEGED INTAKE & CONSULTATION ==================== */
@@ -4405,7 +4722,7 @@ window.openConsultationModal = function(preferredAttorney = '', preferredPractic
 
       ${preferredAttorney ? `
         <div style="background:var(--ivory-surface); padding:10px 14px; border-radius:4px; font-size:13px; margin-bottom:14px; color:var(--text-dark);">
-          <i class="fas fa-user-check" style="color:var(--primary); margin-right:6px;"></i> Requested Counsel: <strong>${escapeHtml(preferredAttorney)}</strong>
+          <i class="fas fa-user-check" style="color:var(--primary); margin-right:6px;"></i> ${preferredAttorney.includes('Santosh') ? 'Founder &amp; CEO' : 'Requested Counsel'}: <strong>${escapeHtml(preferredAttorney)}</strong>
         </div>
       ` : ''}
 
@@ -4435,33 +4752,107 @@ window.handleModalConsultSubmit = async function(e) {
   const name = document.getElementById('modalName')?.value.trim();
   const email = document.getElementById('modalEmail')?.value.trim();
   const phone = document.getElementById('modalPhone')?.value.trim();
-  const practiceArea = document.getElementById('modalPractice')?.value;
+  const practiceArea = document.getElementById('modalPractice')?.value || 'General Legal Practice';
   const description = document.getElementById('modalMessage')?.value.trim();
 
-  let refCode = 'LGA-' + Math.floor(100000 + Math.random()*900000);
+  let refCode = 'inq-' + Date.now();
+  const nowIso = new Date().toISOString();
+
+  const inquiryRecord = {
+    id: refCode,
+    name,
+    email,
+    phone: phone || '',
+    practiceArea,
+    organization: 'Direct Intake Client',
+    jurisdiction: 'Multi-Jurisdictional',
+    urgency: 'Routine',
+    description,
+    message: description,
+    createdAt: nowIso,
+    status: 'New'
+  };
+
+  // 1. Mirror into localStorage for instant persistence & standalone admin portal access
+  try {
+    const local = JSON.parse(localStorage.getItem('lga_client_inquiries') || '[]');
+    local.unshift(inquiryRecord);
+    localStorage.setItem('lga_client_inquiries', JSON.stringify(local.slice(0, 100)));
+  } catch (err) {}
+
+  let gatewayReport = null;
+
+  // 2. Transmit to backend API (triggers automated Email & WhatsApp Gateway)
   try {
     const res = await fetch(`${window.LEX_API_URL || ''}/api/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, practiceArea, description, message: description })
+      body: JSON.stringify(inquiryRecord)
     });
     if (res.ok) {
       const data = await res.json();
-      if (data.id) refCode = data.id;
+      if (data.id) {
+        refCode = data.id;
+        inquiryRecord.id = data.id;
+        try {
+          const local = JSON.parse(localStorage.getItem('lga_client_inquiries') || '[]');
+          if (local.length) { local[0].id = data.id; localStorage.setItem('lga_client_inquiries', JSON.stringify(local)); }
+        } catch (e) {}
+      }
+      if (data.gateway) gatewayReport = data.gateway;
     }
-  } catch (err) {}
+  } catch (err) {
+    console.warn('Backend transmission offline, saved client intake locally:', err);
+  }
 
   closeCustomModal();
+  renderIntakeSuccessModal({ name, email, refCode, practiceArea, description, gatewayReport });
+};
+
+window.renderIntakeSuccessModal = function({ name, email, refCode, practiceArea, description, gatewayReport }) {
+  const emailTarget = gatewayReport?.emailTarget || 'dp.lexglobaladvocacy@gmail.com';
+  const waTarget = gatewayReport?.whatsappTarget || '+91-9307373024';
+  const fallbackSummary = [
+    'LEX GLOBAL ADVOCACY LLP — Client Request',
+    `Ref: ${refCode}`,
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Practice: ${practiceArea}`,
+    `Matter: ${description || ''}`
+  ].join('\n');
+  const waRelayUrl = gatewayReport?.whatsappRelayUrl || `https://wa.me/919307373024?text=${encodeURIComponent(fallbackSummary)}`;
+  const mailtoRelayUrl = gatewayReport?.mailtoRelayUrl || `mailto:${encodeURIComponent(emailTarget)}?subject=${encodeURIComponent('[Client Request] ' + practiceArea + ' - ' + refCode)}&body=${encodeURIComponent(fallbackSummary)}`;
+  const emailBadge = gatewayReport?.emailStatus === 'sent' ? 'Auto-Dispatched' : 'Routed to Mail Gateway';
+  const waBadge = gatewayReport?.whatsappStatus === 'sent' ? 'Auto-Dispatched' : 'Routed to WhatsApp Gateway';
+
   openCustomModal(`
     <div style="text-align:center; padding:20px;">
       <div style="width:64px; height:64px; border:3px solid var(--primary); border-radius:50%; display:grid; place-items:center; font-size:26px; color:var(--primary); margin:0 auto 16px;">
         <i class="fas fa-check"></i>
       </div>
       <h2 style="font-size:28px; margin-bottom:10px;">Confidential Intake Received</h2>
-      <p style="font-size:15px; color:#555; max-width:520px; margin:0 auto 20px;">
-        Your legal request has been encrypted and assigned Reference <strong>${escapeHtml(refCode)}</strong>. Our Conflicts Committee will examine counterparties and contact you directly.
+      <p style="font-size:15px; color:#555; max-width:520px; margin:0 auto 14px;">
+        Thank you, <strong>${escapeHtml(name)}</strong>. Your privileged inquiry has been encrypted and assigned Reference <strong>${escapeHtml(refCode)}</strong>.
       </p>
-      <button class="btn-gold" onclick="closeCustomModal()">Done</button>
+      <div style="background:var(--ivory-surface); border:1px solid var(--ivory-border); padding:14px; border-radius:6px; max-width:480px; margin:0 auto 16px; text-align:left; font-size:13px; color:#334155;">
+        <div><strong>Practice Bench:</strong> ${escapeHtml(practiceArea)}</div>
+        <div><strong>Privilege Standard:</strong> BCI Rule 36 &middot; Sec 126 Evidence Act / Sec 132 BSA, 2023</div>
+        <div style="margin-top:8px; padding-top:8px; border-top:1px solid #E2E8F0;">
+          <strong style="display:block; color:var(--primary-dark); margin-bottom:4px;"><i class="fas fa-paper-plane" style="margin-right:6px;"></i>Automated Notification Gateway</strong>
+          <div><i class="fas fa-envelope" style="color:var(--primary); margin-right:6px;"></i><strong>Email:</strong> ${escapeHtml(emailTarget)} <span style="font-size:11.5px; color:#0f766e; font-weight:700;">(${escapeHtml(emailBadge)})</span></div>
+          <div><i class="fab fa-whatsapp" style="color:#16a34a; margin-right:6px;"></i><strong>WhatsApp:</strong> ${escapeHtml(waTarget)} <span style="font-size:11.5px; color:#0f766e; font-weight:700;">(${escapeHtml(waBadge)})</span></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
+        <a href="${escapeHtml(waRelayUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; padding:9px 16px; border-radius:4px; font-family:var(--font-accent); font-size:12.5px; font-weight:700; text-decoration:none; background:#f0fdf4; border:1px solid #16a34a; color:#15803d;">
+          <i class="fab fa-whatsapp" style="margin-right:6px;"></i> Send Copy on WhatsApp
+        </a>
+        <a href="${escapeHtml(mailtoRelayUrl)}" style="display:inline-flex; align-items:center; padding:9px 16px; border-radius:4px; font-family:var(--font-accent); font-size:12.5px; font-weight:700; text-decoration:none; background:#FAF8F5; border:1px solid #cbd5e1; color:#1e293b;">
+          <i class="fas fa-envelope" style="margin-right:6px; color:var(--primary-dark);"></i> Send Copy via Email Client
+        </a>
+      </div>
+      <p style="font-size:13px; color:#64748b; margin-bottom:20px;">Our intake committee will verify counterparties for conflicts and respond via <strong>${escapeHtml(email)}</strong> within 24 hours.</p>
+      <button class="btn-gold" onclick="closeCustomModal()">Done &rarr;</button>
     </div>
   `);
 };
@@ -4477,7 +4868,7 @@ window.openJournalModal = function() {
 
     <div style="background:#FAF8F5; border:1px solid #E8DFD0; padding:16px 18px; border-radius:6px; margin-bottom:20px;">
       <div style="display:flex; gap:16px; align-items:center;">
-        <img src="/assets/aistudio/journallex_4cecad79.jpeg" alt="LGRLJ" style="width:75px; height:105px; object-fit:cover; border-radius:4px; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+        <img src="lexjournal.jpeg" alt="LGRLJ" style="width:75px; height:105px; object-fit:cover; border-radius:4px; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
         <div>
           <h4 style="margin:0 0 4px; font-size:15px; font-weight:700; color:#111;">Lex Global Review of Law and Justice (Volume 1, Issue 1)</h4>
           <p style="margin:0 0 6px; font-size:12.5px; color:#555;">An International Peer-Reviewed Law Journal &bull; Published by Lex Global Advocacy LLP, Mumbai</p>
@@ -4585,43 +4976,136 @@ window.handleContactSubmit = async function(e) {
   e.preventDefault();
   const form = document.getElementById('contact-form');
   const btn = document.getElementById('contactSubmitBtn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Transmitting...'; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Transmitting Confidential Intake...'; }
 
   const name = document.getElementById('contactName')?.value.trim();
   const email = document.getElementById('contactEmail')?.value.trim();
   const phone = document.getElementById('contactPhone')?.value.trim();
-  const practiceArea = document.getElementById('contactPractice')?.value;
+  const practiceArea = document.getElementById('contactPractice')?.value || 'General Counsel & Advocacy';
   const message = document.getElementById('contactMessage')?.value.trim();
 
-  let refCode = 'LGA-' + Math.floor(100000 + Math.random()*900000);
+  let refCode = 'inq-' + Date.now();
+  const nowIso = new Date().toISOString();
+
+  const inquiryRecord = {
+    id: refCode,
+    name,
+    email,
+    phone: phone || '',
+    practiceArea,
+    organization: 'Client Direct Intake',
+    jurisdiction: 'Multi-Jurisdictional',
+    urgency: 'Routine',
+    description: message,
+    message,
+    createdAt: nowIso,
+    status: 'New'
+  };
+
+  // 1. Mirror into localStorage for instantaneous persistence & offline admin sync
+  try {
+    const local = JSON.parse(localStorage.getItem('lga_client_inquiries') || '[]');
+    local.unshift(inquiryRecord);
+    localStorage.setItem('lga_client_inquiries', JSON.stringify(local.slice(0, 100)));
+  } catch (err) {}
+
+  let gatewayReport = null;
+
+  // 2. Transmit to backend API (triggers automated Email & WhatsApp Gateway)
   try {
     const res = await fetch(`${window.LEX_API_URL || ''}/api/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, practiceArea, message, description: message })
+      body: JSON.stringify(inquiryRecord)
     });
     if (res.ok) {
       const data = await res.json();
-      if (data.id) refCode = data.id;
+      if (data.id) {
+        refCode = data.id;
+        inquiryRecord.id = data.id;
+        try {
+          const local = JSON.parse(localStorage.getItem('lga_client_inquiries') || '[]');
+          if (local.length) { local[0].id = data.id; localStorage.setItem('lga_client_inquiries', JSON.stringify(local)); }
+        } catch (e) {}
+      }
+      if (data.gateway) gatewayReport = data.gateway;
     }
-  } catch (err) {}
+  } catch (err) {
+    console.warn('Backend transmission offline, intake recorded locally:', err);
+  }
 
   if (form) form.reset();
   if (btn) { btn.disabled = false; btn.textContent = 'Submit Confidential Intake →'; }
 
-  openCustomModal(`
-    <div style="text-align:center; padding:20px;">
-      <div style="width:64px; height:64px; border:3px solid var(--primary); border-radius:50%; display:grid; place-items:center; font-size:26px; color:var(--primary); margin:0 auto 16px;">
-        <i class="fas fa-check"></i>
-      </div>
-      <h2 style="font-size:28px; margin-bottom:10px;">Confidential Intake Received</h2>
-      <p style="font-size:15px; color:#555; max-width:520px; margin:0 auto 20px;">
-        Thank you, <strong>${escapeHtml(name)}</strong>. Your privileged inquiry has been assigned Reference <strong>${escapeHtml(refCode)}</strong>. A partner from our ${escapeHtml(practiceArea)} team will reach out within 24 hours.
-      </p>
-      <button class="btn-gold" onclick="closeCustomModal()">Done</button>
-    </div>
-  `);
+  renderIntakeSuccessModal({ name, email, refCode, practiceArea, description: message, gatewayReport });
 };
+
+/* ==================== 11D. BAR COUNCIL OF INDIA DISCLAIMER CONTROLS ==================== */
+window.openBciDisclaimerModal = function(isEntry = false) {
+  const modal = document.getElementById('bciDisclaimerModal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  document.body.classList.add('modal-open');
+
+  const declineBtn = document.getElementById('bciDeclineBtn');
+  const acceptBtn = document.getElementById('bciAcceptBtn');
+  if (isEntry) {
+    if (declineBtn) {
+      declineBtn.innerHTML = '<i class="fas fa-times-circle" style="margin-right:6px;"></i> DECLINE &amp; EXIT';
+      declineBtn.onclick = declineBciDisclaimer;
+    }
+    if (acceptBtn) {
+      acceptBtn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:6px;"></i> I AGREE &amp; PROCEED';
+      acceptBtn.onclick = acceptBciDisclaimer;
+    }
+  } else {
+    // Review mode (opened from footer or nav)
+    if (declineBtn) {
+      declineBtn.innerHTML = '<i class="fas fa-times" style="margin-right:6px;"></i> Close';
+      declineBtn.onclick = closeBciDisclaimerModal;
+    }
+    if (acceptBtn) {
+      acceptBtn.innerHTML = '<i class="fas fa-check" style="margin-right:6px;"></i> Acknowledged';
+      acceptBtn.onclick = acceptBciDisclaimer;
+    }
+  }
+};
+
+window.closeBciDisclaimerModal = function() {
+  const modal = document.getElementById('bciDisclaimerModal');
+  if (modal) modal.style.display = 'none';
+  document.body.classList.remove('modal-open');
+};
+
+window.acceptBciDisclaimer = function() {
+  localStorage.setItem('lga_bci_disclaimer_accepted', 'true');
+  const notice = document.getElementById('bciDeclineNotice');
+  if (notice) notice.style.display = 'none';
+  closeBciDisclaimerModal();
+};
+
+window.declineBciDisclaimer = function() {
+  const notice = document.getElementById('bciDeclineNotice');
+  if (notice) {
+    notice.style.display = 'block';
+    notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+};
+
+// Check BCI disclaimer on initial entry
+function checkBciDisclaimer() {
+  const accepted = localStorage.getItem('lga_bci_disclaimer_accepted');
+  if (accepted !== 'true') {
+    setTimeout(() => {
+      openBciDisclaimerModal(true);
+    }, 400);
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', checkBciDisclaimer);
+} else {
+  checkBciDisclaimer();
+}
 
 /* ==================== 12. HERO SLIDER LOGIC ==================== */
 let currentHeroSlide = 0;
@@ -4753,32 +5237,351 @@ document.getElementById('cookieRejectBtn')?.addEventListener('click', () => {
   cookieBanner?.classList.remove('is-visible');
 });
 
-/* ==================== 16. BACKEND DATA SYNCHRONIZATION ==================== */
+/* ==================== 16. JOURNAL RENDERING & BACKEND DATA SYNCHRONIZATION ==================== */
+function renderJournals() {
+  const section = document.getElementById('journal');
+  const container = document.getElementById('journalGridContainer');
+  if (!section || !container) return;
+
+  if (!SITE_SETTINGS.showJournal || !JOURNALS_DATA.length) {
+    section.style.display = 'none';
+    document.querySelectorAll('a[href="#journal"]').forEach(a => {
+      const li = a.closest('li');
+      if (li) li.style.display = 'none';
+      else a.style.display = 'none';
+    });
+    return;
+  }
+
+  section.style.display = '';
+  document.querySelectorAll('a[href="#journal"]').forEach(a => {
+    const li = a.closest('li');
+    if (li) li.style.display = '';
+    else a.style.display = '';
+  });
+
+  container.innerHTML = JOURNALS_DATA.map((j, idx) => `
+    <div class="journal-grid" style="${idx > 0 ? 'margin-top:56px; padding-top:48px; border-top:1px solid var(--ivory-border);' : ''}">
+      <div class="journal-cover-col">
+        <a
+          href="${escapeHtml(j.issueUrl || j.websiteUrl || 'https://www.lexglobalreview.org')}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="journal-cover-card"
+          title="Click to view ${escapeHtml(j.title)} (${escapeHtml(j.subtitle || '')})"
+          aria-label="${escapeHtml(j.title)} - Read ${escapeHtml(j.subtitle || '')} online">
+          <img
+            src="${escapeHtml(j.image || 'lexjournal.jpeg')}"
+            alt="${escapeHtml(j.title)} - ${escapeHtml(j.subtitle || '')} Cover"
+            class="journal-cover-img"
+            loading="eager"
+            width="720"
+            height="1018">
+          <div class="journal-cover-badge">
+            <span><i class="fas fa-book-open"></i> ${escapeHtml(j.subtitle || 'Volume 1 · Issue 1')}</span>
+            <span>Access Issue &rarr;</span>
+          </div>
+        </a>
+        <div class="journal-meta-strip">
+          <span><i class="fas fa-calendar-alt" style="color:var(--primary);"></i> Published ${escapeHtml(j.year || '2026')}</span>
+          <span>&bull;</span>
+          <span><i class="fas fa-globe" style="color:var(--primary);"></i> ${escapeHtml(j.badge || 'Peer-Reviewed')}</span>
+        </div>
+      </div>
+
+      <div class="journal-info-panel">
+        <span class="section-eyebrow"><i class="fas fa-feather-alt"></i> Scholarly Legal Journal</span>
+        <h2>${escapeHtml(j.title)}</h2>
+        <div class="journal-tagline">
+          ${escapeHtml(j.tagline || '“Justice · Scholarship · Integrity · Excellence” — An International Peer-Reviewed Law Journal')}
+        </div>
+        <p>${escapeHtml(j.description || 'Introduced by Lex Global Advocacy LLP, Mumbai, dedicated to critical doctrinal jurisprudence, transnational commercial arbitration, cross-border treaty frameworks, and contemporary global justice.')}</p>
+
+        <div class="journal-pillars-grid">
+          <div class="journal-pillar-item">
+            <strong><i class="fas fa-check-circle" style="color:var(--primary);"></i> Peer-Reviewed Rigor</strong>
+            Double-blind peer review by distinguished jurists, senior counsel, and international legal scholars.
+          </div>
+          <div class="journal-pillar-item">
+            <strong><i class="fas fa-university" style="color:var(--primary);"></i> Global Circulation</strong>
+            Indexed across international legal repositories, institutional libraries, and open-access academic archives.
+          </div>
+          <div class="journal-pillar-item">
+            <strong><i class="fas fa-gavel" style="color:var(--primary);"></i> Courtroom &amp; Policy Impact</strong>
+            Bridging academic legal doctrine with practical dispute strategies and legislative policy reform.
+          </div>
+          <div class="journal-pillar-item">
+            <strong><i class="fas fa-print" style="color:var(--primary);"></i> Print &amp; Digital Editions</strong>
+            Available via institutional digital repository and archival print subscription distribution.
+          </div>
+        </div>
+
+        <div class="journal-callout-box">
+          <h4><i class="fas fa-bullhorn"></i> Call for Papers &middot; Upcoming Issues</h4>
+          <p>The LGRLJ invites high-quality, original, and unpublished research papers, case notes, and legislative commentaries from legal professionals, judges, academics, and research scholars worldwide.</p>
+        </div>
+
+        <div class="journal-actions-row">
+          <a href="${escapeHtml(j.issueUrl || 'https://www.lexglobalreview.org')}" target="_blank" rel="noopener noreferrer" class="btn-gold" style="display:inline-flex; align-items:center; gap:8px;">
+            <i class="fas fa-external-link-alt"></i> Read Current Issue (${escapeHtml(j.subtitle || 'Vol. 1, Issue 1')})
+          </a>
+          <button class="btn-ivory-outline" onclick="openJournalModal()" style="display:inline-flex; align-items:center; gap:8px;">
+            <i class="fas fa-paper-plane"></i> Submit Manuscript / Inquire
+          </button>
+          ${j.websiteUrl ? `<a href="${escapeHtml(j.websiteUrl)}" target="_blank" rel="noopener noreferrer" class="btn-ivory-outline" style="border-color:transparent; color:var(--text-dark); text-decoration:underline;">Visit Journal Website &rarr;</a>` : ''}
+        </div>
+
+        <div class="social-strip-row">
+          <span class="social-strip-label"><i class="fas fa-share-nodes" style="color:var(--primary); margin-right:6px;"></i> Follow &amp; Share Publications</span>
+          <div class="social-links-row">
+            <a class="social-icon-btn social-light" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(j.issueUrl || 'https://www.lexglobalreview.org')}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a class="social-icon-btn social-light" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a class="social-icon-btn social-light" href="https://x.com/intent/tweet?url=${encodeURIComponent(j.issueUrl || 'https://www.lexglobalreview.org')}&amp;text=${encodeURIComponent(j.title || 'Lex Global Review of Law and Justice')}" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><i class="fab fa-x-twitter"></i></a>
+            <a class="social-icon-btn social-light" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(j.issueUrl || 'https://www.lexglobalreview.org')}" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a class="social-icon-btn social-light" href="https://www.youtube.com/channel/UCg9VbGtXxIWeXYYlmZK2mVQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a class="social-icon-btn social-light" href="https://wa.me/?text=${encodeURIComponent((j.title || 'Lex Global Review of Law and Justice') + ' ' + (j.issueUrl || 'https://www.lexglobalreview.org'))}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderGallery(items = GALLERY_DATA) {
+  const container = document.getElementById('galleryGrid');
+  if (!container) return;
+  if (!items.length) {
+    container.innerHTML = `
+      <div style="grid-column:1/-1; text-align:center; padding:52px 24px; background:var(--ivory-surface); border:1px dashed var(--ivory-border); border-radius:6px;">
+        <i class="fas fa-camera-retro" style="font-size:36px; color:var(--primary); margin-bottom:12px; display:block;"></i>
+        <h4 style="font-size:18px; margin-bottom:6px; color:var(--text-dark);">Meetup &amp; Event Gallery</h4>
+        <p style="margin:0; font-size:14px; color:#64748b;">No meetup photos posted yet. Photos are published exclusively through the Partner / Staff Portal.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = items.map(g => `
+    <article class="gallery-card" onclick="openGalleryModal('${escapeHtml(g.id)}')">
+      <div class="gallery-media-wrap">
+        <img src="${escapeHtml(g.image)}" alt="${escapeHtml(g.title || 'Meetup photo')}" loading="lazy" referrerpolicy="no-referrer">
+        <div class="gallery-scrim">
+          <span class="gallery-scrim-hint">View Photo &rarr;</span>
+        </div>
+      </div>
+      <div class="gallery-body">
+        <div class="gallery-meta">
+          <span>${escapeHtml(g.date || '')}</span>
+          ${g.location ? `<span aria-hidden="true">&middot;</span><span>${escapeHtml(g.location)}</span>` : ''}
+        </div>
+        <h3 class="gallery-title">${escapeHtml(g.title || 'Meetup Highlight')}</h3>
+        ${g.eventName ? `<div style="font-size:13px; color:var(--primary-dark); font-weight:600;">${escapeHtml(g.eventName)}</div>` : ''}
+        ${g.caption ? `<p class="gallery-caption">${escapeHtml(g.caption)}</p>` : ''}
+      </div>
+    </article>
+  `).join('');
+}
+
+window.openGalleryModal = function(id) {
+  const idx = GALLERY_DATA.findIndex(x => x.id === id);
+  if (idx === -1) return;
+  const g = GALLERY_DATA[idx];
+  const prevId = idx > 0 ? GALLERY_DATA[idx - 1].id : GALLERY_DATA[GALLERY_DATA.length - 1].id;
+  const nextId = idx < GALLERY_DATA.length - 1 ? GALLERY_DATA[idx + 1].id : GALLERY_DATA[0].id;
+  const hasMultiple = GALLERY_DATA.length > 1;
+
+  openCustomModal(`
+    <div style="border-bottom:1px solid #E2E8F0; padding-bottom:14px; margin-bottom:18px;">
+      <div style="font-size:12px; color:#64748b; margin-bottom:4px;">
+        <span>${escapeHtml(g.eventName || 'Firm Meetup')}</span>
+        ${g.date ? ` <span aria-hidden="true">&middot;</span> <span>${escapeHtml(g.date)}</span>` : ''}
+        ${g.location ? ` <span aria-hidden="true">&middot;</span> <span>${escapeHtml(g.location)}</span>` : ''}
+      </div>
+      <h2 style="font-size:24px; line-height:1.25; margin:0; color:var(--text-dark);">${escapeHtml(g.title || 'Meetup Highlight')}</h2>
+    </div>
+
+    <div style="background:#0c0e12; border-radius:6px; overflow:hidden; margin-bottom:18px; display:flex; align-items:center; justify-content:center; max-height:70vh;">
+      <img src="${escapeHtml(g.image)}" alt="${escapeHtml(g.title || 'Meetup photo')}" referrerpolicy="no-referrer" style="width:100%; max-height:70vh; object-fit:contain; display:block;">
+    </div>
+
+    ${g.caption ? `<p style="font-size:15px; line-height:1.7; color:#334155; margin-bottom:16px;">${escapeHtml(g.caption)}</p>` : ''}
+
+    ${hasMultiple ? `
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #E2E8F0; padding-top:14px;">
+        <button class="btn-ivory-outline" onclick="openGalleryModal('${escapeHtml(prevId)}')">&larr; Previous Photo</button>
+        <span style="font-size:13px; color:#64748b; font-variant-numeric:tabular-nums;">${idx + 1} / ${GALLERY_DATA.length}</span>
+        <button class="btn-ivory-outline" onclick="openGalleryModal('${escapeHtml(nextId)}')">Next Photo &rarr;</button>
+      </div>
+    ` : ''}
+  `, '920px');
+};
+
+function applySiteSettings() {
+  const blogsSection = document.getElementById('blogs');
+  if (blogsSection) {
+    const showHub = SITE_SETTINGS.showLegalHub !== false;
+    blogsSection.style.display = showHub ? '' : 'none';
+    document.querySelectorAll('a[href="#blogs"]').forEach(a => {
+      const li = a.closest('li');
+      if (li) li.style.display = showHub ? '' : 'none';
+      else a.style.display = showHub ? '' : 'none';
+    });
+  }
+  const coursesSection = document.getElementById('courses');
+  if (coursesSection) {
+    const showAcad = SITE_SETTINGS.showAcademy !== false;
+    coursesSection.style.display = showAcad ? '' : 'none';
+    document.querySelectorAll('a[href="#courses"]').forEach(a => {
+      const li = a.closest('li');
+      if (li) li.style.display = showAcad ? '' : 'none';
+      else a.style.display = showAcad ? '' : 'none';
+    });
+  }
+  const gallerySection = document.getElementById('gallery');
+  if (gallerySection) {
+    const showGal = SITE_SETTINGS.showGallery !== false;
+    gallerySection.style.display = showGal ? '' : 'none';
+    document.querySelectorAll('a[href="#gallery"]').forEach(a => {
+      const li = a.closest('li');
+      if (li) li.style.display = showGal ? '' : 'none';
+      else a.style.display = showGal ? '' : 'none';
+    });
+  }
+  renderJournals();
+  renderGallery();
+}
+
 async function syncBackendData() {
+  let settingsLoaded = false;
+  try {
+    const resSettings = await fetch(`${window.LEX_API_URL || ''}/api/site-settings`);
+    if (resSettings.ok) {
+      const settings = await resSettings.json();
+      if (settings && typeof settings === 'object') {
+        SITE_SETTINGS = { ...SITE_SETTINGS, ...settings };
+        localStorage.setItem('lga_site_settings', JSON.stringify(SITE_SETTINGS));
+        settingsLoaded = true;
+      }
+    }
+  } catch (err) {}
+  if (!settingsLoaded) {
+    try {
+      const localS = localStorage.getItem('lga_site_settings');
+      if (localS) SITE_SETTINGS = { ...SITE_SETTINGS, ...JSON.parse(localS) };
+    } catch (e) {}
+  }
+
+  let journalsLoaded = false;
+  try {
+    const resJournals = await fetch(`${window.LEX_API_URL || ''}/api/journals`);
+    if (resJournals.ok) {
+      const journals = await resJournals.json();
+      if (Array.isArray(journals)) {
+        JOURNALS_DATA.length = 0;
+        journals.forEach(j => JOURNALS_DATA.push(j));
+        localStorage.setItem('lga_journals', JSON.stringify(JOURNALS_DATA));
+        journalsLoaded = true;
+      }
+    }
+  } catch (err) {}
+  if (!journalsLoaded) {
+    try {
+      const localJ = localStorage.getItem('lga_journals');
+      if (localJ) {
+        const parsed = JSON.parse(localJ);
+        if (Array.isArray(parsed)) {
+          JOURNALS_DATA.length = 0;
+          parsed.forEach(j => JOURNALS_DATA.push(j));
+        }
+      }
+    } catch (e) {}
+  }
+
+  let galleryLoaded = false;
+  try {
+    const resGallery = await fetch(`${window.LEX_API_URL || ''}/api/gallery`);
+    if (resGallery.ok) {
+      const gallery = await resGallery.json();
+      if (Array.isArray(gallery)) {
+        GALLERY_DATA.length = 0;
+        gallery.forEach(g => GALLERY_DATA.push(g));
+        try { localStorage.setItem('lga_gallery', JSON.stringify(GALLERY_DATA)); } catch (e) {}
+        galleryLoaded = true;
+      }
+    }
+  } catch (err) {}
+  if (!galleryLoaded) {
+    try {
+      const localG = localStorage.getItem('lga_gallery');
+      if (localG) {
+        const parsed = JSON.parse(localG);
+        if (Array.isArray(parsed)) {
+          GALLERY_DATA.length = 0;
+          parsed.forEach(g => GALLERY_DATA.push(g));
+        }
+      }
+    } catch (e) {}
+  }
+
+  let coursesLoaded = false;
   try {
     const resCourses = await fetch(`${window.LEX_API_URL || ''}/api/courses`);
     if (resCourses.ok) {
       const courses = await resCourses.json();
-      if (Array.isArray(courses) && courses.length > 0) {
+      if (Array.isArray(courses)) {
         COURSES_DATA.length = 0;
         courses.forEach(c => COURSES_DATA.push(c));
+        localStorage.setItem('lga_academy_courses', JSON.stringify(COURSES_DATA));
         activeCourses = [...COURSES_DATA];
         renderCourses(activeCourses);
+        coursesLoaded = true;
       }
     }
   } catch (err) {}
+  if (!coursesLoaded) {
+    try {
+      const localC = localStorage.getItem('lga_academy_courses');
+      if (localC) {
+        const parsed = JSON.parse(localC);
+        if (Array.isArray(parsed)) {
+          COURSES_DATA.length = 0;
+          parsed.forEach(c => COURSES_DATA.push(c));
+          activeCourses = [...COURSES_DATA];
+          renderCourses(activeCourses);
+        }
+      }
+    } catch (e) {}
+  }
 
+  let blogsLoaded = false;
   try {
     const resBlogs = await fetch(`${window.LEX_API_URL || ''}/api/blogs`);
     if (resBlogs.ok) {
       const blogs = await resBlogs.json();
-      if (Array.isArray(blogs) && blogs.length > 0) {
+      if (Array.isArray(blogs)) {
         BLOGS_DATA.length = 0;
         blogs.forEach(b => BLOGS_DATA.push(b));
+        localStorage.setItem('lga_publications', JSON.stringify(BLOGS_DATA));
         filterBlogs();
+        blogsLoaded = true;
       }
     }
   } catch (err) {}
+  if (!blogsLoaded) {
+    try {
+      const localB = localStorage.getItem('lga_publications');
+      if (localB) {
+        const parsed = JSON.parse(localB);
+        if (Array.isArray(parsed)) {
+          BLOGS_DATA.length = 0;
+          parsed.forEach(b => BLOGS_DATA.push(b));
+          filterBlogs();
+        }
+      }
+    } catch (e) {}
+  }
+
+  applySiteSettings();
 }
 
 /* ==================== 17. INITIALIZATION ==================== */
@@ -4786,6 +5589,7 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPracticesGrid();
   renderCourses(activeCourses);
   renderBlogs(BLOGS_DATA);
+  applySiteSettings();
   startHeroAutoplay();
   syncBackendData();
 });

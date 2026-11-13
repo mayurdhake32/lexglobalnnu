@@ -147,14 +147,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [enrollments, setEnrollments] = useState<Record<string, Enrollment>>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEYS.ENROLLMENTS);
-      return raw ? JSON.parse(raw) : {
-        c4: {
-          courseId: 'c4',
-          completedLessons: ['l1'],
-          enrolledAt: new Date(Date.now() - 3 * 86400000).toISOString(),
-          quizPassed: false
-        }
-      };
+      return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
     }
@@ -163,9 +156,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [bookmarks, setBookmarks] = useState<string[]>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEYS.BOOKMARKS);
-      return raw ? JSON.parse(raw) : ['p1'];
+      return raw ? JSON.parse(raw) : [];
     } catch {
-      return ['p1'];
+      return [];
     }
   });
 
@@ -604,15 +597,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
     setPosts(INITIAL_POSTS);
     setCourses(INITIAL_COURSES);
-    setEnrollments({
-      c4: {
-        courseId: 'c4',
-        completedLessons: ['l1'],
-        enrolledAt: new Date(Date.now() - 3 * 86400000).toISOString(),
-        quizPassed: false
-      }
-    });
-    setBookmarks(['p1']);
+    setEnrollments({});
+    setBookmarks([]);
     setInquiries([]);
     showToast('Reset to pristine demonstration data.', 'info');
   }, [showToast]);

@@ -9,6 +9,8 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const cors = require('cors');
+let nodemailer = null;
+try { nodemailer = require('nodemailer'); } catch (_) {}
 require('dotenv').config();
 
 const app = express();
@@ -79,27 +81,62 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
+const DEFAULT_GATEWAY_CONFIG = {
+  notifyEmail: 'dp.lexglobaladvocacy@gmail.com',
+  notifyWhatsapp: '919307373024',
+  emailEnabled: true,
+  whatsappEnabled: true,
+  formsubmitFallback: true
+};
+
+function normalizeWhatsappNumber(raw, fallback = '919307373024') {
+  const digits = String(raw || '').replace(/\D+/g, '');
+  if (!digits) return fallback;
+  if (digits.length === 10) return '91' + digits;
+  return digits;
+}
+
+function sanitizeGatewayConfig(input) {
+  const emailCandidate = input && typeof input.notifyEmail === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.notifyEmail.trim())
+    ? input.notifyEmail.trim()
+    : (process.env.NOTIFY_EMAIL && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(process.env.NOTIFY_EMAIL.trim())
+      ? process.env.NOTIFY_EMAIL.trim()
+      : DEFAULT_GATEWAY_CONFIG.notifyEmail);
+  return {
+    notifyEmail: emailCandidate,
+    notifyWhatsapp: normalizeWhatsappNumber((input && input.notifyWhatsapp) || process.env.NOTIFY_WHATSAPP, DEFAULT_GATEWAY_CONFIG.notifyWhatsapp),
+    emailEnabled: input && input.emailEnabled !== undefined ? Boolean(input.emailEnabled) : true,
+    whatsappEnabled: input && input.whatsappEnabled !== undefined ? Boolean(input.whatsappEnabled) : true,
+    formsubmitFallback: input && input.formsubmitFallback !== undefined ? Boolean(input.formsubmitFallback) : true
+  };
+}
 
 // Database Helpers
 function readDb() {
   try {
     if (!fs.existsSync(DB_PATH)) {
-      return { posts: [], courses: [], team: [], inquiries: [], enrollments: [], orders: [], adminPassword: ADMIN_PASSWORD };
+      return { posts: [], journals: [], gallery: [], siteSettings: { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true }, courses: [], team: [], inquiries: [], enrollments: [], orders: [], gatewayConfig: { ...DEFAULT_GATEWAY_CONFIG }, gatewayLogs: [], adminPassword: ADMIN_PASSWORD };
     }
     const raw = fs.readFileSync(DB_PATH, 'utf-8');
     const data = JSON.parse(raw);
     data.posts = data.posts || [];
+    data.journals = data.journals || [];
+    data.gallery = data.gallery || [];
+    data.siteSettings = { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true, ...(data.siteSettings || {}) };
     data.courses = data.courses || [];
     data.team = data.team || [];
     data.inquiries = data.inquiries || [];
     data.enrollments = data.enrollments || [];
     data.orders = data.orders || [];
+    data.gatewayConfig = sanitizeGatewayConfig(data.gatewayConfig);
+    data.gatewayLogs = Array.isArray(data.gatewayLogs) ? data.gatewayLogs : [];
     return data;
   } catch (e) {
     console.error('Error reading db.json:', e);
-    return { posts: [], courses: [], team: [], inquiries: [], enrollments: [], orders: [], adminPassword: ADMIN_PASSWORD };
+    return { posts: [], journals: [], gallery: [], siteSettings: { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true }, courses: [], team: [], inquiries: [], enrollments: [], orders: [], gatewayConfig: { ...DEFAULT_GATEWAY_CONFIG }, gatewayLogs: [], adminPassword: ADMIN_PASSWORD };
   }
 }
 
@@ -411,14 +448,14 @@ app.post('/api/orders', rateLimiter(60000, 15), (req, res) => {
   res.status(201).json({ success: true, order: newOrder });
 });
 
-app.get('/api/orders', requireAuth, (req, res) => {
+app.get(['/api/orders', '/api/courses/orders'], requireAuth, (req, res) => {
   const db = readDb();
   res.json(db.orders || []);
 });
 
-app.delete('/api/orders/:id', requireAuth, (req, res) => {
+app.delete(['/api/orders/:id', '/api/courses/orders/:id'], requireAuth, (req, res) => {
   const db = readDb();
-  db.orders = (db.orders || []).filter(o => o.id !== req.params.id);
+  db.orders = (db.orders || []).filter(o => o.id !== req.params.id && o.orderId !== req.params.id);
   writeDb(db);
   res.json({ success: true, message: 'Order record removed.' });
 });
@@ -477,15 +514,310 @@ app.post('/api/blogs', requireAuth, (req, res) => {
 app.delete('/api/blogs/:id', requireAuth, (req, res) => {
   const db = readDb();
   const initialLen = db.posts.length;
-  db.posts = db.posts.filter(p => p.id !== req.params.id);
+  db.posts = db.posts.filter(p => p.id !== req.params.id && p.slug !== req.params.id);
   if (db.posts.length === initialLen) return res.status(404).json({ error: 'Article not found.' });
   writeDb(db);
   res.json({ success: true, message: 'Article removed.' });
 });
 
+app.delete('/api/blogs', requireAuth, (req, res) => {
+  const db = readDb();
+  db.posts = [];
+  writeDb(db);
+  res.json({ success: true, message: 'All Legal Hub publications removed.' });
+});
+
+// ==================== LAW JOURNAL (LGRLJ) & SITE SETTINGS ====================
+
+app.get('/api/journals', (req, res) => {
+  const db = readDb();
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+  const isAdmin = activeSessions.has(token);
+  const journals = isAdmin ? (db.journals || []) : (db.journals || []).filter(j => j.published !== false);
+  res.json(journals);
+});
+
+app.post('/api/journals', requireAuth, (req, res) => {
+  const { title, subtitle, tagline, description, year, badge, image, issueUrl, websiteUrl, published } = req.body;
+  if (!title) return res.status(400).json({ error: 'Journal title is required.' });
+  const db = readDb();
+  const newJournal = {
+    id: 'j-' + Date.now(),
+    title: sanitizeText(title),
+    subtitle: sanitizeText(subtitle || 'Volume 1 · Issue 1'),
+    tagline: sanitizeText(tagline || 'An International Peer-Reviewed Law Journal'),
+    description: sanitizeText(description || ''),
+    year: sanitizeText(year || String(new Date().getFullYear())),
+    badge: sanitizeText(badge || 'Peer-Reviewed · ISSN Registered'),
+    image: image || 'lexjournal.jpeg',
+    issueUrl: issueUrl || 'https://www.lexglobalreview.org',
+    websiteUrl: websiteUrl || 'https://www.lexglobalreview.org',
+    published: published !== false
+  };
+  db.journals = db.journals || [];
+  db.journals.unshift(newJournal);
+  writeDb(db);
+  res.status(201).json(newJournal);
+});
+
+app.delete('/api/journals/:id', requireAuth, (req, res) => {
+  const db = readDb();
+  const initialLen = (db.journals || []).length;
+  db.journals = (db.journals || []).filter(j => j.id !== req.params.id && j.slug !== req.params.id);
+  if (db.journals.length === initialLen) return res.status(404).json({ error: 'Journal publication not found.' });
+  writeDb(db);
+  res.json({ success: true, message: 'Journal publication removed.' });
+});
+
+app.delete('/api/journals', requireAuth, (req, res) => {
+  const db = readDb();
+  db.journals = [];
+  writeDb(db);
+  res.json({ success: true, message: 'All Law Journal publications removed.' });
+});
+
+app.get('/api/site-settings', (req, res) => {
+  const db = readDb();
+  res.json(db.siteSettings || { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true });
+});
+
+app.put('/api/site-settings', requireAuth, (req, res) => {
+  const db = readDb();
+  const { showJournal, showLegalHub, showAcademy, showGallery } = req.body || {};
+  db.siteSettings = {
+    showJournal: showJournal !== undefined ? Boolean(showJournal) : (db.siteSettings?.showJournal ?? true),
+    showLegalHub: showLegalHub !== undefined ? Boolean(showLegalHub) : (db.siteSettings?.showLegalHub ?? true),
+    showAcademy: showAcademy !== undefined ? Boolean(showAcademy) : (db.siteSettings?.showAcademy ?? true),
+    showGallery: showGallery !== undefined ? Boolean(showGallery) : (db.siteSettings?.showGallery ?? true)
+  };
+  writeDb(db);
+  res.json(db.siteSettings);
+});
+
+// ==================== MEETUP GALLERY (ADMIN-ONLY WRITE) ====================
+
+app.get('/api/gallery', (req, res) => {
+  const db = readDb();
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+  const isAdmin = activeSessions.has(token);
+  const items = isAdmin ? (db.gallery || []) : (db.gallery || []).filter(g => g.published !== false);
+  res.json(items);
+});
+
+app.post('/api/gallery', requireAuth, (req, res) => {
+  const { title, eventName, location, date, caption, image, published } = req.body || {};
+  const rawImg = typeof image === 'string' ? image.trim() : '';
+  if (!rawImg || /^javascript:/i.test(rawImg)) {
+    return res.status(400).json({ error: 'A valid pasted photo or image URL is required.' });
+  }
+  const db = readDb();
+  const newItem = {
+    id: 'gal-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+    title: sanitizeText(title || 'Meetup Highlight'),
+    eventName: sanitizeText(eventName || 'Firm Meetup & Gathering'),
+    location: sanitizeText(location || 'Mumbai'),
+    date: sanitizeText(date || new Date().toISOString().slice(0, 10)),
+    caption: sanitizeText(caption || ''),
+    image: rawImg,
+    published: published !== false,
+    createdAt: new Date().toISOString()
+  };
+  db.gallery = db.gallery || [];
+  db.gallery.unshift(newItem);
+  writeDb(db);
+  res.status(201).json(newItem);
+});
+
+app.delete('/api/gallery/:id', requireAuth, (req, res) => {
+  const db = readDb();
+  const initialLen = (db.gallery || []).length;
+  db.gallery = (db.gallery || []).filter(g => g.id !== req.params.id);
+  if (db.gallery.length === initialLen) return res.status(404).json({ error: 'Gallery photo not found.' });
+  writeDb(db);
+  res.json({ success: true, message: 'Gallery photo removed.' });
+});
+
+app.delete('/api/gallery', requireAuth, (req, res) => {
+  const db = readDb();
+  db.gallery = [];
+  writeDb(db);
+  res.json({ success: true, message: 'All gallery photos removed.' });
+});
+
 // ==================== INQUIRIES & CONTACT ====================
 
-const handleInquiry = (req, res) => {
+function detectProviders() {
+  const smtpUser = process.env.SMTP_USER || process.env.GMAIL_USER;
+  const smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
+  return {
+    smtpConfigured: Boolean(nodemailer && smtpUser && smtpPass),
+    resendConfigured: Boolean(process.env.RESEND_API_KEY),
+    formsubmitAvailable: true,
+    whatsappCloudConfigured: Boolean(process.env.WHATSAPP_PHONE_NUMBER_ID && process.env.WHATSAPP_ACCESS_TOKEN),
+    callmebotConfigured: Boolean(process.env.CALLMEBOT_API_KEY),
+    twilioConfigured: Boolean(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_WHATSAPP_FROM),
+    webhookConfigured: Boolean(process.env.GATEWAY_WEBHOOK_URL || process.env.EMAIL_WEBHOOK_URL || process.env.WHATSAPP_WEBHOOK_URL)
+  };
+}
+
+function buildGatewayPayload(inq, cfg) {
+  const targetEmail = cfg.notifyEmail || DEFAULT_GATEWAY_CONFIG.notifyEmail;
+  const waDigits = normalizeWhatsappNumber(cfg.notifyWhatsapp);
+  const desc = (inq.description || inq.message || '').trim();
+  const subject = `[Lex Global Client Request] ${inq.practiceArea || 'General Counsel'} - ${inq.name} (${inq.id})`;
+  const summaryText = [
+    '*LEX GLOBAL ADVOCACY LLP — New Client Request*',
+    `Ref ID: ${inq.id}`,
+    `Client Name: ${inq.name}`,
+    `Client Email: ${inq.email}`,
+    `Client Mobile/WhatsApp: ${inq.phone || 'Not provided'}`,
+    `Practice Area: ${inq.practiceArea || 'General Legal Practice'}`,
+    `Organization: ${inq.organization || 'Individual Party'}`,
+    `Urgency: ${inq.urgency || 'Routine'}`,
+    `Submitted At: ${inq.createdAt || new Date().toISOString()}`,
+    '',
+    'Matter Synopsis:',
+    desc
+  ].join('\n');
+  return {
+    targetEmail,
+    waDigits,
+    formattedWaDisplay: '+' + waDigits,
+    subject,
+    summaryText,
+    whatsappRelayUrl: `https://wa.me/${waDigits}?text=${encodeURIComponent(summaryText)}`,
+    mailtoRelayUrl: `mailto:${encodeURIComponent(targetEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summaryText)}`
+  };
+}
+
+async function dispatchNotificationsForInquiry(inq, db) {
+  const cfg = sanitizeGatewayConfig(db.gatewayConfig);
+  const p = buildGatewayPayload(inq, cfg);
+
+  const sendEmail = async () => {
+    if (!cfg.emailEnabled) return { status: 'disabled', provider: 'none', detail: 'Email notifications disabled' };
+    const smtpUser = process.env.SMTP_USER || process.env.GMAIL_USER;
+    const smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
+    if (nodemailer && smtpUser && smtpPass) {
+      try {
+        const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+        const port = parseInt(process.env.SMTP_PORT || '465', 10) || 465;
+        const transporter = nodemailer.createTransport({ host, port, secure: port === 465, auth: { user: smtpUser, pass: smtpPass } });
+        const info = await transporter.sendMail({ from: `"Lex Global Advocacy Intake" <${smtpUser}>`, to: p.targetEmail, replyTo: inq.email, subject: p.subject, text: p.summaryText });
+        return { status: 'sent', provider: 'smtp', detail: `Delivered via SMTP (${info.messageId || 'ok'})` };
+      } catch (err) {
+        return { status: 'failed', provider: 'smtp', detail: err.message || 'SMTP error' };
+      }
+    }
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const r = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ from: process.env.RESEND_FROM_EMAIL || 'Lex Global Intake <onboarding@resend.dev>', to: [p.targetEmail], reply_to: inq.email, subject: p.subject, text: p.summaryText }),
+          signal: AbortSignal.timeout(5000)
+        });
+        if (r.ok) return { status: 'sent', provider: 'resend', detail: 'Delivered via Resend' };
+        return { status: 'failed', provider: 'resend', detail: `Resend HTTP ${r.status}` };
+      } catch (err) { return { status: 'failed', provider: 'resend', detail: err.message || 'Resend error' }; }
+    }
+    const wh = process.env.EMAIL_WEBHOOK_URL || process.env.GATEWAY_WEBHOOK_URL;
+    if (wh) {
+      try {
+        const r = await fetch(wh, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'client_request', channel: 'email', targetEmail: p.targetEmail, subject: p.subject, summaryText: p.summaryText, inquiry: inq }), signal: AbortSignal.timeout(5000) });
+        if (r.ok) return { status: 'sent', provider: 'webhook', detail: `Dispatched to email webhook (${r.status})` };
+        return { status: 'failed', provider: 'webhook', detail: `Webhook HTTP ${r.status}` };
+      } catch (err) { return { status: 'failed', provider: 'webhook', detail: err.message || 'Webhook error' }; }
+    }
+    if (cfg.formsubmitFallback) {
+      try {
+        const r = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(p.targetEmail)}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Origin: process.env.PUBLIC_SITE_URL || 'https://www.lexglobalreview.org',
+            Referer: (process.env.PUBLIC_SITE_URL || 'https://www.lexglobalreview.org') + '/',
+            'User-Agent': 'LexGlobalAdvocacyGateway/1.0'
+          },
+          body: JSON.stringify({ _subject: p.subject, _replyto: inq.email, _template: 'table', Reference_ID: inq.id, Client_Name: inq.name, Client_Email: inq.email, Client_Phone: inq.phone || 'Not provided', Practice_Area: inq.practiceArea, Matter_Synopsis: inq.description }),
+          signal: AbortSignal.timeout(5000)
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && (d.success === 'true' || d.success === true)) return { status: 'sent', provider: 'formsubmit', detail: `Relayed to ${p.targetEmail}` };
+        return { status: 'queued_relay', provider: 'formsubmit', detail: d.message || 'Relay standby; mailto link prepared' };
+      } catch (_) { return { status: 'queued_relay', provider: 'relay', detail: 'Direct mailto relay prepared' }; }
+    }
+    return { status: 'queued_relay', provider: 'relay', detail: 'Direct mailto relay prepared' };
+  };
+
+  const sendWhatsapp = async () => {
+    if (!cfg.whatsappEnabled) return { status: 'disabled', provider: 'none', detail: 'WhatsApp notifications disabled' };
+    if (process.env.WHATSAPP_PHONE_NUMBER_ID && process.env.WHATSAPP_ACCESS_TOKEN) {
+      try {
+        const r = await fetch(`https://graph.facebook.com/v20.0/${encodeURIComponent(process.env.WHATSAPP_PHONE_NUMBER_ID)}/messages`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messaging_product: 'whatsapp', to: p.waDigits, type: 'text', text: { preview_url: false, body: p.summaryText } }),
+          signal: AbortSignal.timeout(5000)
+        });
+        if (r.ok) return { status: 'sent', provider: 'whatsapp_cloud', detail: `Delivered via Meta WhatsApp Cloud API (+${p.waDigits})` };
+        return { status: 'failed', provider: 'whatsapp_cloud', detail: `WhatsApp Cloud HTTP ${r.status}` };
+      } catch (err) { return { status: 'failed', provider: 'whatsapp_cloud', detail: err.message || 'WhatsApp error' }; }
+    }
+    if (process.env.CALLMEBOT_API_KEY) {
+      try {
+        const r = await fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent('+' + p.waDigits)}&text=${encodeURIComponent(p.summaryText)}&apikey=${encodeURIComponent(process.env.CALLMEBOT_API_KEY)}`, { signal: AbortSignal.timeout(5000) });
+        if (r.ok) return { status: 'sent', provider: 'callmebot', detail: `Delivered via CallMeBot (+${p.waDigits})` };
+        return { status: 'failed', provider: 'callmebot', detail: `CallMeBot HTTP ${r.status}` };
+      } catch (err) { return { status: 'failed', provider: 'callmebot', detail: err.message || 'CallMeBot error' }; }
+    }
+    const wh = process.env.WHATSAPP_WEBHOOK_URL || process.env.GATEWAY_WEBHOOK_URL;
+    if (wh) {
+      try {
+        const r = await fetch(wh, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'client_request', channel: 'whatsapp', targetWhatsapp: '+' + p.waDigits, message: p.summaryText, inquiry: inq }), signal: AbortSignal.timeout(5000) });
+        if (r.ok) return { status: 'sent', provider: 'webhook', detail: `Dispatched to WhatsApp webhook (+${p.waDigits})` };
+        return { status: 'failed', provider: 'webhook', detail: `Webhook HTTP ${r.status}` };
+      } catch (err) { return { status: 'failed', provider: 'webhook', detail: err.message || 'Webhook error' }; }
+    }
+    return { status: 'queued_relay', provider: 'whatsapp_relay', detail: `Direct WhatsApp relay link prepared for +${p.waDigits}` };
+  };
+
+  const [email, whatsapp] = await Promise.all([sendEmail(), sendWhatsapp()]);
+  const dispatchedAt = new Date().toISOString();
+  inq.notificationStatus = {
+    dispatchedAt,
+    emailTarget: p.targetEmail,
+    whatsappTarget: p.formattedWaDisplay,
+    emailStatus: email.status,
+    emailProvider: email.provider,
+    emailDetail: email.detail,
+    whatsappStatus: whatsapp.status,
+    whatsappProvider: whatsapp.provider,
+    whatsappDetail: whatsapp.detail
+  };
+  db.gatewayLogs = Array.isArray(db.gatewayLogs) ? db.gatewayLogs : [];
+  db.gatewayLogs.unshift({ id: 'gw-' + Date.now(), inquiryId: inq.id, clientName: inq.name, practiceArea: inq.practiceArea, ...inq.notificationStatus });
+  db.gatewayLogs = db.gatewayLogs.slice(0, 50);
+
+  return {
+    dispatchedAt,
+    emailTarget: p.targetEmail,
+    whatsappTarget: p.formattedWaDisplay,
+    emailStatus: email.status,
+    emailProvider: email.provider,
+    emailDetail: email.detail,
+    whatsappStatus: whatsapp.status,
+    whatsappProvider: whatsapp.provider,
+    whatsappDetail: whatsapp.detail,
+    whatsappRelayUrl: p.whatsappRelayUrl,
+    mailtoRelayUrl: p.mailtoRelayUrl
+  };
+}
+
+const handleInquiry = async (req, res) => {
   const { name, email, phone, organization, practiceArea, message, description } = req.body;
   const content = description || message || '';
 
@@ -509,15 +841,16 @@ const handleInquiry = (req, res) => {
 
   db.inquiries = db.inquiries || [];
   db.inquiries.unshift(newInq);
+  const gateway = await dispatchNotificationsForInquiry(newInq, db);
   writeDb(db);
 
-  res.status(201).json({ success: true, message: 'Inquiry registered.', id: newInq.id });
+  res.status(201).json({ success: true, message: 'Inquiry registered.', id: newInq.id, gateway });
 };
 
 app.post('/api/inquiries', rateLimiter(60000, 10), handleInquiry);
 app.post('/api/contact', rateLimiter(60000, 10), handleInquiry);
 
-app.get('/api/inquiries', requireAuth, (req, res) => {
+app.get(['/api/inquiries', '/api/contact'], requireAuth, (req, res) => {
   const db = readDb();
   res.json(db.inquiries || []);
 });
@@ -532,11 +865,57 @@ app.put('/api/inquiries/:id', requireAuth, (req, res) => {
   res.json(inq);
 });
 
+app.post('/api/inquiries/:id/notify', requireAuth, async (req, res) => {
+  const db = readDb();
+  const inq = (db.inquiries || []).find(i => i.id === req.params.id);
+  if (!inq) return res.status(404).json({ error: 'Inquiry not found.' });
+  const gateway = await dispatchNotificationsForInquiry(inq, db);
+  writeDb(db);
+  res.json({ success: true, inquiry: inq, gateway });
+});
+
 app.delete('/api/inquiries/:id', requireAuth, (req, res) => {
   const db = readDb();
   db.inquiries = (db.inquiries || []).filter(i => i.id !== req.params.id);
   writeDb(db);
   res.json({ success: true, message: 'Inquiry deleted.' });
+});
+
+app.get('/api/gateway/settings', requireAuth, (req, res) => {
+  const db = readDb();
+  res.json({ ...sanitizeGatewayConfig(db.gatewayConfig), providers: detectProviders(), recentLogs: (db.gatewayLogs || []).slice(0, 15) });
+});
+
+app.put('/api/gateway/settings', requireAuth, (req, res) => {
+  const db = readDb();
+  const { notifyEmail, notifyWhatsapp, emailEnabled, whatsappEnabled, formsubmitFallback } = req.body || {};
+  db.gatewayConfig = sanitizeGatewayConfig({
+    notifyEmail: notifyEmail !== undefined ? sanitizeText(notifyEmail) : db.gatewayConfig?.notifyEmail,
+    notifyWhatsapp: notifyWhatsapp !== undefined ? sanitizeText(notifyWhatsapp) : db.gatewayConfig?.notifyWhatsapp,
+    emailEnabled: emailEnabled !== undefined ? Boolean(emailEnabled) : db.gatewayConfig?.emailEnabled,
+    whatsappEnabled: whatsappEnabled !== undefined ? Boolean(whatsappEnabled) : db.gatewayConfig?.whatsappEnabled,
+    formsubmitFallback: formsubmitFallback !== undefined ? Boolean(formsubmitFallback) : db.gatewayConfig?.formsubmitFallback
+  });
+  writeDb(db);
+  res.json({ ...db.gatewayConfig, providers: detectProviders(), recentLogs: (db.gatewayLogs || []).slice(0, 15) });
+});
+
+app.post('/api/gateway/test', requireAuth, async (req, res) => {
+  const db = readDb();
+  const testInquiry = {
+    id: 'test-' + Date.now(),
+    name: 'Gateway Verification Check',
+    email: 'intake-test@lexglobaladvocacy.example',
+    phone: '+91-9307373024',
+    organization: 'LEX GLOBAL ADVOCACY LLP (Admin Test)',
+    practiceArea: 'Automated Gateway Diagnostics',
+    urgency: 'Routine',
+    description: 'Automated test request verifying email & WhatsApp gateway routing for client inquiries.',
+    createdAt: new Date().toISOString()
+  };
+  const gateway = await dispatchNotificationsForInquiry(testInquiry, db);
+  writeDb(db);
+  res.json({ success: true, gateway, recentLogs: (db.gatewayLogs || []).slice(0, 15) });
 });
 
 // ==================== ADMIN STATS & BACKUP ====================
@@ -551,6 +930,7 @@ app.get('/api/admin/stats', requireAuth, (req, res) => {
     totalEnrollments: (db.enrollments || []).length,
     totalCourses: (db.courses || []).length,
     totalPosts: (db.posts || []).length,
+    totalJournals: (db.journals || []).length,
     totalOrders: orders.length,
     totalRevenue
   });

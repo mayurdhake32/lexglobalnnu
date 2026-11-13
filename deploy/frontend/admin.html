@@ -405,6 +405,53 @@ textarea.form-control {
   .nav-group-title { display: none; }
   .main-content { padding: 18px; }
 }
+
+/* Custom In-App Confirmation Dialog & Toast Notifications */
+.admin-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.88);
+  backdrop-filter: blur(4px);
+  display: none;
+  place-items: center;
+  z-index: 2500;
+  padding: 20px;
+}
+.admin-confirm-overlay.is-active {
+  display: grid;
+}
+.admin-confirm-box {
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--danger);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+}
+.admin-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 3000;
+  background: var(--dark-card);
+  color: #fff;
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--success);
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  max-width: 380px;
+}
+.admin-toast.is-visible { display: flex; }
+.admin-toast.toast-error { border-left-color: var(--danger); }
+.admin-toast.toast-warning { border-left-color: var(--warning); }
 </style>
 </head>
 <body>
@@ -483,6 +530,16 @@ textarea.form-control {
     </div>
     <div class="nav-item" onclick="switchTab('blogs')">
       <i class="fas fa-newspaper"></i> Publications &amp; Hub
+      <span class="nav-badge" id="badgeBlogsCount">0</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('gallery')">
+      <i class="fas fa-images"></i> Meetup Gallery
+      <span class="nav-badge" id="badgeGalleryCount">0</span>
+    </div>
+    <div style="padding:4px 12px 10px 12px;">
+      <button class="btn btn-primary btn-sm" style="width:100%; justify-content:center; font-size:12px; height:32px;" onclick="openNewGalleryModal()">
+        <i class="fas fa-paste"></i> + Paste Meetup Photo
+      </button>
     </div>
     <div class="nav-group-title" style="margin-top:20px;">System &amp; Data</div>
     <div class="nav-item" onclick="switchTab('settings')">
@@ -529,6 +586,13 @@ textarea.form-control {
           <div class="stat-info">
             <h4>Published Articles</h4>
             <div class="stat-value" id="kpiPosts">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(16,185,129,0.15); color:#10b981;"><i class="fas fa-images"></i></div>
+          <div class="stat-info">
+            <h4>Meetup Photos</h4>
+            <div class="stat-value" id="kpiGallery">0</div>
           </div>
         </div>
       </div>
@@ -621,8 +685,9 @@ textarea.form-control {
             <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">All inquiries submitted via website intake forms, protected by attorney-client conflict review protocols.</p>
           </div>
           <div class="panel-actions">
+            <button class="btn btn-primary btn-sm" onclick="openNewInquiryModal()"><i class="fas fa-plus-circle"></i> Log Client Inquiry</button>
             <button class="btn btn-outline btn-sm" onclick="exportInquiriesCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
-            <button class="btn btn-outline btn-sm" onclick="loadInquiries()"><i class="fas fa-sync"></i> Refresh</button>
+            <button class="btn btn-outline btn-sm" onclick="loadInquiries(true)"><i class="fas fa-sync"></i> Refresh</button>
           </div>
         </div>
 
@@ -665,7 +730,7 @@ textarea.form-control {
           </div>
           <div class="panel-actions">
             <button class="btn btn-primary btn-sm" onclick="openNewCourseModal()"><i class="fas fa-plus"></i> Add Masterclass</button>
-            <button class="btn btn-outline btn-sm" onclick="loadCourses()"><i class="fas fa-sync"></i> Refresh</button>
+            <button class="btn btn-outline btn-sm" onclick="loadCourses(true)"><i class="fas fa-sync"></i> Refresh</button>
           </div>
         </div>
 
@@ -746,7 +811,7 @@ textarea.form-control {
           </div>
           <div class="panel-actions">
             <button class="btn btn-outline btn-sm" onclick="exportOrdersCSV()"><i class="fas fa-file-csv"></i> Export Orders CSV</button>
-            <button class="btn btn-outline btn-sm" onclick="loadOrders()"><i class="fas fa-sync"></i> Refresh</button>
+            <button class="btn btn-outline btn-sm" onclick="loadOrders(true)"><i class="fas fa-sync"></i> Refresh</button>
           </div>
         </div>
 
@@ -778,17 +843,76 @@ textarea.form-control {
       </div>
     </section>
 
-    <!-- TAB 4: BLOGS & PUBLICATIONS -->
+    <!-- TAB 4: BLOGS, JOURNALS & PUBLICATIONS -->
     <section id="tab-blogs" style="display:none;">
+      <!-- Public Section Visibility Controls -->
+      <div class="card-panel" style="margin-bottom:20px;">
+        <div class="panel-header" style="margin-bottom:12px;">
+          <div>
+            <h3 class="panel-title"><i class="fas fa-eye" style="color:var(--primary); margin-right:8px;"></i> Public Website Visibility — Publications &amp; Legal Hub</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Show or hide the Law Journal (LGRLJ) and The Legal Hub sections on the public website.</p>
+          </div>
+        </div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:240px; background:var(--dark-card); border:1px solid var(--border-color); border-radius:6px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div>
+              <strong style="font-size:14px; color:#fff; display:block;">Law Journal (LGRLJ) Section</strong>
+              <span id="statusShowJournal" style="font-size:12px; color:#10b981;">Visible on public site</span>
+            </div>
+            <button type="button" id="toggleShowJournalBtn" class="btn btn-outline btn-sm" onclick="toggleSiteSetting('showJournal')">Hide Section</button>
+          </div>
+          <div style="flex:1; min-width:240px; background:var(--dark-card); border:1px solid var(--border-color); border-radius:6px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div>
+              <strong style="font-size:14px; color:#fff; display:block;">The Legal Hub &amp; Publications Section</strong>
+              <span id="statusShowLegalHub" style="font-size:12px; color:#10b981;">Visible on public site</span>
+            </div>
+            <button type="button" id="toggleShowLegalHubBtn" class="btn btn-outline btn-sm" onclick="toggleSiteSetting('showLegalHub')">Hide Section</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Law Journal Publications (LGRLJ) -->
+      <div class="card-panel" style="margin-bottom:20px;">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Law Journal Publications (LGRLJ — Flagship Periodicals)</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Manage or delete existing peer-reviewed Law Journal issues displayed on the public website.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn btn-primary btn-sm" onclick="openNewJournalModal()"><i class="fas fa-plus"></i> Add Journal Publication</button>
+            <button id="deleteAllJournalsBtn" class="btn btn-danger btn-sm" style="display:none;" onclick="deleteAllJournals()"><i class="fas fa-trash-alt"></i> Delete All</button>
+            <button class="btn btn-outline btn-sm" onclick="loadJournals(true)"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Journal Title &amp; Volume</th>
+                <th>Year</th>
+                <th>Peer-Review / ISSN</th>
+                <th>External Issue Link</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="journalsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- The Legal Hub Articles -->
       <div class="card-panel">
         <div class="panel-header">
           <div>
             <h3 class="panel-title">The Legal Hub — Publications &amp; Scholarly Insights</h3>
-            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Publish cross-border legal commentaries, case analyses, and advisory whitepapers.</p>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Publish, review, or delete cross-border legal commentaries, case analyses, and advisory whitepapers.</p>
           </div>
           <div class="panel-actions">
             <button class="btn btn-primary btn-sm" onclick="openNewBlogModal()"><i class="fas fa-plus"></i> New Publication</button>
-            <button class="btn btn-outline btn-sm" onclick="loadBlogs()"><i class="fas fa-sync"></i> Refresh</button>
+            <button id="deleteAllBlogsBtn" class="btn btn-danger btn-sm" style="display:none;" onclick="deleteAllBlogs()"><i class="fas fa-trash-alt"></i> Delete All</button>
+            <button class="btn btn-outline btn-sm" onclick="loadBlogs(true)"><i class="fas fa-sync"></i> Refresh</button>
           </div>
         </div>
 
@@ -811,8 +935,101 @@ textarea.form-control {
       </div>
     </section>
 
-    <!-- TAB 5: SECURITY & SETTINGS -->
+    <!-- TAB 5: MEETUP GALLERY (ADMIN-ONLY PASTE) -->
+    <section id="tab-gallery" style="display:none;">
+      <div class="card-panel" style="margin-bottom:20px;">
+        <div class="panel-header" style="margin-bottom:12px;">
+          <div>
+            <h3 class="panel-title"><i class="fas fa-eye" style="color:var(--primary); margin-right:8px;"></i> Public Website Visibility — Meetup &amp; Conference Gallery</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Gallery is enabled by default on the public site. Photos can only be pasted or deleted from this portal.</p>
+          </div>
+        </div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:260px; background:var(--dark-card); border:1px solid var(--border-color); border-radius:6px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div>
+              <strong style="font-size:14px; color:#fff; display:block;">Meetup &amp; Conference Gallery Section</strong>
+              <span id="statusShowGallery" class="js-gallery-status" style="font-size:12px; color:#10b981;">Visible on public site</span>
+            </div>
+            <button type="button" id="toggleShowGalleryBtn" class="btn btn-outline btn-sm js-gallery-btn" onclick="toggleSiteSetting('showGallery')">Hide Gallery Section</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title"><i class="fas fa-camera-retro" style="color:var(--primary); margin-right:8px;"></i> Meetup &amp; Event Photo Gallery</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Paste meetup photos directly from clipboard (Ctrl+V / Cmd+V) or paste an image URL to publish on the website Gallery.</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn btn-primary btn-sm" onclick="openNewGalleryModal()"><i class="fas fa-paste"></i> Paste Meetup Photo</button>
+            <button id="deleteAllGalleryBtn" class="btn btn-danger btn-sm" style="display:none;" onclick="deleteAllGallery()"><i class="fas fa-trash-alt"></i> Delete All</button>
+            <button class="btn btn-outline btn-sm" onclick="loadGallery(true)"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+        </div>
+
+        <div id="galleryAdminGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:16px;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 6: SECURITY & SETTINGS -->
     <section id="tab-settings" style="display:none;">
+      <div class="card-panel" style="max-width:680px;">
+        <h3 class="panel-title" style="margin-bottom:8px;"><i class="fas fa-eye" style="color:var(--primary); margin-right:8px;"></i> Public Website Section Visibility</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Show or hide optional sections on the public website.</p>
+        <div style="background:var(--dark-card); border:1px solid var(--border-color); border-radius:6px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div>
+            <strong style="font-size:14px; color:#fff; display:block;">Meetup &amp; Conference Gallery Section</strong>
+            <span class="js-gallery-status" style="font-size:12px; color:#10b981;">Visible on public site</span>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm js-gallery-btn" onclick="toggleSiteSetting('showGallery')">Hide Gallery Section</button>
+        </div>
+      </div>
+
+      <!-- Automated Client Request Notification Gateway (Email & WhatsApp) -->
+      <div class="card-panel" style="max-width:680px;">
+        <h3 class="panel-title" style="margin-bottom:8px;"><i class="fas fa-paper-plane" style="color:var(--primary); margin-right:8px;"></i> Client Request Notification Gateway (Email &amp; WhatsApp)</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+          Every client intake or consultation request is automatically routed to your designated firm email address and WhatsApp number. Configure routing destinations below (provider credentials are managed strictly via server environment variables).
+        </p>
+
+        <div class="form-row-2" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; align-items:end;">
+          <div class="form-group">
+            <label for="gatewayNotifyEmail">Alert Notification Email *</label>
+            <input type="email" id="gatewayNotifyEmail" class="form-control" value="dp.lexglobaladvocacy@gmail.com" placeholder="dp.lexglobaladvocacy@gmail.com">
+          </div>
+          <div class="form-group">
+            <label for="gatewayNotifyWhatsapp">WhatsApp Alert Number (+91...) *</label>
+            <input type="tel" id="gatewayNotifyWhatsapp" class="form-control" value="919307373024" placeholder="919307373024">
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px; font-size:13px; color:#cbd5e1;">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="gatewayEmailEnabled" checked> Automatically send every new client request via Email
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="gatewayWhatsappEnabled" checked> Automatically send every new client request via WhatsApp
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="gatewayFormsubmitFallback" checked> Enable zero-config FormSubmit email relay when SMTP/Resend env vars are unset
+          </label>
+        </div>
+
+        <div id="gatewayProviderBadges" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;"></div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <button type="button" class="btn btn-primary" onclick="saveGatewaySettings()"><i class="fas fa-save"></i> Save Gateway Routing</button>
+          <button type="button" class="btn btn-outline" id="testGatewayBtn" onclick="testGatewayDispatch()"><i class="fas fa-bolt"></i> Send Test Request Alert</button>
+          <span id="gatewaySaveMsg" style="font-size:12px; color:#10b981; display:none;"></span>
+        </div>
+
+        <div style="margin-top:16px; border-top:1px solid var(--border-color); padding-top:12px;">
+          <strong style="font-size:12px; text-transform:uppercase; letter-spacing:1px; color:var(--primary); display:block; margin-bottom:8px;">Recent Gateway Dispatches</strong>
+          <div id="gatewayLogsContainer" style="font-size:12px; color:#94a3b8;">No gateway dispatches recorded yet.</div>
+        </div>
+      </div>
+
       <!-- Razorpay Payment Gateway Settings Card -->
       <div class="card-panel" style="max-width:680px;">
         <h3 class="panel-title" style="margin-bottom:12px;"><i class="fas fa-credit-card" style="color:var(--primary); margin-right:8px;"></i> Razorpay Payment Gateway Integration</h3>
@@ -890,7 +1107,8 @@ textarea.form-control {
         <h3 class="panel-title" style="margin-bottom:12px;">Firm Identity &amp; Registration</h3>
         <p style="font-size:14px; color:#fff;"><strong>Firm Name:</strong> LEX GLOBAL ADVOCACY LLP</p>
         <p style="font-size:14px; color:#fff;"><strong>LLPIN:</strong> ACK-4630 (Mumbai, India)</p>
-        <p style="font-size:14px; color:var(--text-muted);"><strong>Headquarters:</strong> Savannah, Georgia &amp; Mumbai, India</p>
+        <p style="font-size:14px; color:var(--text-muted);"><strong>Mumbai Headquarters:</strong> 91 Springboard BKC 2, Kalina, Santacruz East, Mumbai &ndash; 400098</p>
+        <p style="font-size:14px; color:var(--text-muted);"><strong>Pune Headquarters:</strong> Flat no. 9 + 16, Damodar Prasad Apartment, B Wing, Hingne Khurd, Sinhgad Road, Pune &ndash; 411051</p>
         <p style="font-size:14px; color:var(--text-muted);"><strong>Jurisdictions Covered:</strong> 42+ Global Arbitral and Common Law Seats</p>
       </div>
     </section>
@@ -910,7 +1128,9 @@ textarea.form-control {
       <p id="modalInquiryDesc" style="font-size:15px; color:#e2e8f0; white-space:pre-wrap; line-height:1.7;"></p>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+    <div id="modalInquiryGatewayInfo" style="background:rgba(245,192,12,0.06); border:1px solid var(--border-color); padding:10px 14px; border-radius:6px; font-size:12px; color:#cbd5e1; margin-bottom:14px;"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid #1e293b; padding-top:16px;">
       <div style="display:flex; align-items:center; gap:8px;">
         <label style="font-size:13px; color:var(--text-muted);">Change Status:</label>
         <select id="modalInquiryStatusSelect" class="form-control" style="width:auto; height:36px;">
@@ -920,8 +1140,80 @@ textarea.form-control {
         </select>
         <button class="btn btn-outline btn-sm" onclick="saveInquiryStatusFromModal()">Update</button>
       </div>
-      <button class="btn btn-primary btn-sm" onclick="closeInquiryModal()">Done</button>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <button type="button" class="btn btn-outline btn-sm" id="modalInquiryResendBtn" onclick="resendInquiryGateway()"><i class="fas fa-paper-plane"></i> Re-send Gateway Alert</button>
+        <a id="modalInquiryWaForwardBtn" href="#" class="btn btn-outline btn-sm" target="_blank" rel="noopener noreferrer" style="border-color:#16a34a; color:#4ade80;"><i class="fab fa-whatsapp"></i> Send to Firm WhatsApp</a>
+        <a id="modalInquiryReplyBtn" href="#" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-reply"></i> Reply via Email</a>
+        <a id="modalInquiryCallBtn" href="#" class="btn btn-outline btn-sm"><i class="fas fa-phone-alt"></i> Call</a>
+        <button class="btn btn-outline btn-sm" onclick="closeInquiryModal()">Close</button>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- LOG MANUAL CLIENT INQUIRY MODAL -->
+<div id="newInquiryModal" class="admin-modal-overlay">
+  <div class="admin-modal-box">
+    <button class="modal-close-btn" onclick="closeNewInquiryModal()">&times;</button>
+    <h3 style="font-family:var(--font-serif); font-size:24px; margin-bottom:6px;">Log Direct Client Inquiry</h3>
+    <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Record in-person, telephonic, or direct referral client matter details into the confidential registry.</p>
+    
+    <form onsubmit="handleManualInquirySubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Client Full Name *</label>
+          <input type="text" id="manualInqName" class="form-control" required placeholder="e.g. Adv. Amit Saxena / Tata Trust">
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="manualInqEmail" class="form-control" required placeholder="client@domain.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Telephone / WhatsApp *</label>
+          <input type="tel" id="manualInqPhone" class="form-control" required placeholder="+91-98XXXXXXXX">
+        </div>
+        <div class="form-group">
+          <label>Organization / Entity</label>
+          <input type="text" id="manualInqOrg" class="form-control" placeholder="Company / Institution / Individual">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Designated Practice Area</label>
+          <select id="manualInqPractice" class="form-control">
+            <option value="International Commercial Arbitration">International Commercial Arbitration</option>
+            <option value="Corporate & M&A">Corporate &amp; M&amp;A</option>
+            <option value="Commercial Litigation">Commercial Litigation</option>
+            <option value="Banking & Finance">Banking &amp; Finance (DRT / NCLT)</option>
+            <option value="Criminal Law">Criminal Law &amp; White Collar</option>
+            <option value="Real Estate">Real Estate &amp; MahaRERA</option>
+            <option value="Data Privacy & GDPR">Data Privacy &amp; GDPR</option>
+            <option value="Taxation Law">Taxation Law &amp; GST</option>
+            <option value="Maritime & Admiralty">Maritime &amp; Admiralty</option>
+            <option value="Law Journal (LGRLJ)">Law Journal (LGRLJ)</option>
+            <option value="Other">Other Specialized Matter</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Urgency Level</label>
+          <select id="manualInqUrgency" class="form-control">
+            <option value="Routine">Routine</option>
+            <option value="Immediate Attention">Immediate Attention (High Court / Interim Relief)</option>
+            <option value="Urgent">Urgent</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label>Confidential Matter Description &amp; Counterparties *</label>
+        <textarea id="manualInqDesc" class="form-control" rows="4" required placeholder="Factual synopsis, opposite parties, courts involved..."></textarea>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" class="btn btn-outline" onclick="closeNewInquiryModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="manualInqSubmitBtn"><i class="fas fa-save"></i> Save Client Inquiry</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -1067,12 +1359,146 @@ textarea.form-control {
   </div>
 </div>
 
+<!-- JOURNAL CREATE MODAL -->
+<div id="journalModal" class="admin-modal-overlay">
+  <div class="admin-modal-box">
+    <button class="modal-close-btn" onclick="closeJournalModal()">&times;</button>
+    <h3 style="font-family:var(--font-serif); font-size:24px; margin-bottom:16px;">Add Law Journal Publication</h3>
+    <form onsubmit="handleSaveJournal(event)">
+      <div class="form-group">
+        <label>Journal Title *</label>
+        <input type="text" id="jTitle" class="form-control" required value="Lex Global Review of Law and Justice (LGRLJ)">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div class="form-group">
+          <label>Volume &amp; Issue *</label>
+          <input type="text" id="jSubtitle" class="form-control" required placeholder="e.g. Volume 1 · Issue 2">
+        </div>
+        <div class="form-group">
+          <label>Publication Year</label>
+          <input type="text" id="jYear" class="form-control" value="2026">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Cover Image URL</label>
+        <input type="text" id="jImage" class="form-control" value="lexjournal.jpeg">
+      </div>
+      <div class="form-group">
+        <label>Issue / Read Online URL</label>
+        <input type="url" id="jIssueUrl" class="form-control" placeholder="https://www.lexglobalreview.org/index.php/lgrlj/issue/view/1">
+      </div>
+      <div class="form-group">
+        <label>Tagline / Subtitle</label>
+        <input type="text" id="jTagline" class="form-control" value="“Justice · Scholarship · Integrity · Excellence” — An International Peer-Reviewed Law Journal">
+      </div>
+      <div class="form-group">
+        <label>Editorial Summary *</label>
+        <textarea id="jDescription" class="form-control" rows="4" required placeholder="Brief description of this journal issue..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; height:42px;">Publish Journal Issue</button>
+    </form>
+  </div>
+</div>
+
+<!-- PASTE MEETUP PHOTO MODAL -->
+<div id="galleryModal" class="admin-modal-overlay">
+  <div class="admin-modal-box">
+    <button class="modal-close-btn" onclick="closeGalleryModal()">&times;</button>
+    <h3 style="font-family:var(--font-serif); font-size:24px; margin-bottom:6px;">Paste Meetup Photo</h3>
+    <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Photos pasted here appear immediately in the website Meetup &amp; Conference Gallery. Visitors cannot upload photos from the public site.</p>
+
+    <form onsubmit="handleSaveGallery(event)">
+      <div class="form-group">
+        <label>1. Paste Photo from Clipboard (Default — Ctrl+V / Cmd+V)</label>
+        <div id="gPasteZone" tabindex="0" style="border:2px dashed var(--primary); background:rgba(245,192,12,0.06); border-radius:6px; padding:22px 16px; text-align:center; cursor:pointer; outline:none; transition:background 0.2s;" onclick="document.getElementById('gPasteZone').focus()">
+          <i class="fas fa-paste" style="font-size:26px; color:var(--primary); display:block; margin-bottom:8px;"></i>
+          <strong style="font-size:14px; color:#fff; display:block;">Click here &amp; press Ctrl+V (or Cmd+V) to paste copied photo</strong>
+          <span style="font-size:12px; color:#94a3b8; display:block; margin-top:4px;">Supports screenshots, copied images from WhatsApp/Web/Gallery, or drag-and-drop</span>
+          <div style="margin-top:10px;">
+            <label for="gFileInput" class="btn btn-outline btn-sm" style="cursor:pointer; margin:0;" onclick="event.stopPropagation()">
+              <i class="fas fa-folder-open"></i> Or Choose Image File
+            </label>
+            <input type="file" id="gFileInput" accept="image/*" style="display:none;" onchange="handleGalleryFileSelect(event)">
+          </div>
+        </div>
+      </div>
+
+      <div id="gPreviewWrap" style="display:none; margin-bottom:16px; background:#0f172a; border:1px solid var(--border-color); border-radius:6px; padding:10px; text-align:center;">
+        <img id="gPreviewImg" src="" alt="Pasted preview" style="max-height:220px; max-width:100%; border-radius:4px; object-fit:contain; display:inline-block;">
+        <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#10b981;">
+          <span><i class="fas fa-check-circle"></i> Photo ready to publish</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="clearGalleryPhotoDraft()">Clear Photo</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="gImageUrl">Or Paste Direct Image URL</label>
+        <input type="text" id="gImageUrl" class="form-control" placeholder="https://... or image filename (e.g. meetup1.jpeg)" oninput="handleGalleryUrlInput()">
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div class="form-group">
+          <label for="gTitle">Photo Title *</label>
+          <input type="text" id="gTitle" class="form-control" required placeholder="e.g. Mumbai Legal Conclave 2026">
+        </div>
+        <div class="form-group">
+          <label for="gEventName">Meetup / Event Name</label>
+          <input type="text" id="gEventName" class="form-control" placeholder="e.g. Annual Arbitration Meetup">
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div class="form-group">
+          <label for="gLocation">City / Venue</label>
+          <input type="text" id="gLocation" class="form-control" placeholder="e.g. Mumbai, BKC">
+        </div>
+        <div class="form-group">
+          <label for="gDate">Meetup Date</label>
+          <input type="date" id="gDate" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="gCaption">Short Caption (Optional)</label>
+        <textarea id="gCaption" class="form-control" rows="2" placeholder="Brief note about this meetup photo..."></textarea>
+      </div>
+
+      <button type="submit" id="gSaveBtn" class="btn btn-primary" style="width:100%; justify-content:center; height:44px; font-weight:700;">
+        <i class="fas fa-check-circle" style="margin-right:6px;"></i> Publish Photo to Website Gallery
+      </button>
+    </form>
+  </div>
+</div>
+
 <!-- ORDER TAX INVOICE MODAL -->
 <div id="orderInvoiceModal" class="admin-modal-overlay">
   <div class="admin-modal-box" style="max-width:720px; background:#fff; color:#0f172a; padding:28px; border-radius:8px; box-shadow:0 20px 40px rgba(0,0,0,0.3);">
     <button class="modal-close-btn" style="color:#0f172a; font-size:24px;" onclick="closeOrderInvoiceModal()">&times;</button>
     <div id="orderInvoiceModalBody"></div>
   </div>
+</div>
+
+<!-- CUSTOM IN-APP CONFIRMATION DIALOG (WORKS INSIDE IFRAMES) -->
+<div id="adminConfirmModal" class="admin-confirm-overlay" role="dialog" aria-modal="true">
+  <div class="admin-confirm-box">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+      <div style="width:38px; height:38px; border-radius:50%; background:rgba(239,68,68,0.16); color:#fca5a5; display:grid; place-items:center; flex-shrink:0;">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h3 id="adminConfirmTitle" style="font-family:var(--font-serif); font-size:21px; color:#fff; margin:0;">Confirm Action</h3>
+    </div>
+    <p id="adminConfirmMessage" style="font-size:14px; color:#cbd5e1; margin-bottom:22px; line-height:1.55;">Are you sure you want to proceed?</p>
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button type="button" id="adminConfirmCancelBtn" class="btn btn-outline btn-sm">Cancel</button>
+      <button type="button" id="adminConfirmOkBtn" class="btn btn-danger btn-sm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- NON-BLOCKING ADMIN TOAST -->
+<div id="adminToast" class="admin-toast" role="status" aria-live="polite">
+  <i id="adminToastIcon" class="fas fa-check-circle"></i>
+  <span id="adminToastText"></span>
 </div>
 
 <script>
@@ -1084,6 +1510,10 @@ let currentCourses = [];
 let currentEnrollments = [];
 let currentOrders = [];
 let currentBlogs = [];
+let currentJournals = [];
+let currentGallery = [];
+let pastedGalleryImageData = '';
+let currentSiteSettings = { showJournal: true, showLegalHub: true, showAcademy: true, showGallery: true };
 let activeInquiryModalId = null;
 let activeInvoiceOrderId = null;
 
@@ -1092,6 +1522,62 @@ const SEED_INQUIRIES = [];
 const SEED_ENROLLMENTS = [];
 const SEED_COURSES = [];
 const SEED_BLOGS = [];
+const SEED_JOURNALS = [];
+const SEED_GALLERY = [];
+
+let adminToastTimer = null;
+function showAdminNotice(message, type = 'success') {
+  const toast = document.getElementById('adminToast');
+  const icon = document.getElementById('adminToastIcon');
+  const text = document.getElementById('adminToastText');
+  if (!toast || !text) return;
+  toast.className = 'admin-toast is-visible' + (type === 'error' ? ' toast-error' : (type === 'warning' ? ' toast-warning' : ''));
+  if (icon) {
+    icon.className = type === 'error' ? 'fas fa-exclamation-circle' : (type === 'warning' ? 'fas fa-info-circle' : 'fas fa-check-circle');
+    icon.style.color = type === 'error' ? '#ef4444' : (type === 'warning' ? '#f59e0b' : '#10b981');
+  }
+  text.textContent = message;
+  clearTimeout(adminToastTimer);
+  adminToastTimer = setTimeout(() => { toast.classList.remove('is-visible'); }, 3500);
+}
+
+let confirmResolver = null;
+function showConfirmDialog(title, message, confirmLabel = 'Delete') {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('adminConfirmModal');
+    const titleEl = document.getElementById('adminConfirmTitle');
+    const msgEl = document.getElementById('adminConfirmMessage');
+    const okBtn = document.getElementById('adminConfirmOkBtn');
+    const cancelBtn = document.getElementById('adminConfirmCancelBtn');
+    if (!modal || !okBtn || !cancelBtn) { resolve(false); return; }
+
+    if (confirmResolver) {
+      confirmResolver(false);
+      confirmResolver = null;
+    }
+
+    titleEl.textContent = title || 'Confirm Deletion';
+    msgEl.textContent = message || 'Are you sure you want to delete this item?';
+    okBtn.textContent = confirmLabel || 'Delete';
+    confirmResolver = resolve;
+
+    const cleanup = (result) => {
+      modal.classList.remove('is-active');
+      okBtn.onclick = null;
+      cancelBtn.onclick = null;
+      if (confirmResolver) {
+        const fn = confirmResolver;
+        confirmResolver = null;
+        fn(result);
+      }
+    };
+
+    okBtn.onclick = () => cleanup(true);
+    cancelBtn.onclick = () => cleanup(false);
+    modal.classList.add('is-active');
+    okBtn.focus();
+  });
+}
 
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
@@ -1111,25 +1597,46 @@ async function apiFetch(endpoint, options = {}) {
   }
   try {
     const controller = new AbortController();
-    const tid = setTimeout(() => controller.abort(), 3500);
+    const tid = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers, signal: controller.signal });
     clearTimeout(tid);
     if (res.ok) return res;
+    if (res.status === 401 && options.method && options.method !== 'GET') {
+      showAdminNotice('Session expired on server. Please Sign Out and Sign In again to save changes.', 'error');
+    }
   } catch (err) {}
   return null;
 }
 
 async function checkAuth() {
   if (!authToken) { showLogin(); return; }
-  if (authToken.startsWith('lga-standalone-') || authToken.startsWith('local-')) { showApp(); loadAllData(); return; }
   try {
     const res = await apiFetch('/api/auth/verify');
     if (res && res.ok) {
       const data = await res.json();
-      if (data.authenticated) { showApp(); loadAllData(); return; }
+      if (data.authenticated) {
+        showApp();
+        loadAllData();
+        return;
+      }
     }
   } catch (e) {}
-  showApp(); loadAllData();
+
+  if (authToken.startsWith('lga-standalone-') || authToken.startsWith('local-')) {
+    showApp();
+    loadAllData();
+    return;
+  }
+
+  // Token was rejected by backend — clear and prompt re-authentication
+  authToken = '';
+  localStorage.removeItem('lex_admin_token');
+  const alertEl = document.getElementById('loginAlert');
+  if (alertEl) {
+    alertEl.textContent = 'Previous session expired. Please enter management credentials.';
+    alertEl.style.display = 'block';
+  }
+  showLogin();
 }
 
 function showLogin() {
@@ -1184,7 +1691,7 @@ async function handleLogin(e) {
   let authenticated = false;
   try {
     const controller = new AbortController();
-    const tid = setTimeout(() => controller.abort(), 2500);
+    const tid = setTimeout(() => controller.abort(), 6000);
     const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1253,17 +1760,20 @@ function logout(isTimeout = false) {
 }
 
 function switchTab(tabName) {
-  const tabs = ['dashboard', 'orders', 'inquiries', 'courses', 'blogs', 'settings'];
+  const tabs = ['dashboard', 'orders', 'inquiries', 'courses', 'blogs', 'gallery', 'settings'];
   tabs.forEach(t => {
     const el = document.getElementById(`tab-${t}`);
     if (el) el.style.display = (t === tabName) ? 'block' : 'none';
   });
-  document.querySelectorAll('.sidebar .nav-item').forEach(item => item.classList.remove('active'));
-  event?.currentTarget?.classList.add('active');
+  document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+    item.classList.remove('active');
+    const onclickAttr = item.getAttribute('onclick') || '';
+    if (onclickAttr.includes(`'${tabName}'`)) item.classList.add('active');
+  });
 }
 
 async function loadAllData() {
-  await Promise.all([loadOrders(), loadInquiries(), loadCourses(), loadEnrollments(), loadBlogs(), loadStats()]);
+  await Promise.all([loadOrders(), loadInquiries(), loadCourses(), loadEnrollments(), loadBlogs(), loadJournals(), loadGallery(), loadSiteSettings(), loadGatewaySettings(), loadStats()]);
   updateModeDisplay();
   loadRazorpaySettingsUI();
 }
@@ -1284,21 +1794,25 @@ function updateModeDisplay() {
 
 async function loadStats() {
   const totalRevenue = currentOrders.reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
+  const totalPubs = currentBlogs.length + currentJournals.length;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('kpiRevenue', '₹' + totalRevenue.toLocaleString());
   set('kpiOrders', currentOrders.length);
   set('kpiInquiries', currentInquiries.length);
   set('kpiCourses', currentCourses.length);
-  set('kpiPosts', currentBlogs.length);
+  set('kpiPosts', totalPubs);
+  set('kpiGallery', currentGallery.length);
   set('ordersTotalRevenue', '₹' + totalRevenue.toLocaleString());
   set('ordersTotalCount', currentOrders.length);
   set('badgeOrdersCount', currentOrders.length);
   set('badgeInquiriesCount', currentInquiries.filter(i => i.status === 'New').length || currentInquiries.length);
   set('badgeCoursesCount', currentCourses.length);
+  set('badgeBlogsCount', totalPubs);
+  set('badgeGalleryCount', currentGallery.length);
 }
 
 // ==================== ORDERS ====================
-async function loadOrders() {
+async function loadOrders(showToast = false) {
   let loaded = false;
   const res = await apiFetch('/api/courses/orders');
   if (res) {
@@ -1310,6 +1824,8 @@ async function loadOrders() {
   }
   renderOrdersTable();
   renderDashboardOrders();
+  loadStats();
+  if (showToast) showAdminNotice('Orders registry refreshed.');
 }
 
 function renderDashboardOrders() {
@@ -1385,10 +1901,35 @@ function openOrderInvoiceModal(orderId) {
     </table>
     <div style="background:#f1f5f9; border-radius:4px; padding:10px 14px; font-size:11px; color:#64748b; margin-bottom:20px;"><i class="fas fa-check-shield" style="color:#10b981;"></i> Payment processed via <strong>${escapeHtml(o.paymentMethod || 'Razorpay')}</strong>. Transaction Reference: <code>${escapeHtml(o.paymentId || 'N/A')}</code>.</div>
     <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
-      <button type="button" class="btn btn-outline" onclick="window.print()" style="background:#0c0e12; color:#fff; border:none;"><i class="fas fa-print" style="margin-right:6px;"></i> Print Tax Invoice</button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-outline" onclick="printInvoiceModal()" style="background:#0c0e12; color:#fff; border:none;"><i class="fas fa-print" style="margin-right:6px;"></i> Print Tax Invoice</button>
+        <button type="button" class="btn btn-outline" onclick="downloadInvoiceHtml('${escapeHtml(o.orderId || o.id)}')" style="border-color:#cbd5e1; color:#0f172a;"><i class="fas fa-download" style="margin-right:6px;"></i> Download Invoice</button>
+      </div>
       <button type="button" class="btn btn-primary" onclick="closeOrderInvoiceModal()">Close</button>
     </div>`;
   modal.classList.add('is-active');
+}
+
+function printInvoiceModal() {
+  try {
+    window.print();
+  } catch (e) {
+    showAdminNotice('Use Download Invoice to save an offline copy.', 'warning');
+  }
+}
+
+function downloadInvoiceHtml(orderId) {
+  const body = document.getElementById('orderInvoiceModalBody');
+  if (!body) return;
+  const htmlDoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Tax Invoice - ${escapeHtml(orderId)}</title><style>body{font-family:Arial,sans-serif;padding:32px;color:#0f172a;max-width:780px;margin:0 auto;}button{display:none!important;}</style></head><body>${body.innerHTML}</body></html>`;
+  const blob = new Blob([htmlDoc], { type: 'text/html' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `invoice-${String(orderId || 'order').replace(/[^a-z0-9_-]/gi, '')}.html`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+  showAdminNotice('Tax invoice downloaded.');
 }
 
 function closeOrderInvoiceModal() {
@@ -1398,17 +1939,19 @@ function closeOrderInvoiceModal() {
 }
 
 async function deleteOrder(orderId) {
-  if (!confirm('Are you sure you wish to delete this order record?')) return;
+  const confirmed = await showConfirmDialog('Delete Order Record', 'Are you sure you wish to delete this order record?', 'Delete Order');
+  if (!confirmed) return;
   currentOrders = currentOrders.filter(o => o.orderId !== orderId && o.id !== orderId);
   localStorage.setItem('lga_course_orders', JSON.stringify(currentOrders));
   renderOrdersTable();
   renderDashboardOrders();
   loadStats();
-  apiFetch(`/api/courses/orders/${orderId}`, { method: 'DELETE' });
+  await apiFetch(`/api/courses/orders/${encodeURIComponent(orderId)}`, { method: 'DELETE' });
+  showAdminNotice('Order record deleted.');
 }
 
 function exportOrdersCSV() {
-  if (!currentOrders.length) { alert('No course orders available to export.'); return; }
+  if (!currentOrders.length) { showAdminNotice('No course orders available to export.', 'warning'); return; }
   const headers = ['Order ID', 'Date', 'Student ID', 'Buyer Name', 'Email', 'Phone', 'Organization', 'Course Title', 'Track', 'Amount', 'Currency', 'Payment Method', 'Payment ID', 'Status'];
   const rows = currentOrders.map(o => [sanitizeCsvCell(o.orderId || o.id), sanitizeCsvCell(o.timestamp || ''), sanitizeCsvCell(o.studentId || ''), sanitizeCsvCell(o.buyerName || ''), sanitizeCsvCell(o.buyerEmail || ''), sanitizeCsvCell(o.buyerPhone || ''), sanitizeCsvCell(o.organization || ''), sanitizeCsvCell(o.courseTitle || ''), sanitizeCsvCell(o.learningTrack || ''), sanitizeCsvCell(o.amount || 0), sanitizeCsvCell(o.currency || 'INR'), sanitizeCsvCell(o.paymentMethod || ''), sanitizeCsvCell(o.paymentId || ''), sanitizeCsvCell(o.paymentStatus || 'Paid')]);
   const csvContent = 'data:text/csv;charset=utf-8,' + [headers.map(sanitizeCsvCell).join(','), ...rows.map(e => e.join(','))].join('\n');
@@ -1416,6 +1959,7 @@ function exportOrdersCSV() {
   link.setAttribute('href', encodeURI(csvContent));
   link.setAttribute('download', `lex-global-orders-${new Date().toISOString().slice(0,10)}.csv`);
   document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  showAdminNotice('Orders CSV exported.');
 }
 
 // Razorpay settings
@@ -1446,25 +1990,47 @@ function saveRazorpaySettings() {
 }
 
 // ==================== INQUIRIES ====================
-async function loadInquiries() {
+async function loadInquiries(showToast = false) {
   let loaded = false;
   const res = await apiFetch('/api/inquiries');
   if (res) {
-    try { const data = await res.json(); if (Array.isArray(data)) { currentInquiries = data; localStorage.setItem('lga_client_inquiries', JSON.stringify(currentInquiries)); loaded = true; } } catch (e) {}
+    try {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        currentInquiries = data;
+        // Merge with locally stored inquiries by ID
+        const local = JSON.parse(localStorage.getItem('lga_client_inquiries') || '[]');
+        const ids = new Set(currentInquiries.map(i => i.id));
+        for (const l of local) {
+          if (!ids.has(l.id)) {
+            currentInquiries.push(l);
+            ids.add(l.id);
+          }
+        }
+        localStorage.setItem('lga_client_inquiries', JSON.stringify(currentInquiries));
+        loaded = true;
+      }
+    } catch (e) {}
   }
   if (!loaded) {
     const local = localStorage.getItem('lga_client_inquiries');
-    if (local) { try { currentInquiries = JSON.parse(local); } catch (e) {} } else currentInquiries = [...SEED_INQUIRIES];
+    if (local) {
+      try { currentInquiries = JSON.parse(local); } catch (e) {}
+    } else {
+      currentInquiries = [...SEED_INQUIRIES];
+    }
   }
   renderInquiriesTable();
   renderDashboardInquiries();
+  loadStats();
+  if (showToast) showAdminNotice('Client inquiries refreshed.');
 }
 
 function renderDashboardInquiries() {
   const tbody = document.getElementById('dashInquiriesTableBody');
   if (!tbody) return;
   const recent = currentInquiries.slice(0, 5);
-  if (!recent.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#777;">No inquiries registered yet.</td></tr>'; return; }
+  if (!recent.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#777; padding:20px;">No inquiries registered yet.</td></tr>'; return; }
   tbody.innerHTML = recent.map(inq => `
     <tr>
       <td style="color:#aaa; font-size:12px;">${inq.createdAt ? new Date(inq.createdAt).toLocaleDateString() : 'Recent'}</td>
@@ -1482,15 +2048,15 @@ function renderInquiriesTable() {
   const q = (document.getElementById('inquirySearchInput')?.value || '').toLowerCase().trim();
   const statusFilter = document.getElementById('inquiryStatusFilter')?.value || '';
   const filtered = currentInquiries.filter(i => {
-    const text = (i.name + ' ' + i.email + ' ' + (i.organization||'') + ' ' + (i.description||'')).toLowerCase();
+    const text = (i.name + ' ' + i.email + ' ' + (i.phone||'') + ' ' + (i.organization||'') + ' ' + (i.description||'') + ' ' + (i.practiceArea||'')).toLowerCase();
     return (!q || text.includes(q)) && (!statusFilter || i.status === statusFilter);
   });
-  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#777; padding:30px;">No matching inquiries found.</td></tr>'; return; }
+  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#777; padding:30px;">No matching client inquiries found.</td></tr>'; return; }
   tbody.innerHTML = filtered.map(inq => `
     <tr>
-      <td style="font-size:12px; color:#aaa;">${inq.createdAt ? new Date(inq.createdAt).toLocaleString() : 'N/A'}</td>
-      <td><strong>${escapeHtml(inq.name)}</strong><br><a href="mailto:${escapeHtml(inq.email)}" style="font-size:12px;">${escapeHtml(inq.email)}</a></td>
-      <td>${escapeHtml(inq.organization || 'Individual')}</td>
+      <td style="font-size:12px; color:#aaa;">${inq.createdAt ? new Date(inq.createdAt).toLocaleString() : 'N/A'}<br><code style="font-size:11px; color:#94a3b8;">${escapeHtml(inq.id)}</code></td>
+      <td><strong>${escapeHtml(inq.name)}</strong><br><a href="mailto:${escapeHtml(inq.email)}" style="font-size:12px; color:var(--primary);">${escapeHtml(inq.email)}</a>${inq.phone ? `<br><a href="tel:${escapeHtml(inq.phone)}" style="font-size:11px; color:#94a3b8;">${escapeHtml(inq.phone)}</a>` : ''}</td>
+      <td>${escapeHtml(inq.organization || 'Individual Party')}</td>
       <td>${escapeHtml(inq.practiceArea)}</td>
       <td><span class="badge ${inq.urgency === 'Urgent' || inq.urgency === 'Immediate Attention' ? 'badge-urgent' : 'badge-new'}">${escapeHtml(inq.urgency || 'Routine')}</span></td>
       <td>
@@ -1500,7 +2066,12 @@ function renderInquiriesTable() {
           <option value="Cleared" ${inq.status === 'Cleared' ? 'selected' : ''}>Cleared</option>
         </select>
       </td>
-      <td><div style="display:flex; gap:6px;"><button class="btn btn-outline btn-sm" onclick="openInquiryModal('${inq.id}')"><i class="fas fa-eye"></i></button><button class="btn btn-danger btn-sm" onclick="deleteInquiry('${inq.id}')"><i class="fas fa-trash"></i></button></div></td>
+      <td>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="openInquiryModal('${inq.id}')" title="View Full Intake"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="deleteInquiry('${inq.id}')" title="Delete Record"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
     </tr>`).join('');
 }
 
@@ -1511,17 +2082,20 @@ async function updateInquiryStatus(id, newStatus) {
   renderInquiriesTable();
   renderDashboardInquiries();
   loadStats();
-  apiFetch(`/api/inquiries/${id}`, { method: 'PUT', body: JSON.stringify({ status: newStatus }) });
+  await apiFetch(`/api/inquiries/${encodeURIComponent(id)}`, { method: 'PUT', body: JSON.stringify({ status: newStatus }) });
+  showAdminNotice('Inquiry status updated.');
 }
 
 async function deleteInquiry(id) {
-  if (!confirm('Are you sure you wish to delete this inquiry record?')) return;
+  const confirmed = await showConfirmDialog('Delete Inquiry Record', 'Are you sure you wish to delete this inquiry record?', 'Delete Inquiry');
+  if (!confirmed) return;
   currentInquiries = currentInquiries.filter(x => x.id !== id);
   localStorage.setItem('lga_client_inquiries', JSON.stringify(currentInquiries));
   renderInquiriesTable();
   renderDashboardInquiries();
   loadStats();
-  apiFetch(`/api/inquiries/${id}`, { method: 'DELETE' });
+  await apiFetch(`/api/inquiries/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  showAdminNotice('Inquiry record deleted.');
 }
 
 function openInquiryModal(id) {
@@ -1529,23 +2103,118 @@ function openInquiryModal(id) {
   if (!inq) return;
   activeInquiryModalId = id;
   document.getElementById('modalInquiryName').textContent = inq.name;
-  document.getElementById('modalInquiryMeta').innerHTML = `<strong>Email:</strong> ${escapeHtml(inq.email)} &bull; <strong>Phone:</strong> ${escapeHtml(inq.phone || 'None provided')} &bull; <strong>Practice:</strong> ${escapeHtml(inq.practiceArea)} &bull; <strong>Organization:</strong> ${escapeHtml(inq.organization || 'Individual')}`;
+  document.getElementById('modalInquiryMeta').innerHTML = `
+    <strong>Email:</strong> <a href="mailto:${escapeHtml(inq.email)}" style="color:var(--primary); font-weight:700;">${escapeHtml(inq.email)}</a> &bull;
+    <strong>Phone:</strong> <a href="tel:${escapeHtml(inq.phone || '')}" style="color:var(--primary); font-weight:700;">${escapeHtml(inq.phone || 'None')}</a> &bull;
+    <strong>Practice:</strong> ${escapeHtml(inq.practiceArea)} &bull;
+    <strong>Organization:</strong> ${escapeHtml(inq.organization || 'Individual')} &bull;
+    <strong>Submitted:</strong> ${inq.createdAt ? new Date(inq.createdAt).toLocaleString() : 'Recent'}
+  `;
   document.getElementById('modalInquiryDesc').textContent = inq.description || inq.message || 'No description entered.';
   document.getElementById('modalInquiryStatusSelect').value = inq.status || 'New';
+
+  const ns = inq.notificationStatus;
+  const gwInfo = document.getElementById('modalInquiryGatewayInfo');
+  if (gwInfo) {
+    if (ns) {
+      gwInfo.innerHTML = `<strong style="color:var(--primary);"><i class="fas fa-paper-plane" style="margin-right:6px;"></i>Gateway Dispatch Log:</strong> Email (${escapeHtml(ns.emailTarget || 'dp.lexglobaladvocacy@gmail.com')}): <code>${escapeHtml(ns.emailStatus || 'logged')}</code> &bull; WhatsApp (${escapeHtml(ns.whatsappTarget || '+919307373024')}): <code>${escapeHtml(ns.whatsappStatus || 'logged')}</code>`;
+    } else {
+      gwInfo.innerHTML = `<strong style="color:var(--primary);"><i class="fas fa-paper-plane" style="margin-right:6px;"></i>Gateway Target:</strong> Email: <code>dp.lexglobaladvocacy@gmail.com</code> &bull; WhatsApp: <code>+91-9307373024</code>`;
+    }
+  }
+
+  const waBtn = document.getElementById('modalInquiryWaForwardBtn');
+  if (waBtn) {
+    const waTargetDigits = String(currentGatewaySettings?.notifyWhatsapp || '919307373024').replace(/\D+/g, '') || '919307373024';
+    const waText = `*LEX GLOBAL ADVOCACY LLP — Client Request*\nRef: ${inq.id}\nName: ${inq.name}\nEmail: ${inq.email}\nPhone: ${inq.phone || 'N/A'}\nPractice: ${inq.practiceArea}\nMatter: ${inq.description || inq.message || ''}`;
+    waBtn.href = `https://wa.me/${waTargetDigits}?text=${encodeURIComponent(waText)}`;
+  }
+
+  const replyBtn = document.getElementById('modalInquiryReplyBtn');
+  if (replyBtn) {
+    replyBtn.href = inq.email ? `mailto:${encodeURIComponent(inq.email)}?subject=${encodeURIComponent('Confidential Privileged Response: ' + inq.practiceArea + ' [Ref: ' + inq.id + ']')}` : '#';
+    replyBtn.style.display = inq.email ? 'inline-flex' : 'none';
+  }
+  const callBtn = document.getElementById('modalInquiryCallBtn');
+  if (callBtn) {
+    callBtn.href = inq.phone ? `tel:${encodeURIComponent(inq.phone)}` : '#';
+    callBtn.style.display = inq.phone ? 'inline-flex' : 'none';
+  }
+
   document.getElementById('inquiryModal').classList.add('is-active');
 }
+
 function closeInquiryModal() {
   document.getElementById('inquiryModal').classList.remove('is-active');
   activeInquiryModalId = null;
 }
+
 async function saveInquiryStatusFromModal() {
   if (!activeInquiryModalId) return;
   await updateInquiryStatus(activeInquiryModalId, document.getElementById('modalInquiryStatusSelect').value);
   closeInquiryModal();
 }
 
+function openNewInquiryModal() {
+  const modal = document.getElementById('newInquiryModal');
+  if (modal) modal.classList.add('is-active');
+}
+function closeNewInquiryModal() {
+  const modal = document.getElementById('newInquiryModal');
+  if (modal) modal.classList.remove('is-active');
+}
+
+async function handleManualInquirySubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('manualInqSubmitBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
+
+  const name = document.getElementById('manualInqName')?.value.trim();
+  const email = document.getElementById('manualInqEmail')?.value.trim();
+  const phone = document.getElementById('manualInqPhone')?.value.trim();
+  const organization = document.getElementById('manualInqOrg')?.value.trim() || 'Individual Party';
+  const practiceArea = document.getElementById('manualInqPractice')?.value || 'General Legal Practice';
+  const urgency = document.getElementById('manualInqUrgency')?.value || 'Routine';
+  const description = document.getElementById('manualInqDesc')?.value.trim();
+
+  const newRecord = {
+    id: 'inq-' + Date.now(),
+    name,
+    email,
+    phone,
+    organization,
+    practiceArea,
+    urgency,
+    description,
+    message: description,
+    createdAt: new Date().toISOString(),
+    status: 'New'
+  };
+
+  currentInquiries.unshift(newRecord);
+  localStorage.setItem('lga_client_inquiries', JSON.stringify(currentInquiries));
+  renderInquiriesTable();
+  renderDashboardInquiries();
+  loadStats();
+
+  try {
+    const res = await apiFetch('/api/contact', {
+      method: 'POST',
+      body: JSON.stringify(newRecord)
+    });
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data.id) newRecord.id = data.id;
+    }
+  } catch (err) {}
+
+  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Client Inquiry'; }
+  closeNewInquiryModal();
+  e.target.reset();
+}
+
 function exportInquiriesCSV() {
-  if (!currentInquiries.length) { alert('No inquiries available to export.'); return; }
+  if (!currentInquiries.length) { showAdminNotice('No inquiries available to export.', 'warning'); return; }
   const headers = ['ID', 'Date', 'Name', 'Email', 'Phone', 'Organization', 'Practice Area', 'Urgency', 'Status', 'Description'];
   const rows = currentInquiries.map(i => [sanitizeCsvCell(i.id), sanitizeCsvCell(i.createdAt || ''), sanitizeCsvCell(i.name || ''), sanitizeCsvCell(i.email || ''), sanitizeCsvCell(i.phone || ''), sanitizeCsvCell(i.organization || ''), sanitizeCsvCell(i.practiceArea || ''), sanitizeCsvCell(i.urgency || ''), sanitizeCsvCell(i.status || ''), sanitizeCsvCell(i.description || i.message || '')]);
   const csvContent = 'data:text/csv;charset=utf-8,' + [headers.map(sanitizeCsvCell).join(','), ...rows.map(e => e.join(','))].join('\n');
@@ -1553,10 +2222,11 @@ function exportInquiriesCSV() {
   link.setAttribute('href', encodeURI(csvContent));
   link.setAttribute('download', `lex-global-inquiries-${new Date().toISOString().slice(0,10)}.csv`);
   document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  showAdminNotice('Client inquiries CSV exported.');
 }
 
 // ==================== COURSES ====================
-async function loadCourses() {
+async function loadCourses(showToast = false) {
   let loaded = false;
   const res = await apiFetch('/api/courses');
   if (res) {
@@ -1567,6 +2237,8 @@ async function loadCourses() {
     if (local) { try { currentCourses = JSON.parse(local); } catch(e) {} } else currentCourses = [...SEED_COURSES];
   }
   renderCoursesTable();
+  loadStats();
+  if (showToast) showAdminNotice('Academy courses refreshed.');
 }
 
 function renderCoursesTable() {
@@ -1691,21 +2363,30 @@ async function handleSaveCourse(e) {
     published: true
   };
 
+  const res = await apiFetch('/api/courses', { method: 'POST', body: JSON.stringify(newCourse) });
+  if (res) {
+    try {
+      const saved = await res.json();
+      if (saved && saved.id) newCourse.id = saved.id;
+    } catch (err) {}
+  }
   currentCourses.unshift(newCourse);
   localStorage.setItem('lga_academy_courses', JSON.stringify(currentCourses));
   renderCoursesTable();
   loadStats();
   closeCourseModal();
-  apiFetch('/api/courses', { method: 'POST', body: JSON.stringify(newCourse) });
+  showAdminNotice('Masterclass published to website.');
 }
 
 async function deleteCourse(id) {
-  if (!confirm('Are you sure you want to delete this course?')) return;
-  currentCourses = currentCourses.filter(c => c.id !== id);
+  const confirmed = await showConfirmDialog('Delete Masterclass', 'Are you sure you want to delete this course from the website?', 'Delete Course');
+  if (!confirmed) return;
+  currentCourses = currentCourses.filter(c => c.id !== id && c.slug !== id);
   localStorage.setItem('lga_academy_courses', JSON.stringify(currentCourses));
   renderCoursesTable();
   loadStats();
-  apiFetch(`/api/courses/${id}`, { method: 'DELETE' });
+  await apiFetch(`/api/courses/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  showAdminNotice('Masterclass deleted.');
 }
 
 // ==================== ENROLLMENTS ====================
@@ -1761,17 +2442,191 @@ function renderEnrollmentsTable() {
 }
 
 async function deleteEnrollment(id) {
-  if (!confirm('Remove this enrollment record?')) return;
+  const confirmed = await showConfirmDialog('Remove Enrollment', 'Are you sure you want to remove this enrollment record?', 'Remove');
+  if (!confirmed) return;
   currentEnrollments = currentEnrollments.filter(e => e.id !== id);
   localStorage.setItem('lga_academy_enrollments', JSON.stringify(currentEnrollments));
   renderEnrollmentsTable();
   renderDashboardEnrollments();
   loadStats();
-  apiFetch(`/api/enrollments/${id}`, { method: 'DELETE' });
+  await apiFetch(`/api/enrollments/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  showAdminNotice('Enrollment record removed.');
+}
+
+// ==================== SITE SETTINGS & JOURNAL PUBLICATIONS ====================
+async function loadSiteSettings() {
+  let loaded = false;
+  const res = await apiFetch('/api/site-settings');
+  if (res) {
+    try {
+      const data = await res.json();
+      if (data && typeof data === 'object') {
+        currentSiteSettings = { ...currentSiteSettings, ...data };
+        localStorage.setItem('lga_site_settings', JSON.stringify(currentSiteSettings));
+        loaded = true;
+      }
+    } catch (e) {}
+  }
+  if (!loaded) {
+    const local = localStorage.getItem('lga_site_settings');
+    if (local) { try { currentSiteSettings = { ...currentSiteSettings, ...JSON.parse(local) }; } catch (e) {} }
+  }
+  renderSiteSettingsToggles();
+}
+
+function renderSiteSettingsToggles() {
+  const jStatus = document.getElementById('statusShowJournal');
+  const jBtn = document.getElementById('toggleShowJournalBtn');
+  if (jStatus && jBtn) {
+    const on = currentSiteSettings.showJournal !== false;
+    jStatus.textContent = on ? 'Visible on public site' : 'Hidden from public site';
+    jStatus.style.color = on ? '#10b981' : '#f59e0b';
+    jBtn.textContent = on ? 'Hide Section' : 'Show Section';
+  }
+  const hStatus = document.getElementById('statusShowLegalHub');
+  const hBtn = document.getElementById('toggleShowLegalHubBtn');
+  if (hStatus && hBtn) {
+    const on = currentSiteSettings.showLegalHub !== false;
+    hStatus.textContent = on ? 'Visible on public site' : 'Hidden from public site';
+    hStatus.style.color = on ? '#10b981' : '#f59e0b';
+    hBtn.textContent = on ? 'Hide Section' : 'Show Section';
+  }
+  const galOn = currentSiteSettings.showGallery !== false;
+  document.querySelectorAll('.js-gallery-status').forEach(el => {
+    el.textContent = galOn ? 'Visible on public site' : 'Hidden from public site';
+    el.style.color = galOn ? '#10b981' : '#f59e0b';
+  });
+  document.querySelectorAll('.js-gallery-btn').forEach(btn => {
+    btn.textContent = galOn ? 'Hide Gallery Section' : 'Show Gallery Section';
+  });
+}
+
+async function toggleSiteSetting(key) {
+  currentSiteSettings[key] = currentSiteSettings[key] === false ? true : false;
+  localStorage.setItem('lga_site_settings', JSON.stringify(currentSiteSettings));
+  renderSiteSettingsToggles();
+  await apiFetch('/api/site-settings', { method: 'PUT', body: JSON.stringify(currentSiteSettings) });
+  showAdminNotice('Public website visibility updated.');
+}
+
+async function loadJournals(showToast = false) {
+  let loaded = false;
+  const res = await apiFetch('/api/journals');
+  if (res) {
+    try {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        currentJournals = data;
+        localStorage.setItem('lga_journals', JSON.stringify(currentJournals));
+        loaded = true;
+      }
+    } catch (e) {}
+  }
+  if (!loaded) {
+    const local = localStorage.getItem('lga_journals');
+    if (local) { try { currentJournals = JSON.parse(local); } catch (e) {} }
+    else currentJournals = [...SEED_JOURNALS];
+  }
+  renderJournalsTable();
+  loadStats();
+  if (showToast) showAdminNotice('Law Journal publications refreshed.');
+}
+
+function renderJournalsTable() {
+  const tbody = document.getElementById('journalsTableBody');
+  const delAllBtn = document.getElementById('deleteAllJournalsBtn');
+  if (delAllBtn) delAllBtn.style.display = currentJournals.length ? 'inline-flex' : 'none';
+  if (!tbody) return;
+  if (!currentJournals.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:28px;"><i class="fas fa-book-open" style="font-size:28px; display:block; margin-bottom:8px; opacity:0.6;"></i><strong>No Law Journal publications listed.</strong><div style="font-size:12px; color:#64748b; margin-top:4px;">The Law Journal section is automatically hidden on the website until a journal issue is added.</div></td></tr>';
+    return;
+  }
+  const defaultCover = 'lexjournal.jpeg';
+  tbody.innerHTML = currentJournals.map(j => `
+    <tr>
+      <td>
+        <div class="cell-flex">
+          <img src="${escapeHtml(j.image || defaultCover)}" alt="" class="admin-thumb" onerror="this.src='${defaultCover}'">
+          <div>
+            <strong>${escapeHtml(j.title)}</strong><br>
+            <span style="font-size:12px; color:var(--primary);">${escapeHtml(j.subtitle || '')}</span>
+          </div>
+        </div>
+      </td>
+      <td>${escapeHtml(j.year || '2026')}</td>
+      <td><span class="badge badge-new">${escapeHtml(j.badge || 'Peer-Reviewed')}</span></td>
+      <td><a href="${escapeHtml(j.issueUrl || j.websiteUrl || '#')}" target="_blank" rel="noopener noreferrer" style="font-size:12px;"><i class="fas fa-external-link-alt"></i> View Issue</a></td>
+      <td><span class="badge ${j.published !== false ? 'badge-cleared' : 'badge-review'}">${j.published !== false ? 'Published' : 'Hidden'}</span></td>
+      <td><button type="button" class="btn btn-danger btn-sm" onclick="deleteJournal('${escapeHtml(j.id || j.slug)}')" title="Delete Journal Publication"><i class="fas fa-trash"></i> Delete</button></td>
+    </tr>`).join('');
+}
+
+function openNewJournalModal() {
+  ['jSubtitle', 'jIssueUrl', 'jDescription'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const titleEl = document.getElementById('jTitle'); if (titleEl) titleEl.value = 'Lex Global Review of Law and Justice (LGRLJ)';
+  const yearEl = document.getElementById('jYear'); if (yearEl) yearEl.value = '2026';
+  const imgEl = document.getElementById('jImage'); if (imgEl) imgEl.value = 'lexjournal.jpeg';
+  document.getElementById('journalModal').classList.add('is-active');
+}
+
+function closeJournalModal() {
+  document.getElementById('journalModal').classList.remove('is-active');
+}
+
+async function handleSaveJournal(e) {
+  e.preventDefault();
+  const payload = {
+    id: 'j-' + Date.now(),
+    title: document.getElementById('jTitle').value.trim(),
+    subtitle: document.getElementById('jSubtitle').value.trim(),
+    year: document.getElementById('jYear').value.trim() || '2026',
+    image: document.getElementById('jImage').value.trim() || 'lexjournal.jpeg',
+    issueUrl: document.getElementById('jIssueUrl').value.trim() || 'https://www.lexglobalreview.org',
+    websiteUrl: 'https://www.lexglobalreview.org',
+    tagline: document.getElementById('jTagline').value.trim(),
+    description: document.getElementById('jDescription').value.trim(),
+    badge: 'Peer-Reviewed · ISSN Registered',
+    published: true
+  };
+  const res = await apiFetch('/api/journals', { method: 'POST', body: JSON.stringify(payload) });
+  if (res) {
+    try {
+      const saved = await res.json();
+      if (saved && saved.id) payload.id = saved.id;
+    } catch (err) {}
+  }
+  currentJournals.unshift(payload);
+  localStorage.setItem('lga_journals', JSON.stringify(currentJournals));
+  renderJournalsTable();
+  loadStats();
+  closeJournalModal();
+  showAdminNotice('Law Journal publication published.');
+}
+
+async function deleteJournal(id) {
+  const confirmed = await showConfirmDialog('Delete Law Journal Publication', 'Are you sure you want to delete this Law Journal publication from the website?', 'Delete Publication');
+  if (!confirmed) return;
+  currentJournals = currentJournals.filter(j => j.id !== id && j.slug !== id);
+  localStorage.setItem('lga_journals', JSON.stringify(currentJournals));
+  renderJournalsTable();
+  loadStats();
+  await apiFetch(`/api/journals/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  showAdminNotice('Law Journal publication deleted.');
+}
+
+async function deleteAllJournals() {
+  const confirmed = await showConfirmDialog('Delete All Law Journal Publications', 'Delete ALL Law Journal publications from the website? The Law Journal section will hide automatically until you add a new issue.', 'Delete All');
+  if (!confirmed) return;
+  currentJournals = [];
+  localStorage.setItem('lga_journals', JSON.stringify(currentJournals));
+  renderJournalsTable();
+  loadStats();
+  await apiFetch('/api/journals', { method: 'DELETE' });
+  showAdminNotice('All Law Journal publications deleted.');
 }
 
 // ==================== BLOGS ====================
-async function loadBlogs() {
+async function loadBlogs(showToast = false) {
   let loaded = false;
   const res = await apiFetch('/api/blogs');
   if (res) {
@@ -1782,10 +2637,14 @@ async function loadBlogs() {
     if (local) { try { currentBlogs = JSON.parse(local); } catch (e) {} } else currentBlogs = [...SEED_BLOGS];
   }
   renderBlogsTable();
+  loadStats();
+  if (showToast) showAdminNotice('Legal Hub publications refreshed.');
 }
 
 function renderBlogsTable() {
   const tbody = document.getElementById('blogsTableBody');
+  const delAllBtn = document.getElementById('deleteAllBlogsBtn');
+  if (delAllBtn) delAllBtn.style.display = currentBlogs.length ? 'inline-flex' : 'none';
   if (!tbody) return;
   if (!currentBlogs.length) {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:36px;"><i class="fas fa-newspaper" style="font-size:32px; display:block; margin-bottom:10px; opacity:0.6;"></i><strong>No publications published yet.</strong><div style="font-size:12px; color:#64748b; margin-top:4px;">Publish legal research articles and legal commentary directly to the website.</div><div style="margin-top:14px;"><button class="btn btn-primary btn-sm" onclick="openNewBlogModal()"><i class="fas fa-plus"></i> Publish Article</button></div></td></tr>';
@@ -1808,7 +2667,7 @@ function renderBlogsTable() {
       <td style="font-size:12px; color:#aaa;">${escapeHtml(b.date)}</td>
       <td>${b.views || 0}</td>
       <td><span class="badge ${b.published !== false ? 'badge-cleared' : 'badge-review'}">${b.published !== false ? 'Published' : 'Draft'}</span></td>
-      <td><button class="btn btn-danger btn-sm" onclick="deleteBlog('${b.id}')"><i class="fas fa-trash"></i></button></td>
+      <td><button type="button" class="btn btn-danger btn-sm" onclick="deleteBlog('${escapeHtml(b.id || b.slug)}')"><i class="fas fa-trash"></i> Delete</button></td>
     </tr>`).join('');
 }
 
@@ -1826,7 +2685,6 @@ async function handleSaveBlog(e) {
   e.preventDefault();
   const title = document.getElementById('bTitle').value.trim();
   const subtitle = document.getElementById('bSubtitle').value.trim();
-  // NEW: admin-controlled cover image URL
   const image = document.getElementById('bImage').value.trim();
   const category = document.getElementById('bCategory').value;
   const author = document.getElementById('bAuthor').value.trim();
@@ -1837,7 +2695,7 @@ async function handleSaveBlog(e) {
     id: 'p-' + Date.now(),
     title,
     subtitle,
-    image,   // NEW
+    image,
     category,
     author,
     date: new Date().toISOString().slice(0, 10),
@@ -1847,49 +2705,452 @@ async function handleSaveBlog(e) {
     published: true
   };
 
+  const res = await apiFetch('/api/blogs', { method: 'POST', body: JSON.stringify(newPost) });
+  if (res) {
+    try {
+      const saved = await res.json();
+      if (saved && saved.id) newPost.id = saved.id;
+    } catch (err) {}
+  }
+
   currentBlogs.unshift(newPost);
   localStorage.setItem('lga_publications', JSON.stringify(currentBlogs));
   renderBlogsTable();
   loadStats();
   closeBlogModal();
-  apiFetch('/api/blogs', { method: 'POST', body: JSON.stringify(newPost) });
+  showAdminNotice('Article published to Legal Hub.');
 }
 
 async function deleteBlog(id) {
-  if (!confirm('Are you sure you wish to delete this publication?')) return;
-  currentBlogs = currentBlogs.filter(b => b.id !== id);
+  const confirmed = await showConfirmDialog('Delete Publication', 'Are you sure you wish to delete this publication from the Legal Hub?', 'Delete Publication');
+  if (!confirmed) return;
+  currentBlogs = currentBlogs.filter(b => b.id !== id && b.slug !== id);
   localStorage.setItem('lga_publications', JSON.stringify(currentBlogs));
   renderBlogsTable();
   loadStats();
-  apiFetch(`/api/blogs/${id}`, { method: 'DELETE' });
+  await apiFetch(`/api/blogs/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  showAdminNotice('Publication deleted.');
+}
+
+async function deleteAllBlogs() {
+  const confirmed = await showConfirmDialog('Delete All Legal Hub Publications', 'Delete ALL Legal Hub publications? This cannot be undone.', 'Delete All');
+  if (!confirmed) return;
+  currentBlogs = [];
+  localStorage.setItem('lga_publications', JSON.stringify(currentBlogs));
+  renderBlogsTable();
+  loadStats();
+  await apiFetch('/api/blogs', { method: 'DELETE' });
+  showAdminNotice('All Legal Hub publications deleted.');
+}
+
+// ==================== MEETUP GALLERY (ADMIN-ONLY PASTE) ====================
+async function loadGallery(showToast = false) {
+  let loaded = false;
+  const res = await apiFetch('/api/gallery');
+  if (res) {
+    try {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        currentGallery = data;
+        try { localStorage.setItem('lga_gallery', JSON.stringify(currentGallery)); } catch (e) {}
+        loaded = true;
+      }
+    } catch (e) {}
+  }
+  if (!loaded) {
+    const local = localStorage.getItem('lga_gallery');
+    if (local) { try { currentGallery = JSON.parse(local); } catch (e) {} }
+    else currentGallery = [...SEED_GALLERY];
+  }
+  renderGalleryAdmin();
+  loadStats();
+  if (showToast) showAdminNotice('Meetup gallery refreshed.');
+}
+
+function renderGalleryAdmin() {
+  const grid = document.getElementById('galleryAdminGrid');
+  const delAllBtn = document.getElementById('deleteAllGalleryBtn');
+  if (delAllBtn) delAllBtn.style.display = currentGallery.length ? 'inline-flex' : 'none';
+  if (!grid) return;
+
+  if (!currentGallery.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:42px 20px; border:1px dashed var(--border-color); border-radius:6px;">
+        <i class="fas fa-images" style="font-size:34px; display:block; margin-bottom:10px; opacity:0.65; color:var(--primary);"></i>
+        <strong style="color:#fff; display:block; margin-bottom:4px;">No Meetup Photos Posted Yet</strong>
+        <div style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Click "+ Paste Meetup Photo" and press Ctrl+V / Cmd+V to paste photos straight from your clipboard.</div>
+        <button class="btn btn-primary btn-sm" onclick="openNewGalleryModal()"><i class="fas fa-paste"></i> Paste First Meetup Photo</button>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = currentGallery.map(g => `
+    <div style="background:var(--dark-card); border:1px solid var(--border-color); border-radius:6px; overflow:hidden; display:flex; flex-direction:column;">
+      <div style="aspect-ratio:4/3; background:#090b0f; overflow:hidden;">
+        <img src="${escapeHtml(g.image)}" alt="${escapeHtml(g.title)}" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div style="padding:14px; display:flex; flex-direction:column; gap:6px; flex:1;">
+        <div style="font-size:11px; color:#94a3b8;">${escapeHtml(g.date || '')}${g.location ? ` &middot; ${escapeHtml(g.location)}` : ''}</div>
+        <strong style="font-size:15px; color:#fff;">${escapeHtml(g.title || 'Meetup Highlight')}</strong>
+        ${g.eventName ? `<span style="font-size:12px; color:var(--primary);">${escapeHtml(g.eventName)}</span>` : ''}
+        ${g.caption ? `<p style="font-size:12px; color:#cbd5e1; margin:2px 0 0; line-height:1.5;">${escapeHtml(g.caption)}</p>` : ''}
+        <div style="margin-top:auto; padding-top:10px; display:flex; justify-content:flex-end;">
+          <button class="btn btn-danger btn-sm" onclick="deleteGalleryPhoto('${escapeHtml(g.id)}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setGalleryPreview(imgSrc) {
+  pastedGalleryImageData = imgSrc || '';
+  const wrap = document.getElementById('gPreviewWrap');
+  const imgEl = document.getElementById('gPreviewImg');
+  if (!wrap || !imgEl) return;
+  if (imgSrc) {
+    imgEl.src = imgSrc;
+    wrap.style.display = 'block';
+  } else {
+    imgEl.src = '';
+    wrap.style.display = 'none';
+  }
+}
+
+function clearGalleryPhotoDraft() {
+  const urlEl = document.getElementById('gImageUrl');
+  const fileEl = document.getElementById('gFileInput');
+  if (urlEl) urlEl.value = '';
+  if (fileEl) fileEl.value = '';
+  setGalleryPreview('');
+}
+
+function processImageBlobToDataUrl(blob) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result || '');
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 1600;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+          else { w = Math.round((w * maxDim) / h); h = maxDim; }
+        }
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.86));
+        } catch (err) {
+          resolve(dataUrl);
+        }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    };
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function handleGalleryFileSelect(e) {
+  const file = e.target?.files?.[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const dataUrl = await processImageBlobToDataUrl(file);
+  const urlEl = document.getElementById('gImageUrl');
+  if (urlEl) urlEl.value = '';
+  setGalleryPreview(dataUrl);
+}
+
+function handleGalleryUrlInput() {
+  const val = (document.getElementById('gImageUrl')?.value || '').trim();
+  if (val) setGalleryPreview(val);
+  else if (!pastedGalleryImageData.startsWith('data:image/')) setGalleryPreview('');
+}
+
+async function handleGalleryModalPaste(e) {
+  const modal = document.getElementById('galleryModal');
+  if (!modal || !modal.classList.contains('is-active')) return;
+  const items = e.clipboardData?.items || [];
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    if (item.type && item.type.startsWith('image/')) {
+      e.preventDefault();
+      const file = item.getAsFile();
+      if (file) {
+        const dataUrl = await processImageBlobToDataUrl(file);
+        const urlEl = document.getElementById('gImageUrl');
+        if (urlEl) urlEl.value = '';
+        setGalleryPreview(dataUrl);
+      }
+      return;
+    }
+  }
+  const text = (e.clipboardData?.getData('text/plain') || '').trim();
+  if (text && (text.startsWith('http://') || text.startsWith('https://') || text.startsWith('data:image/'))) {
+    if (document.activeElement?.id !== 'gImageUrl') {
+      e.preventDefault();
+      const urlEl = document.getElementById('gImageUrl');
+      if (urlEl) urlEl.value = text;
+      setGalleryPreview(text);
+    }
+  }
+}
+
+document.addEventListener('paste', handleGalleryModalPaste);
+
+window.addEventListener('DOMContentLoaded', () => {
+  const pasteZone = document.getElementById('gPasteZone');
+  if (pasteZone) {
+    pasteZone.addEventListener('dragover', (e) => { e.preventDefault(); pasteZone.style.background = 'rgba(245,192,12,0.14)'; });
+    pasteZone.addEventListener('dragleave', () => { pasteZone.style.background = 'rgba(245,192,12,0.06)'; });
+    pasteZone.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      pasteZone.style.background = 'rgba(245,192,12,0.06)';
+      const file = e.dataTransfer?.files?.[0];
+      if (file && file.type.startsWith('image/')) {
+        const dataUrl = await processImageBlobToDataUrl(file);
+        const urlEl = document.getElementById('gImageUrl');
+        if (urlEl) urlEl.value = '';
+        setGalleryPreview(dataUrl);
+      }
+    });
+  }
+});
+
+function openNewGalleryModal() {
+  switchTab('gallery');
+  ['gTitle', 'gEventName', 'gLocation', 'gCaption', 'gImageUrl'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const dateEl = document.getElementById('gDate');
+  if (dateEl) dateEl.value = new Date().toISOString().slice(0, 10);
+  clearGalleryPhotoDraft();
+  document.getElementById('galleryModal').classList.add('is-active');
+  setTimeout(() => { document.getElementById('gPasteZone')?.focus(); }, 60);
+}
+
+function closeGalleryModal() {
+  document.getElementById('galleryModal').classList.remove('is-active');
+}
+
+async function handleSaveGallery(e) {
+  e.preventDefault();
+  const urlVal = (document.getElementById('gImageUrl')?.value || '').trim();
+  const image = urlVal || pastedGalleryImageData;
+  if (!image) {
+    showAdminNotice('Please paste a photo (Ctrl+V / Cmd+V) or enter an image URL first.', 'warning');
+    return;
+  }
+
+  const payload = {
+    id: 'gal-' + Date.now(),
+    title: document.getElementById('gTitle').value.trim() || 'Meetup Highlight',
+    eventName: document.getElementById('gEventName').value.trim() || 'Firm Meetup & Gathering',
+    location: document.getElementById('gLocation').value.trim() || 'Mumbai',
+    date: document.getElementById('gDate').value || new Date().toISOString().slice(0, 10),
+    caption: document.getElementById('gCaption').value.trim(),
+    image,
+    published: true
+  };
+
+  const btn = document.getElementById('gSaveBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing Photo...'; }
+
+  const res = await apiFetch('/api/gallery', { method: 'POST', body: JSON.stringify(payload) });
+  if (res) {
+    try {
+      const saved = await res.json();
+      if (saved && saved.id) payload.id = saved.id;
+    } catch (err) {}
+  }
+
+  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:6px;"></i> Publish Photo to Website Gallery'; }
+
+  currentGallery.unshift(payload);
+  try { localStorage.setItem('lga_gallery', JSON.stringify(currentGallery)); } catch (err) {}
+  renderGalleryAdmin();
+  loadStats();
+  closeGalleryModal();
+  showAdminNotice('Meetup photo published to website gallery.');
+}
+
+async function deleteGalleryPhoto(id) {
+  const confirmed = await showConfirmDialog('Delete Meetup Photo', 'Delete this meetup photo from the website gallery?', 'Delete Photo');
+  if (!confirmed) return;
+  currentGallery = currentGallery.filter(g => g.id !== id);
+  try { localStorage.setItem('lga_gallery', JSON.stringify(currentGallery)); } catch (err) {}
+  renderGalleryAdmin();
+  loadStats();
+  await apiFetch(`/api/gallery/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  showAdminNotice('Meetup photo deleted.');
+}
+
+async function deleteAllGallery() {
+  const confirmed = await showConfirmDialog('Delete All Meetup Photos', 'Delete ALL meetup gallery photos? This cannot be undone.', 'Delete All');
+  if (!confirmed) return;
+  currentGallery = [];
+  try { localStorage.setItem('lga_gallery', JSON.stringify(currentGallery)); } catch (err) {}
+  renderGalleryAdmin();
+  loadStats();
+  await apiFetch('/api/gallery', { method: 'DELETE' });
+  showAdminNotice('All meetup gallery photos deleted.');
 }
 
 // ==================== SETTINGS ====================
 function saveBackendUrl() {
   const url = document.getElementById('backendUrlInput').value.trim().replace(/\/+$/, '');
-  if (!url) { alert('Please enter a valid backend URL.'); return; }
+  if (!url) { showAdminNotice('Please enter a valid backend URL.', 'warning'); return; }
   localStorage.setItem('lex_backend_url', url);
   API_BASE = url;
-  alert('Backend API URL saved! Re-testing connection...');
+  showAdminNotice('Backend API URL saved. Re-testing connection...');
   loadAllData();
 }
 function disconnectBackendUrl() {
   localStorage.removeItem('lex_backend_url');
   API_BASE = '';
   document.getElementById('backendUrlInput').value = '';
-  alert('Reset to Standalone Netlify Mode.');
+  showAdminNotice('Reset to Standalone Mode.');
   loadAllData();
+}
+
+let currentGatewaySettings = {
+  notifyEmail: 'dp.lexglobaladvocacy@gmail.com',
+  notifyWhatsapp: '919307373024',
+  emailEnabled: true,
+  whatsappEnabled: true,
+  formsubmitFallback: true,
+  providers: {},
+  recentLogs: []
+};
+
+async function loadGatewaySettings() {
+  try {
+    const res = await apiFetch('/api/gateway/settings');
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data && data.notifyEmail) {
+        currentGatewaySettings = data;
+      }
+    }
+  } catch (e) {}
+  renderGatewaySettingsUI();
+}
+
+function renderGatewaySettingsUI() {
+  const emailEl = document.getElementById('gatewayNotifyEmail');
+  const waEl = document.getElementById('gatewayNotifyWhatsapp');
+  const emCheck = document.getElementById('gatewayEmailEnabled');
+  const waCheck = document.getElementById('gatewayWhatsappEnabled');
+  const fsCheck = document.getElementById('gatewayFormsubmitFallback');
+  if (emailEl) emailEl.value = currentGatewaySettings.notifyEmail || 'dp.lexglobaladvocacy@gmail.com';
+  if (waEl) waEl.value = currentGatewaySettings.notifyWhatsapp || '919307373024';
+  if (emCheck) emCheck.checked = currentGatewaySettings.emailEnabled !== false;
+  if (waCheck) waCheck.checked = currentGatewaySettings.whatsappEnabled !== false;
+  if (fsCheck) fsCheck.checked = currentGatewaySettings.formsubmitFallback !== false;
+
+  const p = currentGatewaySettings.providers || {};
+  const badgeHost = document.getElementById('gatewayProviderBadges');
+  if (badgeHost) {
+    const badge = (label, active) => `<span style="font-size:11px; padding:3px 9px; border-radius:999px; border:1px solid ${active ? '#10b981' : '#334155'}; color:${active ? '#34d399' : '#94a3b8'}; background:${active ? 'rgba(16,185,129,0.1)' : 'rgba(15,23,42,0.5)'};">${escapeHtml(label)}: ${active ? 'Active' : 'Env Optional'}</span>`;
+    badgeHost.innerHTML = [
+      badge('SMTP / Gmail', Boolean(p.smtpConfigured)),
+      badge('Resend API', Boolean(p.resendConfigured)),
+      badge('WhatsApp Cloud API', Boolean(p.whatsappCloudConfigured)),
+      badge('CallMeBot WhatsApp', Boolean(p.callmebotConfigured)),
+      badge('Twilio WhatsApp', Boolean(p.twilioConfigured)),
+      badge('Webhook Relay', Boolean(p.webhookConfigured))
+    ].join('');
+  }
+
+  const logsHost = document.getElementById('gatewayLogsContainer');
+  if (logsHost) {
+    const logs = Array.isArray(currentGatewaySettings.recentLogs) ? currentGatewaySettings.recentLogs : [];
+    if (!logs.length) {
+      logsHost.innerHTML = 'No gateway dispatches recorded yet.';
+    } else {
+      logsHost.innerHTML = logs.slice(0, 6).map(l => `
+        <div style="padding:7px 10px; border:1px solid var(--border-color); border-radius:4px; margin-bottom:6px; background:rgba(15,23,42,0.4);">
+          <strong style="color:#fff;">${escapeHtml(l.clientName || 'Client')}</strong> (${escapeHtml(l.inquiryId || '')}) &middot; <span style="color:#94a3b8;">${l.dispatchedAt ? new Date(l.dispatchedAt).toLocaleString() : ''}</span><br>
+          <span>Mail &rarr; ${escapeHtml(l.emailTarget || '')}: <strong style="color:${l.emailStatus === 'sent' ? '#34d399' : '#fbbf24'};">${escapeHtml(l.emailStatus || 'queued')}</strong> (${escapeHtml(l.emailProvider || '')})</span> &bull;
+          <span>WhatsApp &rarr; ${escapeHtml(l.whatsappTarget || '')}: <strong style="color:${l.whatsappStatus === 'sent' ? '#34d399' : '#fbbf24'};">${escapeHtml(l.whatsappStatus || 'queued')}</strong> (${escapeHtml(l.whatsappProvider || '')})</span>
+        </div>
+      `).join('');
+    }
+  }
+}
+
+async function saveGatewaySettings() {
+  const payload = {
+    notifyEmail: document.getElementById('gatewayNotifyEmail')?.value.trim() || 'dp.lexglobaladvocacy@gmail.com',
+    notifyWhatsapp: document.getElementById('gatewayNotifyWhatsapp')?.value.trim() || '919307373024',
+    emailEnabled: Boolean(document.getElementById('gatewayEmailEnabled')?.checked),
+    whatsappEnabled: Boolean(document.getElementById('gatewayWhatsappEnabled')?.checked),
+    formsubmitFallback: Boolean(document.getElementById('gatewayFormsubmitFallback')?.checked)
+  };
+  const res = await apiFetch('/api/gateway/settings', { method: 'PUT', body: JSON.stringify(payload) });
+  if (res && res.ok) {
+    currentGatewaySettings = await res.json();
+    renderGatewaySettingsUI();
+    showAdminNotice('Client request gateway routing saved.');
+  } else {
+    showAdminNotice('Unable to save gateway routing settings.', 'error');
+  }
+}
+
+async function testGatewayDispatch() {
+  const btn = document.getElementById('testGatewayBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Gateway...'; }
+  try {
+    const res = await apiFetch('/api/gateway/test', { method: 'POST' });
+    if (res && res.ok) {
+      const data = await res.json();
+      if (data.recentLogs) currentGatewaySettings.recentLogs = data.recentLogs;
+      renderGatewaySettingsUI();
+      const gw = data.gateway || {};
+      showAdminNotice(`Test dispatched — Mail: ${gw.emailStatus || 'ok'}, WhatsApp: ${gw.whatsappStatus || 'ok'}.`);
+    } else {
+      showAdminNotice('Gateway test failed.', 'error');
+    }
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-bolt"></i> Send Test Request Alert'; }
+  }
+}
+
+async function resendInquiryGateway() {
+  if (!activeInquiryModalId) return;
+  const btn = document.getElementById('modalInquiryResendBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Dispatching...'; }
+  try {
+    const res = await apiFetch(`/api/inquiries/${encodeURIComponent(activeInquiryModalId)}/notify`, { method: 'POST' });
+    if (res && res.ok) {
+      const data = await res.json();
+      const idx = currentInquiries.findIndex(x => x.id === activeInquiryModalId);
+      if (idx !== -1 && data.inquiry) currentInquiries[idx] = data.inquiry;
+      openInquiryModal(activeInquiryModalId);
+      loadGatewaySettings();
+      showAdminNotice('Inquiry re-dispatched through Mail & WhatsApp gateway.');
+    } else {
+      showAdminNotice('Failed to dispatch inquiry via gateway.', 'error');
+    }
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Re-send Gateway Alert'; }
+  }
 }
 
 async function handleChangePassword(e) {
   e.preventDefault();
   const newPw = document.getElementById('newPasswordInput').value;
   const confirmPw = document.getElementById('confirmPasswordInput').value;
-  if (newPw !== confirmPw) { alert('Passwords do not match.'); return; }
-  if (newPw.length < 8) { alert('Password must be at least 8 characters long.'); return; }
+  if (newPw !== confirmPw) { showAdminNotice('Passwords do not match.', 'error'); return; }
+  if (newPw.length < 8) { showAdminNotice('Password must be at least 8 characters long.', 'warning'); return; }
   localStorage.setItem('lex_local_admin_password', newPw);
-  apiFetch('/api/auth/password', { method: 'POST', body: JSON.stringify({ newPassword: newPw }) });
-  alert('Master administrative password updated successfully!');
+  await apiFetch('/api/auth/password', { method: 'POST', body: JSON.stringify({ newPassword: newPw }) });
+  showAdminNotice('Master administrative password updated successfully.');
   document.getElementById('newPasswordInput').value = '';
   document.getElementById('confirmPasswordInput').value = '';
 }
@@ -1901,7 +3162,10 @@ async function downloadDatabaseBackup() {
     inquiries: currentInquiries,
     enrollments: currentEnrollments,
     courses: currentCourses,
-    publications: currentBlogs
+    publications: currentBlogs,
+    journals: currentJournals,
+    gallery: currentGallery,
+    siteSettings: currentSiteSettings
   };
   const blob = new Blob([JSON.stringify(fullBackup, null, 2)], { type: 'application/json' });
   const url = window.URL.createObjectURL(blob);
@@ -1912,9 +3176,34 @@ async function downloadDatabaseBackup() {
   a.click();
   window.URL.revokeObjectURL(url);
   document.body.removeChild(a);
+  showAdminNotice('Database backup downloaded.');
 }
 
-window.addEventListener('DOMContentLoaded', () => { checkAuth(); });
+window.addEventListener('DOMContentLoaded', () => {
+  checkAuth();
+  document.querySelectorAll('.admin-modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('is-active');
+    });
+  });
+  const confirmModal = document.getElementById('adminConfirmModal');
+  if (confirmModal) {
+    confirmModal.addEventListener('click', (e) => {
+      if (e.target === confirmModal) {
+        document.getElementById('adminConfirmCancelBtn')?.click();
+      }
+    });
+  }
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (confirmModal && confirmModal.classList.contains('is-active')) {
+        document.getElementById('adminConfirmCancelBtn')?.click();
+        return;
+      }
+      document.querySelectorAll('.admin-modal-overlay.is-active').forEach(m => m.classList.remove('is-active'));
+    }
+  });
+});
 </script>
 </body>
 </html>
